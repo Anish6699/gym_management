@@ -1,8 +1,10 @@
 // ignore_for_file: prefer_typing_uninitialized_variables
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import 'package:gmstest/configs/colors.dart';
+import 'package:gmstest/controllers/admin_controllers.dart';
 import 'package:gmstest/navigation_pane/navigation_pane_closed.dart';
 import 'package:gmstest/navigation_pane/navigation_pane_expanded.dart';
 import 'package:gmstest/widgets/buttons.dart';
@@ -31,7 +33,7 @@ class _MembersState extends State<AllAdmins> {
 
   List<Map<String, dynamic>> uploadRakeDispatched = [];
 
-  // ScrollController horizontalTableScrollController = ScrollController();
+  ScrollController horizontalTableScrollController = ScrollController();
 
   bool isNavOpen = true;
   final FocusNode _tableFocusNode = FocusNode();
@@ -40,83 +42,43 @@ class _MembersState extends State<AllAdmins> {
   var _headerModel;
   var selectedEntity = 'All';
 
+  AdminController adminController = AdminController();
   TextEditingController searchController = TextEditingController();
-  List<Map<String, dynamic>> membersList = [
-    {
-      'first_name': 'Anish',
-      'last_name': 'Gunjal',
-      'primary_mobile_no': '1111111111',
-      'secondary_mobile_no': '1111111111',
-      'email': 'abcccc@gmail.com',
-      'address': 'Yerawda Pune - 6'
-    },
-    {
-      'first_name': 'Anish',
-      'last_name': 'Gunjal',
-      'primary_mobile_no': '1111111111',
-      'secondary_mobile_no': '1111111111',
-      'email': 'abcccc@gmail.com',
-      'address': 'Yerawda Pune - 6'
-    },
-    {
-      'first_name': 'Anish',
-      'last_name': 'Gunjal',
-      'primary_mobile_no': '1111111111',
-      'secondary_mobile_no': '1111111111',
-      'email': 'abcccc@gmail.com',
-      'address': 'Yerawda Pune - 6'
-    },
-    {
-      'first_name': 'Anish',
-      'last_name': 'Gunjal',
-      'primary_mobile_no': '1111111111',
-      'secondary_mobile_no': '1111111111',
-      'email': 'abcccc@gmail.com',
-      'address': 'Yerawda Pune - 6'
-    },
-    {
-      'first_name': 'Anish',
-      'last_name': 'Gunjal',
-      'primary_mobile_no': '1111111111',
-      'secondary_mobile_no': '1111111111',
-      'email': 'abcccc@gmail.com',
-      'address': 'Yerawda Pune - 6'
-    },
-    {
-      'first_name': 'Anish',
-      'last_name': 'Gunjal',
-      'primary_mobile_no': '1111111111',
-      'secondary_mobile_no': '1111111111',
-      'email': 'abcccc@gmail.com',
-      'address': 'Yerawda Pune - 6'
-    },
-    {
-      'first_name': 'Anish',
-      'last_name': 'Gunjal',
-      'primary_mobile_no': '1111111111',
-      'secondary_mobile_no': '1111111111',
-      'email': 'abcccc@gmail.com',
-      'address': 'Yerawda Pune - 6'
-    },
-  ];
+  TextEditingController firstNameController = TextEditingController();
+  TextEditingController lastNameController = TextEditingController();
+  TextEditingController primaryMobileNo = TextEditingController();
+  TextEditingController secondaryMobileNo = TextEditingController();
+  TextEditingController email = TextEditingController();
+  TextEditingController address = TextEditingController();
+  TextEditingController password = TextEditingController();
 
+  List adminList = [];
   @override
   void initState() {
+    getAdminData();
     super.initState();
+  }
+
+  getAdminData() async {
+    adminList = await adminController.getAllAdmin();
+    print('aaaaaaaaaaaaaaaa');
+    print(adminList);
+    initializeData();
   }
 
   void didChangeDependencies() {
     super.didChangeDependencies();
-    initializeData();
   }
 
   initializeData() {
     print('in it state started');
     _headerModel = DaviModel(
-      rows: membersList,
+      rows: adminList,
       columns: _getColumns(context),
     );
     print('in it state completed');
+    print('aaaaaaaaaaaaaaaa');
+    print(adminList);
     isLoading = false;
     setState(() {});
   }
@@ -136,7 +98,7 @@ class _MembersState extends State<AllAdmins> {
     //     entity: selectedEntity == 'All' ? 'all' : selectedEntity);
 
     _headerModel = DaviModel(
-      rows: membersList,
+      rows: adminList,
       columns: _getColumns(context),
     );
     isLoading = false;
@@ -151,14 +113,14 @@ class _MembersState extends State<AllAdmins> {
     //     searchText: searchController.text);
 
     _headerModel = DaviModel(
-      rows: membersList,
+      rows: adminList,
       columns: _getColumns(context),
     );
     isLoading = false;
     setState(() {});
   }
 
-  List<DaviColumn<Map<String, dynamic>>> _getColumns(BuildContext context) {
+  List<DaviColumn> _getColumns(BuildContext context) {
     return [
       DaviColumn(
         width: MediaQuery.of(context).size.width * 0.088,
@@ -265,7 +227,7 @@ class _MembersState extends State<AllAdmins> {
         cellOverflow: TextOverflow.visible,
       ),
       DaviColumn(
-        width: MediaQuery.of(context).size.width * 0.12,
+        width: MediaQuery.of(context).size.width * 0.17,
 
         headerPadding: EdgeInsets.zero,
 
@@ -306,7 +268,7 @@ class _MembersState extends State<AllAdmins> {
 
         sortable: true,
 
-        stringValue: (row) => row['address'],
+        stringValue: (row) => row['addr'],
 
         cellAlignment: Alignment.center,
 
@@ -972,7 +934,8 @@ class _MembersState extends State<AllAdmins> {
                                                                 color:
                                                                     primaryThemeColor),
                                                           )),
-                                                  // controller: emailController,
+                                                  controller:
+                                                      firstNameController,
                                                   keyboardType: TextInputType
                                                       .emailAddress,
                                                   enableSuggestions: true,
@@ -1032,7 +995,8 @@ class _MembersState extends State<AllAdmins> {
                                                                 color:
                                                                     primaryThemeColor),
                                                           )),
-                                                  // controller: emailController,
+                                                  controller:
+                                                      lastNameController,
                                                   keyboardType: TextInputType
                                                       .emailAddress,
                                                   enableSuggestions: true,
@@ -1092,7 +1056,7 @@ class _MembersState extends State<AllAdmins> {
                                                                 color:
                                                                     primaryThemeColor),
                                                           )),
-                                                  // controller: emailController,
+                                                  controller: primaryMobileNo,
                                                   keyboardType: TextInputType
                                                       .emailAddress,
                                                   enableSuggestions: true,
@@ -1152,7 +1116,7 @@ class _MembersState extends State<AllAdmins> {
                                                                 color:
                                                                     primaryThemeColor),
                                                           )),
-                                                  // controller: emailController,
+                                                  controller: secondaryMobileNo,
                                                   keyboardType: TextInputType
                                                       .emailAddress,
                                                   enableSuggestions: true,
@@ -1212,7 +1176,7 @@ class _MembersState extends State<AllAdmins> {
                                                                 color:
                                                                     primaryThemeColor),
                                                           )),
-                                                  // controller: emailController,
+                                                  controller: email,
                                                   keyboardType: TextInputType
                                                       .emailAddress,
                                                   enableSuggestions: true,
@@ -1272,7 +1236,7 @@ class _MembersState extends State<AllAdmins> {
                                                                 color:
                                                                     primaryThemeColor),
                                                           )),
-                                                  // controller: emailController,
+                                                  controller: address,
                                                   keyboardType: TextInputType
                                                       .emailAddress,
                                                   enableSuggestions: true,
@@ -1332,11 +1296,10 @@ class _MembersState extends State<AllAdmins> {
                                                                 color:
                                                                     primaryThemeColor),
                                                           )),
-                                                  // controller: emailController,
+                                                  controller: password,
                                                   keyboardType: TextInputType
                                                       .emailAddress,
                                                   enableSuggestions: true,
-                                                  onChanged: (e) {},
                                                   autofocus: true,
                                                   style: TextStyle(
                                                       fontSize:
@@ -1355,6 +1318,114 @@ class _MembersState extends State<AllAdmins> {
                                     ),
                                   ),
                                 ),
+                                onSecondaryButtonPressed: () {
+                                  Get.back();
+                                },
+                                onPrimaryButtonPressed: () {
+                                  showDialog(
+                                      barrierDismissible: false,
+                                      context: context,
+                                      builder: (context) {
+                                        return FutureBuilder(
+                                          future: adminController.addAdmin({
+                                            'first_name':
+                                                firstNameController.text,
+                                            'last_name':
+                                                lastNameController.text,
+                                            'primary_mobile_no':
+                                                primaryMobileNo.text,
+                                            'email': email.text,
+                                            'address': address.text,
+                                            'password': password.text,
+                                            'secondary_mobile_no':
+                                                secondaryMobileNo.text,
+                                          }),
+                                          builder: (context, snapshot) {
+                                            return snapshot.connectionState ==
+                                                    ConnectionState.waiting
+                                                ? GenericDialogBox(
+                                                    enableSecondaryButton:
+                                                        false,
+                                                    isLoader: true,
+                                                    content: Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              8.0),
+                                                      child: SizedBox(
+                                                        width: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .width *
+                                                            0.04,
+                                                        height: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .width *
+                                                            0.06,
+                                                        child: const Center(
+                                                          child: Column(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .center,
+                                                            children: [
+                                                              CircularProgressIndicator(
+                                                                color:
+                                                                    primaryDarkBlueColor,
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  )
+                                                : GenericDialogBox(
+                                                    closeButtonEnabled: false,
+                                                    enablePrimaryButton: true,
+                                                    enableSecondaryButton:
+                                                        false,
+                                                    isLoader: false,
+                                                    content: Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              8.0),
+                                                      child: SizedBox(
+                                                        width: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .width *
+                                                            0.04,
+                                                        height: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .width *
+                                                            0.06,
+                                                        child: Center(
+                                                          child: Column(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .center,
+                                                            children: [
+                                                              Text(snapshot
+                                                                      .data![
+                                                                  'message'])
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    primaryButtonText: 'Ok',
+                                                    onPrimaryButtonPressed:
+                                                        () async {
+                                                      Get.offAllNamed(
+                                                        AllAdmins
+                                                            .allAdminRouteName,
+                                                      );
+                                                    },
+                                                  );
+                                          },
+                                        );
+                                      });
+                                },
                               );
                             });
                       },
@@ -1441,7 +1512,7 @@ class _MembersState extends State<AllAdmins> {
                               MediaQuery.of(context).size.height * 0.07,
                         ),
                       ),
-                      child: Davi<Map<String, dynamic>>(
+                      child: Davi(
                         _headerModel,
 
                         // visibleRowsCount:
@@ -1469,7 +1540,7 @@ class _MembersState extends State<AllAdmins> {
             ? Expanded(
                 flex: 2,
                 child: InventoryNavigationPaneExpanded(
-                  selected: "allAdmins",
+                  selected: "allAdmin",
                   // subSelected: "approvedCoalDatabase",
                 ),
               )
@@ -1482,7 +1553,7 @@ class _MembersState extends State<AllAdmins> {
                     });
                   },
                   child: InventoryNavigationPaneMinimized(
-                    selected: "trainer",
+                    selected: "allAdmin",
                     // subSelected: "approvedCoalDatabase",
                   ),
                 ),
