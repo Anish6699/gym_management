@@ -156,7 +156,7 @@ class _InventoryNavigationPaneExpandedState
                                     MediaQuery.of(context).size.width * 0.012,
                               ),
                               Text(
-                                "Admins",
+                                "ADMINS",
                                 style: TextStyle(
                                     fontSize:
                                         MediaQuery.of(context).size.width *
@@ -210,7 +210,7 @@ class _InventoryNavigationPaneExpandedState
                                     MediaQuery.of(context).size.width * 0.012,
                               ),
                               Text(
-                                "MEMBER",
+                                "MEMBERS", 
                                 style: TextStyle(
                                     fontSize:
                                         MediaQuery.of(context).size.width *

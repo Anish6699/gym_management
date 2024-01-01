@@ -25,4 +25,22 @@ class AdminController extends GetxController {
 
     return body;
   }
+   Future<Map<String, dynamic>> editAdmin(Map<String, dynamic> data,adminId) async {
+    print(data);
+    var response = await _httpClient.post(path: 'edit-admin/$adminId', body: data);
+    print(response['body']);
+    var body = json.decode(response['body']) as Map<String, dynamic>;
+
+    return body;
+  }
+
+   Future<Map<String, dynamic>> addBranch(Map<String, dynamic> data) async {
+    print(data);
+    var response = await _httpClient.post(path: 'add-branch', body: data);
+    print(response['body']);
+    var body = json.decode(response['body']) as Map<String, dynamic>;
+
+    return body;
+  }
+
 }
