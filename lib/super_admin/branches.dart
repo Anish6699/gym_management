@@ -1,6 +1,5 @@
 // ignore_for_file: prefer_typing_uninitialized_variables
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -8,29 +7,30 @@ import 'package:gmstest/configs/colors.dart';
 import 'package:gmstest/controllers/admin_controllers.dart';
 import 'package:gmstest/navigation_pane/navigation_pane_closed.dart';
 import 'package:gmstest/navigation_pane/navigation_pane_expanded.dart';
-import 'package:gmstest/super_admin/branches.dart';
+import 'package:gmstest/super_admin/admins.dart';
 import 'package:gmstest/widgets/buttons.dart';
 import 'package:gmstest/widgets/generic_appbar.dart';
 import 'package:davi/davi.dart';
 import 'package:gmstest/widgets/popup.dart';
 // import 'package:easy_table/easy_table.dart';
 
-class AllAdmins extends StatefulWidget {
-  const AllAdmins({Key? key}) : super(key: key);
+class AdminAllBranch extends StatefulWidget {
+  const AdminAllBranch({Key? key}) : super(key: key);
 
-  static const String allAdminRouteName = '/all-admin-view';
+  static const String adminAllBranchesRouteName = '/admin-all-branch-view';
 
-  static Route allAdminsRoute() {
+  static Route allAdminsRoute(dynamic arguments) {
     return MaterialPageRoute(
-        builder: (_) => const AllAdmins(),
-        settings: const RouteSettings(name: allAdminRouteName));
+        builder: (_) => const AdminAllBranch(),
+        settings: RouteSettings(
+            name: adminAllBranchesRouteName, arguments: arguments));
   }
 
   @override
-  State<AllAdmins> createState() => _MembersState();
+  State<AdminAllBranch> createState() => _MembersState();
 }
 
-class _MembersState extends State<AllAdmins> {
+class _MembersState extends State<AdminAllBranch> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   List<Map<String, dynamic>> uploadRakeDispatched = [];
@@ -53,8 +53,9 @@ class _MembersState extends State<AllAdmins> {
   TextEditingController email = TextEditingController();
   TextEditingController address = TextEditingController();
   TextEditingController password = TextEditingController();
+  Map arrData = {};
 
-  List adminList = [];
+  List adminBranchList = [];
   @override
   void initState() {
     getAdminData();
@@ -62,10 +63,16 @@ class _MembersState extends State<AllAdmins> {
   }
 
   getAdminData() async {
-    adminList = await adminController.getAllAdmin();
-    print('aaaaaaaaaaaaaaaa');
-    print(adminList);
-    initializeData();
+    print('innnn elseee');
+    if (Get.arguments == null) {
+      Get.back();
+    } else {
+      arrData = Get.arguments;
+      adminBranchList = await adminController.getAdminAllBranches(
+          adminId: Get.arguments['adminId']);
+
+      initializeData();
+    }
   }
 
   void didChangeDependencies() {
@@ -73,14 +80,11 @@ class _MembersState extends State<AllAdmins> {
   }
 
   initializeData() {
-    print('in it state started');
     _headerModel = DaviModel(
-      rows: adminList,
+      rows: adminBranchList,
       columns: _getColumns(context),
     );
-    print('in it state completed');
-    print('aaaaaaaaaaaaaaaa');
-    print(adminList);
+
     isLoading = false;
     setState(() {});
   }
@@ -96,11 +100,10 @@ class _MembersState extends State<AllAdmins> {
   changeTableData() async {
     isLoading = true;
     setState(() {});
-    // var a = await rakeDispatchedController.getAllRakes(
-    //     entity: selectedEntity == 'All' ? 'all' : selectedEntity);
-
+    adminBranchList =
+        await adminController.getAdminAllBranches(adminId: arrData['adminId']);
     _headerModel = DaviModel(
-      rows: adminList,
+      rows: adminBranchList,
       columns: _getColumns(context),
     );
     isLoading = false;
@@ -115,7 +118,7 @@ class _MembersState extends State<AllAdmins> {
     //     searchText: searchController.text);
 
     _headerModel = DaviModel(
-      rows: adminList,
+      rows: adminBranchList,
       columns: _getColumns(context),
     );
     isLoading = false;
@@ -125,7 +128,7 @@ class _MembersState extends State<AllAdmins> {
   List<DaviColumn> _getColumns(BuildContext context) {
     return [
       DaviColumn(
-        width: MediaQuery.of(context).size.width * 0.088,
+        width: MediaQuery.of(context).size.width * 0.13,
 
         headerPadding: EdgeInsets.zero,
 
@@ -134,39 +137,13 @@ class _MembersState extends State<AllAdmins> {
         headerTextStyle: const TextStyle(
             fontWeight: FontWeight.bold, color: primaryLightColor),
 
-        name: 'First Name',
+        name: 'Branch Name',
 
         // pinStatus: PinStatus.left,
 
         sortable: true,
 
-        stringValue: (row) => row['first_name'],
-
-        cellAlignment: Alignment.center,
-
-        headerAlignment: Alignment.center,
-
-        resizable: false,
-
-        cellOverflow: TextOverflow.visible,
-      ),
-      DaviColumn(
-        width: MediaQuery.of(context).size.width * 0.088,
-
-        headerPadding: EdgeInsets.zero,
-
-        cellPadding: EdgeInsets.zero,
-
-        headerTextStyle: const TextStyle(
-            fontWeight: FontWeight.bold, color: primaryLightColor),
-
-        name: 'Last Name',
-
-        // pinStatus: PinStatus.left,
-
-        sortable: true,
-
-        stringValue: (row) => row['last_name'],
+        stringValue: (row) => row['branch_name'],
 
         cellAlignment: Alignment.center,
 
@@ -255,7 +232,7 @@ class _MembersState extends State<AllAdmins> {
         cellOverflow: TextOverflow.visible,
       ),
       DaviColumn(
-        width: MediaQuery.of(context).size.width * 0.12,
+        width: MediaQuery.of(context).size.width * 0.16,
 
         headerPadding: EdgeInsets.zero,
 
@@ -281,95 +258,26 @@ class _MembersState extends State<AllAdmins> {
         cellOverflow: TextOverflow.visible,
       ),
       DaviColumn(
-        name: 'Active',
-        cellBuilder: (context, data) {
-          return Center(
-              child: Transform.scale(
-            scale: 0.6,
-            child: CupertinoSwitch(
-                activeColor: primaryDarkGreenColor,
-                value: data.data['status'] == 0 ? true : false,
-                onChanged: (v) {}),
-          ));
-        },
-
-        width: MediaQuery.of(context).size.width * 0.07,
-
-        headerPadding: EdgeInsets.zero,
-
-        cellPadding: EdgeInsets.zero,
-
-        headerTextStyle: const TextStyle(
-            fontWeight: FontWeight.bold, color: primaryLightColor),
-
-        // pinStatus: PinStatus.left,
-
-        sortable: true,
-
-        stringValue: (row) => '',
-
-        cellAlignment: Alignment.center,
-
-        headerAlignment: Alignment.center,
-
-        resizable: false,
-
-        cellOverflow: TextOverflow.visible,
-      ),
-      DaviColumn(
-        name: 'View Branches',
-        cellBuilder: (context, data) {
-          return Center(
-              child: InkWell(
-                  onTap: () {
-                    Get.toNamed(AdminAllBranch.adminAllBranchesRouteName,
-                        arguments: {
-                          'adminName': data.data['first_name'],
-                          'adminId': data.data['id']
-                        });
-                  },
-                  child: const Icon(Icons.visibility)));
-        },
-
-        width: MediaQuery.of(context).size.width * 0.078,
-
-        headerPadding: EdgeInsets.zero,
-
-        cellPadding: EdgeInsets.zero,
-
-        headerTextStyle: const TextStyle(
-            fontWeight: FontWeight.bold, color: primaryLightColor),
-
-        // pinStatus: PinStatus.left,
-
-        sortable: true,
-
-        stringValue: (row) => '',
-
-        cellAlignment: Alignment.center,
-
-        headerAlignment: Alignment.center,
-
-        resizable: false,
-
-        cellOverflow: TextOverflow.visible,
-      ),
-      DaviColumn(
         name: 'Action',
         cellBuilder: (context, data) {
           return Center(
               child: InkWell(
                   onTap: () {
-                    firstNameController.text =
-                        data.data['first_name'].toString();
-                    lastNameController.text = data.data['last_name'].toString();
-                    primaryMobileNo.text =
-                        data.data['primary_mobile_no'].toString();
-                    secondaryMobileNo.text =
-                        data.data['secondary_mobile_no'].toString();
-                    email.text = data.data['email'].toString();
-                    address.text = data.data['addr'].toString();
-                    password.text = data.data['password']?.toString() ?? '';
+                    firstNameController.clear();
+
+                    lastNameController.clear();
+                    primaryMobileNo.clear();
+                    secondaryMobileNo.clear();
+                    email.clear();
+                    address.clear();
+                    password.clear();
+
+                    firstNameController.text = data.data['branch_name'];
+
+                    primaryMobileNo.text = data.data['primary_mobile_no'];
+                    secondaryMobileNo.text = data.data['secondary_mobile_no'];
+                    email.text = data.data['email'];
+                    address.text = data.data['addr'];
 
                     showDialog(
                         context: context,
@@ -377,7 +285,7 @@ class _MembersState extends State<AllAdmins> {
                           return GenericDialogBox(
                             enableSecondaryButton: true,
                             isLoader: false,
-                            title: "Edit Admin",
+                            title: "Edit Branch",
                             primaryButtonText: 'Edit',
                             secondaryButtonText: 'Cancel',
                             content: SizedBox(
@@ -395,7 +303,7 @@ class _MembersState extends State<AllAdmins> {
                                         children: [
                                           const Flexible(
                                             child: SelectableText(
-                                              'First Name',
+                                              'Branch Name',
                                               style: TextStyle(
                                                   fontWeight: FontWeight.bold),
                                             ),
@@ -422,61 +330,6 @@ class _MembersState extends State<AllAdmins> {
                                                             primaryThemeColor),
                                                   )),
                                               controller: firstNameController,
-                                              keyboardType:
-                                                  TextInputType.emailAddress,
-                                              enableSuggestions: true,
-                                              onChanged: (e) {},
-                                              autofocus: true,
-                                              style: TextStyle(
-                                                  fontSize:
-                                                      MediaQuery.of(context)
-                                                              .size
-                                                              .height *
-                                                          0.02),
-                                              textAlignVertical:
-                                                  TextAlignVertical.center,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.3,
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          const Flexible(
-                                            child: SelectableText(
-                                              'Last Name',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                          ),
-                                          const SizedBox(
-                                            height: 8,
-                                          ),
-                                          SizedBox(
-                                            height: MediaQuery.of(context)
-                                                    .size
-                                                    .height *
-                                                0.07,
-                                            child: TextFormField(
-                                              decoration: const InputDecoration(
-                                                  border: OutlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                        color:
-                                                            secondaryBorderGreyColor),
-                                                  ),
-                                                  focusedBorder:
-                                                      OutlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                        color:
-                                                            primaryThemeColor),
-                                                  )),
-                                              controller: lastNameController,
                                               keyboardType:
                                                   TextInputType.emailAddress,
                                               enableSuggestions: true,
@@ -715,81 +568,23 @@ class _MembersState extends State<AllAdmins> {
                                         ],
                                       ),
                                     ),
-                                    SizedBox(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.3,
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          const Flexible(
-                                            child: SelectableText(
-                                              'Password',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                          ),
-                                          const SizedBox(
-                                            height: 8,
-                                          ),
-                                          SizedBox(
-                                            height: MediaQuery.of(context)
-                                                    .size
-                                                    .height *
-                                                0.07,
-                                            child: TextFormField(
-                                              decoration: const InputDecoration(
-                                                  border: OutlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                        color:
-                                                            secondaryBorderGreyColor),
-                                                  ),
-                                                  focusedBorder:
-                                                      OutlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                        color:
-                                                            primaryThemeColor),
-                                                  )),
-                                              controller: password,
-                                              keyboardType:
-                                                  TextInputType.emailAddress,
-                                              enableSuggestions: true,
-                                              autofocus: true,
-                                              style: TextStyle(
-                                                  fontSize:
-                                                      MediaQuery.of(context)
-                                                              .size
-                                                              .height *
-                                                          0.02),
-                                              textAlignVertical:
-                                                  TextAlignVertical.center,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
                                   ],
                                 ),
                               ),
                             ),
-                            onSecondaryButtonPressed: () {
-                              Get.back();
-                            },
                             onPrimaryButtonPressed: () {
                               showDialog(
                                   barrierDismissible: false,
                                   context: context,
                                   builder: (context) {
                                     return FutureBuilder(
-                                      future: adminController.editAdmin({
-                                        'first_name': firstNameController.text,
-                                        'last_name': lastNameController.text,
+                                      future: adminController.editBranch({
+                                        'owner_name': arrData['adminId'],
+                                        'branch_name': firstNameController.text,
                                         'primary_mobile_no':
                                             primaryMobileNo.text,
                                         'email': email.text,
                                         'address': address.text,
-                                        'password': password.text,
                                         'secondary_mobile_no':
                                             secondaryMobileNo.text,
                                       }, data.data['id']),
@@ -854,12 +649,8 @@ class _MembersState extends State<AllAdmins> {
                                                             MainAxisAlignment
                                                                 .center,
                                                         children: [
-                                                          Text(
-                                                            snapshot.data![
-                                                                'message'],
-                                                            textAlign: TextAlign
-                                                                .center,
-                                                          )
+                                                          Text(snapshot
+                                                              .data!['message'])
                                                         ],
                                                       ),
                                                     ),
@@ -868,9 +659,13 @@ class _MembersState extends State<AllAdmins> {
                                                 primaryButtonText: 'Ok',
                                                 onPrimaryButtonPressed:
                                                     () async {
-                                                  Get.offAllNamed(
-                                                    AllAdmins.allAdminRouteName,
-                                                  );
+                                                  await changeTableData();
+                                                  Get.back();
+                                                  Get.back();
+                                                  // Get.offAllNamed(
+                                                  //   AdminAllBranch
+                                                  //       .adminAllBranchesRouteName,
+                                                  // );
                                                 },
                                               );
                                       },
@@ -1071,7 +866,7 @@ class _MembersState extends State<AllAdmins> {
                                   const RoundedRectangleBorder(
                             borderRadius: BorderRadius.all(Radius.circular(4)),
                           ))),
-                      onPressed: () async {
+                      onPressed: () {
                         firstNameController.clear();
 
                         lastNameController.clear();
@@ -1086,11 +881,12 @@ class _MembersState extends State<AllAdmins> {
                               return GenericDialogBox(
                                 enableSecondaryButton: true,
                                 isLoader: false,
-                                title: "Add Admin",
+                                title: "Add Branch",
                                 primaryButtonText: 'Add',
                                 secondaryButtonText: 'Cancel',
                                 content: SizedBox(
-                                  height: mediaQuery.height * 0.7,
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.7,
                                   child: SingleChildScrollView(
                                     child: Column(
                                       children: [
@@ -1106,7 +902,7 @@ class _MembersState extends State<AllAdmins> {
                                             children: [
                                               const Flexible(
                                                 child: SelectableText(
-                                                  'First Name',
+                                                  'Branch Name',
                                                   style: TextStyle(
                                                       fontWeight:
                                                           FontWeight.bold),
@@ -1137,67 +933,6 @@ class _MembersState extends State<AllAdmins> {
                                                           )),
                                                   controller:
                                                       firstNameController,
-                                                  keyboardType: TextInputType
-                                                      .emailAddress,
-                                                  enableSuggestions: true,
-                                                  onChanged: (e) {},
-                                                  autofocus: true,
-                                                  style: TextStyle(
-                                                      fontSize:
-                                                          MediaQuery.of(context)
-                                                                  .size
-                                                                  .height *
-                                                              0.02),
-                                                  textAlignVertical:
-                                                      TextAlignVertical.center,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.3,
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              const Flexible(
-                                                child: SelectableText(
-                                                  'Last Name',
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                ),
-                                              ),
-                                              const SizedBox(
-                                                height: 8,
-                                              ),
-                                              SizedBox(
-                                                height: MediaQuery.of(context)
-                                                        .size
-                                                        .height *
-                                                    0.07,
-                                                child: TextFormField(
-                                                  decoration:
-                                                      const InputDecoration(
-                                                          border:
-                                                              OutlineInputBorder(
-                                                            borderSide: BorderSide(
-                                                                color:
-                                                                    secondaryBorderGreyColor),
-                                                          ),
-                                                          focusedBorder:
-                                                              OutlineInputBorder(
-                                                            borderSide: BorderSide(
-                                                                color:
-                                                                    primaryThemeColor),
-                                                          )),
-                                                  controller:
-                                                      lastNameController,
                                                   keyboardType: TextInputType
                                                       .emailAddress,
                                                   enableSuggestions: true,
@@ -1501,6 +1236,7 @@ class _MembersState extends State<AllAdmins> {
                                                   keyboardType: TextInputType
                                                       .emailAddress,
                                                   enableSuggestions: true,
+                                                  onChanged: (e) {},
                                                   autofocus: true,
                                                   style: TextStyle(
                                                       fontSize:
@@ -1519,20 +1255,16 @@ class _MembersState extends State<AllAdmins> {
                                     ),
                                   ),
                                 ),
-                                onSecondaryButtonPressed: () {
-                                  Get.back();
-                                },
                                 onPrimaryButtonPressed: () {
                                   showDialog(
                                       barrierDismissible: false,
                                       context: context,
                                       builder: (context) {
                                         return FutureBuilder(
-                                          future: adminController.addAdmin({
-                                            'first_name':
+                                          future: adminController.addBranch({
+                                            'owner_name': arrData['adminId'],
+                                            'branch_name':
                                                 firstNameController.text,
-                                            'last_name':
-                                                lastNameController.text,
                                             'primary_mobile_no':
                                                 primaryMobileNo.text,
                                             'email': email.text,
@@ -1617,10 +1349,13 @@ class _MembersState extends State<AllAdmins> {
                                                     primaryButtonText: 'Ok',
                                                     onPrimaryButtonPressed:
                                                         () async {
-                                                      Get.offAllNamed(
-                                                        AllAdmins
-                                                            .allAdminRouteName,
-                                                      );
+                                                      await changeTableData();
+                                                      Get.back();
+                                                      Get.back();
+                                                      // Get.offAllNamed(
+                                                      //   AdminAllBranch
+                                                      //       .adminAllBranchesRouteName,
+                                                      // );
                                                     },
                                                   );
                                           },
@@ -1639,7 +1374,7 @@ class _MembersState extends State<AllAdmins> {
                             size: MediaQuery.of(context).size.width * 0.017,
                           ),
                           Text(
-                            'Add Admin',
+                            'Add Branch',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize:
@@ -1657,9 +1392,20 @@ class _MembersState extends State<AllAdmins> {
           SizedBox(
             height: mediaQuery.height * 0.01,
           ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                child: Text('ADMIN NAME : ${arrData['adminName'] ?? '-'}'),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: mediaQuery.height * 0.01,
+          ),
           Container(
             padding: const EdgeInsets.all(5),
-            height: MediaQuery.of(context).size.height * 0.8,
+            height: MediaQuery.of(context).size.height * 0.7,
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(5),
@@ -1769,7 +1515,7 @@ class _MembersState extends State<AllAdmins> {
                   isNavOpen = !isNavOpen;
                 });
               },
-              title: 'All Admins',
+              title: 'Admin All Branches',
               toolbarHeight: MediaQuery.of(context).size.height * 0.075,
             ),
             body: _body(mediaQuery),

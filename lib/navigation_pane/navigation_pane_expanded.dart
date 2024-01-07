@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gmstest/configs/colors.dart';
 import 'package:gmstest/super_admin/admins.dart';
-import 'package:gmstest/views/dashboard.dart';
+import 'package:gmstest/views/dashboards/admin_dashboard.dart';
+import 'package:gmstest/views/dashboards/branch_dashboard.dart';
+import 'package:gmstest/views/dashboards/dashboard.dart';
 import 'package:gmstest/views/members.dart';
 import 'package:gmstest/views/trainer.dart';
 import 'package:gmstest/views/visitors.dart';
@@ -102,13 +104,119 @@ class _InventoryNavigationPaneExpandedState
                                     MediaQuery.of(context).size.width * 0.012,
                               ),
                               Text(
-                                "DASHBOARD",
+                                "SUPERADMIN DASHBOARD",
                                 style: TextStyle(
                                     fontSize:
                                         MediaQuery.of(context).size.width *
                                             0.009,
                                     fontWeight: FontWeight.w700,
                                     color: widget.selected == "dashboard"
+                                        ? primaryThemeColor
+                                        : Colors.white),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () {
+                      Get.toNamed(
+                        AdminDashboard.routeName,
+                      );
+                    },
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                          right: MediaQuery.of(context).size.width * 0.006,
+                          top: MediaQuery.of(context).size.width * 0.006),
+                      child: Container(
+                        height: MediaQuery.of(context).size.width * 0.03,
+                        decoration: BoxDecoration(
+                          color: widget.selected == "admin-dashboard"
+                              ? Colors.white
+                              : primaryThemeColor,
+                          borderRadius: const BorderRadius.only(
+                              topRight: Radius.circular(5),
+                              bottomRight: Radius.circular(5)),
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.all(
+                              MediaQuery.of(context).size.width * 0.006),
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.dashboard_outlined,
+                                size: MediaQuery.of(context).size.width * 0.012,
+                                color: widget.selected == "admin-dashboard"
+                                    ? primaryThemeColor
+                                    : Colors.white,
+                              ),
+                              SizedBox(
+                                width:
+                                    MediaQuery.of(context).size.width * 0.012,
+                              ),
+                              Text(
+                                "ADMIN DASHBOARD",
+                                style: TextStyle(
+                                    fontSize:
+                                        MediaQuery.of(context).size.width *
+                                            0.009,
+                                    fontWeight: FontWeight.w700,
+                                    color: widget.selected == "admin-dashboard"
+                                        ? primaryThemeColor
+                                        : Colors.white),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () {
+                      Get.toNamed(
+                        BranchDashboard.routeName,
+                      );
+                    },
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                          right: MediaQuery.of(context).size.width * 0.006,
+                          top: MediaQuery.of(context).size.width * 0.006),
+                      child: Container(
+                        height: MediaQuery.of(context).size.width * 0.03,
+                        decoration: BoxDecoration(
+                          color: widget.selected == "branch-dashboard"
+                              ? Colors.white
+                              : primaryThemeColor,
+                          borderRadius: const BorderRadius.only(
+                              topRight: Radius.circular(5),
+                              bottomRight: Radius.circular(5)),
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.all(
+                              MediaQuery.of(context).size.width * 0.006),
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.dashboard_outlined,
+                                size: MediaQuery.of(context).size.width * 0.012,
+                                color: widget.selected == "branch-dashboard"
+                                    ? primaryThemeColor
+                                    : Colors.white,
+                              ),
+                              SizedBox(
+                                width:
+                                    MediaQuery.of(context).size.width * 0.012,
+                              ),
+                              Text(
+                                "BRANCH DASHBOARD",
+                                style: TextStyle(
+                                    fontSize:
+                                        MediaQuery.of(context).size.width *
+                                            0.009,
+                                    fontWeight: FontWeight.w700,
+                                    color: widget.selected == "branch-dashboard"
                                         ? primaryThemeColor
                                         : Colors.white),
                               )
@@ -210,7 +318,7 @@ class _InventoryNavigationPaneExpandedState
                                     MediaQuery.of(context).size.width * 0.012,
                               ),
                               Text(
-                                "MEMBERS", 
+                                "MEMBERS",
                                 style: TextStyle(
                                     fontSize:
                                         MediaQuery.of(context).size.width *
@@ -433,60 +541,6 @@ class _InventoryNavigationPaneExpandedState
                                             0.009,
                                     fontWeight: FontWeight.w700,
                                     color: widget.selected == "trainer"
-                                        ? primaryThemeColor
-                                        : Colors.white),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-
-                  InkWell(
-                    onTap: () {
-                      //  Get.toNamed(
-                      //           SalesDashboard.vijayanagarRouteName,
-                      //           );
-                    },
-                    child: Padding(
-                      padding: EdgeInsets.only(
-                          right: MediaQuery.of(context).size.width * 0.006,
-                          top: MediaQuery.of(context).size.width * 0.006),
-                      child: Container(
-                        height: MediaQuery.of(context).size.width * 0.03,
-                        decoration: BoxDecoration(
-                          color: widget.selected == "sales-dashboard"
-                              ? Colors.white
-                              : primaryThemeColor,
-                          borderRadius: const BorderRadius.only(
-                              topRight: Radius.circular(5),
-                              bottomRight: Radius.circular(5)),
-                        ),
-                        child: Padding(
-                          padding: EdgeInsets.all(
-                              MediaQuery.of(context).size.width * 0.006),
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.dashboard_outlined,
-                                size: MediaQuery.of(context).size.width * 0.012,
-                                color: widget.selected == "sales-dashboard"
-                                    ? primaryThemeColor
-                                    : Colors.white,
-                              ),
-                              SizedBox(
-                                width:
-                                    MediaQuery.of(context).size.width * 0.012,
-                              ),
-                              Text(
-                                "SALES DASHBOARD",
-                                style: TextStyle(
-                                    fontSize:
-                                        MediaQuery.of(context).size.width *
-                                            0.009,
-                                    fontWeight: FontWeight.w700,
-                                    color: widget.selected == "sales-dashboard"
                                         ? primaryThemeColor
                                         : Colors.white),
                               )
