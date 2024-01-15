@@ -272,12 +272,13 @@ class _MembersState extends State<AdminAllBranch> {
                     address.clear();
                     password.clear();
 
-                    firstNameController.text = data.data['branch_name'];
+                    firstNameController.text = data.data['branch_name'] ?? '';
 
-                    primaryMobileNo.text = data.data['primary_mobile_no'];
-                    secondaryMobileNo.text = data.data['secondary_mobile_no'];
-                    email.text = data.data['email'];
-                    address.text = data.data['addr'];
+                    primaryMobileNo.text = data.data['primary_mobile_no'] ?? '';
+                    secondaryMobileNo.text =
+                        data.data['secondary_mobile_no'] ?? '';
+                    email.text = data.data['email'] ?? '';
+                    address.text = data.data['addr'] ?? '';
 
                     showDialog(
                         context: context,

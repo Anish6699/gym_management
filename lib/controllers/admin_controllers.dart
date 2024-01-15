@@ -23,6 +23,8 @@ class AdminController extends GetxController {
 
     var a = jsonDecode(response['body']);
     List body = a['data'] as List;
+    print('bbbbbbbbbbbbbbbb');
+    print(body);
 
     return body;
   }

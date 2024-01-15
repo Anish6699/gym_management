@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gmstest/configs/colors.dart';
+import 'package:gmstest/configs/server_configs.dart';
 import 'package:gmstest/super_admin/admins.dart';
 import 'package:gmstest/views/dashboards/admin_dashboard.dart';
 import 'package:gmstest/views/dashboards/branch_dashboard.dart';
@@ -8,6 +9,7 @@ import 'package:gmstest/views/dashboards/dashboard.dart';
 import 'package:gmstest/views/members.dart';
 import 'package:gmstest/views/trainer.dart';
 import 'package:gmstest/views/visitors.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class InventoryNavigationPaneExpanded extends StatefulWidget {
   InventoryNavigationPaneExpanded({
@@ -29,8 +31,24 @@ class _InventoryNavigationPaneExpandedState
   initState() {
     // widget.selected == "coal" ? coalVisible = true : null;
     // widget.selected == "coal" ? databaseVisible = true : coalVisible = false;
-
+    setInitialData();
     super.initState();
+  }
+
+  setInitialData() async {
+    print('in set initial data');
+    final prefs = await SharedPreferences.getInstance();
+
+    userType = prefs.getInt('user_type');
+    adminId = prefs.getInt('adminId');
+    branchId = prefs.getInt('branchId');
+    print(userType.toString());
+    setState(() {});
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
   }
 
   ScrollController scrollcontroller = ScrollController();
@@ -67,489 +85,539 @@ class _InventoryNavigationPaneExpandedState
                   const SizedBox(
                     height: 20,
                   ),
-                  InkWell(
-                    onTap: () {
-                      Get.toNamed(
-                        Dashboard.routeName,
-                      );
-                    },
-                    child: Padding(
-                      padding: EdgeInsets.only(
-                          right: MediaQuery.of(context).size.width * 0.006,
-                          top: MediaQuery.of(context).size.width * 0.006),
-                      child: Container(
-                        height: MediaQuery.of(context).size.width * 0.03,
-                        decoration: BoxDecoration(
-                          color: widget.selected == "dashboard"
-                              ? Colors.white
-                              : primaryThemeColor,
-                          borderRadius: const BorderRadius.only(
-                              topRight: Radius.circular(5),
-                              bottomRight: Radius.circular(5)),
-                        ),
-                        child: Padding(
-                          padding: EdgeInsets.all(
-                              MediaQuery.of(context).size.width * 0.006),
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.dashboard_outlined,
-                                size: MediaQuery.of(context).size.width * 0.012,
+                  userType == 1
+                      ? InkWell(
+                          onTap: () {
+                            Get.toNamed(
+                              Dashboard.routeName,
+                            );
+                          },
+                          child: Padding(
+                            padding: EdgeInsets.only(
+                                right:
+                                    MediaQuery.of(context).size.width * 0.006,
+                                top: MediaQuery.of(context).size.width * 0.006),
+                            child: Container(
+                              height: MediaQuery.of(context).size.width * 0.03,
+                              decoration: BoxDecoration(
                                 color: widget.selected == "dashboard"
-                                    ? primaryThemeColor
-                                    : Colors.white,
+                                    ? Colors.white
+                                    : primaryThemeColor,
+                                borderRadius: const BorderRadius.only(
+                                    topRight: Radius.circular(5),
+                                    bottomRight: Radius.circular(5)),
                               ),
-                              SizedBox(
-                                width:
-                                    MediaQuery.of(context).size.width * 0.012,
+                              child: Padding(
+                                padding: EdgeInsets.all(
+                                    MediaQuery.of(context).size.width * 0.006),
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      Icons.dashboard_outlined,
+                                      size: MediaQuery.of(context).size.width *
+                                          0.012,
+                                      color: widget.selected == "dashboard"
+                                          ? primaryThemeColor
+                                          : Colors.white,
+                                    ),
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.012,
+                                    ),
+                                    Text(
+                                      "SUPERADMIN DASHBOARD",
+                                      style: TextStyle(
+                                          fontSize: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.009,
+                                          fontWeight: FontWeight.w700,
+                                          color: widget.selected == "dashboard"
+                                              ? primaryThemeColor
+                                              : Colors.white),
+                                    )
+                                  ],
+                                ),
                               ),
-                              Text(
-                                "SUPERADMIN DASHBOARD",
-                                style: TextStyle(
-                                    fontSize:
-                                        MediaQuery.of(context).size.width *
-                                            0.009,
-                                    fontWeight: FontWeight.w700,
-                                    color: widget.selected == "dashboard"
-                                        ? primaryThemeColor
-                                        : Colors.white),
-                              )
-                            ],
+                            ),
                           ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  InkWell(
-                    onTap: () {
-                      Get.toNamed(
-                        AdminDashboard.routeName,
-                      );
-                    },
-                    child: Padding(
-                      padding: EdgeInsets.only(
-                          right: MediaQuery.of(context).size.width * 0.006,
-                          top: MediaQuery.of(context).size.width * 0.006),
-                      child: Container(
-                        height: MediaQuery.of(context).size.width * 0.03,
-                        decoration: BoxDecoration(
-                          color: widget.selected == "admin-dashboard"
-                              ? Colors.white
-                              : primaryThemeColor,
-                          borderRadius: const BorderRadius.only(
-                              topRight: Radius.circular(5),
-                              bottomRight: Radius.circular(5)),
-                        ),
-                        child: Padding(
-                          padding: EdgeInsets.all(
-                              MediaQuery.of(context).size.width * 0.006),
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.dashboard_outlined,
-                                size: MediaQuery.of(context).size.width * 0.012,
+                        )
+                      : SizedBox(),
+                  userType == 2
+                      ? InkWell(
+                          onTap: () {
+                            Get.toNamed(
+                              AdminDashboard.routeName,
+                            );
+                          },
+                          child: Padding(
+                            padding: EdgeInsets.only(
+                                right:
+                                    MediaQuery.of(context).size.width * 0.006,
+                                top: MediaQuery.of(context).size.width * 0.006),
+                            child: Container(
+                              height: MediaQuery.of(context).size.width * 0.03,
+                              decoration: BoxDecoration(
                                 color: widget.selected == "admin-dashboard"
-                                    ? primaryThemeColor
-                                    : Colors.white,
+                                    ? Colors.white
+                                    : primaryThemeColor,
+                                borderRadius: const BorderRadius.only(
+                                    topRight: Radius.circular(5),
+                                    bottomRight: Radius.circular(5)),
                               ),
-                              SizedBox(
-                                width:
-                                    MediaQuery.of(context).size.width * 0.012,
+                              child: Padding(
+                                padding: EdgeInsets.all(
+                                    MediaQuery.of(context).size.width * 0.006),
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      Icons.dashboard_outlined,
+                                      size: MediaQuery.of(context).size.width *
+                                          0.012,
+                                      color:
+                                          widget.selected == "admin-dashboard"
+                                              ? primaryThemeColor
+                                              : Colors.white,
+                                    ),
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.012,
+                                    ),
+                                    Text(
+                                      "ADMIN DASHBOARD",
+                                      style: TextStyle(
+                                          fontSize: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.009,
+                                          fontWeight: FontWeight.w700,
+                                          color: widget.selected ==
+                                                  "admin-dashboard"
+                                              ? primaryThemeColor
+                                              : Colors.white),
+                                    )
+                                  ],
+                                ),
                               ),
-                              Text(
-                                "ADMIN DASHBOARD",
-                                style: TextStyle(
-                                    fontSize:
-                                        MediaQuery.of(context).size.width *
-                                            0.009,
-                                    fontWeight: FontWeight.w700,
-                                    color: widget.selected == "admin-dashboard"
-                                        ? primaryThemeColor
-                                        : Colors.white),
-                              )
-                            ],
+                            ),
                           ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  InkWell(
-                    onTap: () {
-                      Get.toNamed(
-                        BranchDashboard.routeName,
-                      );
-                    },
-                    child: Padding(
-                      padding: EdgeInsets.only(
-                          right: MediaQuery.of(context).size.width * 0.006,
-                          top: MediaQuery.of(context).size.width * 0.006),
-                      child: Container(
-                        height: MediaQuery.of(context).size.width * 0.03,
-                        decoration: BoxDecoration(
-                          color: widget.selected == "branch-dashboard"
-                              ? Colors.white
-                              : primaryThemeColor,
-                          borderRadius: const BorderRadius.only(
-                              topRight: Radius.circular(5),
-                              bottomRight: Radius.circular(5)),
-                        ),
-                        child: Padding(
-                          padding: EdgeInsets.all(
-                              MediaQuery.of(context).size.width * 0.006),
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.dashboard_outlined,
-                                size: MediaQuery.of(context).size.width * 0.012,
+                        )
+                      : SizedBox(),
+                  (userType == 2 || userType == 3)
+                      ? InkWell(
+                          onTap: () {
+                            Get.toNamed(
+                              BranchDashboard.routeName,
+                            );
+                          },
+                          child: Padding(
+                            padding: EdgeInsets.only(
+                                right:
+                                    MediaQuery.of(context).size.width * 0.006,
+                                top: MediaQuery.of(context).size.width * 0.006),
+                            child: Container(
+                              height: MediaQuery.of(context).size.width * 0.03,
+                              decoration: BoxDecoration(
                                 color: widget.selected == "branch-dashboard"
-                                    ? primaryThemeColor
-                                    : Colors.white,
+                                    ? Colors.white
+                                    : primaryThemeColor,
+                                borderRadius: const BorderRadius.only(
+                                    topRight: Radius.circular(5),
+                                    bottomRight: Radius.circular(5)),
                               ),
-                              SizedBox(
-                                width:
-                                    MediaQuery.of(context).size.width * 0.012,
+                              child: Padding(
+                                padding: EdgeInsets.all(
+                                    MediaQuery.of(context).size.width * 0.006),
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      Icons.dashboard_outlined,
+                                      size: MediaQuery.of(context).size.width *
+                                          0.012,
+                                      color:
+                                          widget.selected == "branch-dashboard"
+                                              ? primaryThemeColor
+                                              : Colors.white,
+                                    ),
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.012,
+                                    ),
+                                    Text(
+                                      "BRANCH DASHBOARD",
+                                      style: TextStyle(
+                                          fontSize: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.009,
+                                          fontWeight: FontWeight.w700,
+                                          color: widget.selected ==
+                                                  "branch-dashboard"
+                                              ? primaryThemeColor
+                                              : Colors.white),
+                                    )
+                                  ],
+                                ),
                               ),
-                              Text(
-                                "BRANCH DASHBOARD",
-                                style: TextStyle(
-                                    fontSize:
-                                        MediaQuery.of(context).size.width *
-                                            0.009,
-                                    fontWeight: FontWeight.w700,
-                                    color: widget.selected == "branch-dashboard"
-                                        ? primaryThemeColor
-                                        : Colors.white),
-                              )
-                            ],
+                            ),
                           ),
-                        ),
-                      ),
-                    ),
-                  ),
+                        )
+                      : SizedBox(),
 
-                  InkWell(
-                    onTap: () {
-                      Get.toNamed(
-                        AllAdmins.allAdminRouteName,
-                      );
-                    },
-                    child: Padding(
-                      padding: EdgeInsets.only(
-                          right: MediaQuery.of(context).size.width * 0.006,
-                          top: MediaQuery.of(context).size.width * 0.006),
-                      child: Container(
-                        height: MediaQuery.of(context).size.width * 0.03,
-                        decoration: BoxDecoration(
-                          color: widget.selected == "allAdmin"
-                              ? Colors.white
-                              : primaryThemeColor,
-                          borderRadius: const BorderRadius.only(
-                              topRight: Radius.circular(5),
-                              bottomRight: Radius.circular(5)),
-                        ),
-                        child: Padding(
-                          padding: EdgeInsets.all(
-                              MediaQuery.of(context).size.width * 0.006),
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.person,
-                                size: MediaQuery.of(context).size.width * 0.012,
+                  userType == 1
+                      ? InkWell(
+                          onTap: () {
+                            Get.toNamed(
+                              AllAdmins.allAdminRouteName,
+                            );
+                          },
+                          child: Padding(
+                            padding: EdgeInsets.only(
+                                right:
+                                    MediaQuery.of(context).size.width * 0.006,
+                                top: MediaQuery.of(context).size.width * 0.006),
+                            child: Container(
+                              height: MediaQuery.of(context).size.width * 0.03,
+                              decoration: BoxDecoration(
                                 color: widget.selected == "allAdmin"
-                                    ? primaryThemeColor
-                                    : Colors.white,
+                                    ? Colors.white
+                                    : primaryThemeColor,
+                                borderRadius: const BorderRadius.only(
+                                    topRight: Radius.circular(5),
+                                    bottomRight: Radius.circular(5)),
                               ),
-                              SizedBox(
-                                width:
-                                    MediaQuery.of(context).size.width * 0.012,
+                              child: Padding(
+                                padding: EdgeInsets.all(
+                                    MediaQuery.of(context).size.width * 0.006),
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      Icons.person,
+                                      size: MediaQuery.of(context).size.width *
+                                          0.012,
+                                      color: widget.selected == "allAdmin"
+                                          ? primaryThemeColor
+                                          : Colors.white,
+                                    ),
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.012,
+                                    ),
+                                    Text(
+                                      "ADMINS",
+                                      style: TextStyle(
+                                          fontSize: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.009,
+                                          fontWeight: FontWeight.w700,
+                                          color: widget.selected == "allAdmin"
+                                              ? primaryThemeColor
+                                              : Colors.white),
+                                    )
+                                  ],
+                                ),
                               ),
-                              Text(
-                                "ADMINS",
-                                style: TextStyle(
-                                    fontSize:
-                                        MediaQuery.of(context).size.width *
-                                            0.009,
-                                    fontWeight: FontWeight.w700,
-                                    color: widget.selected == "allAdmin"
-                                        ? primaryThemeColor
-                                        : Colors.white),
-                              )
-                            ],
+                            ),
                           ),
-                        ),
-                      ),
-                    ),
-                  ),
+                        )
+                      : SizedBox(),
 
-                  InkWell(
-                    onTap: () {
-                      Get.toNamed(
-                        MembersView.membersRouteName,
-                      );
-                    },
-                    child: Padding(
-                      padding: EdgeInsets.only(
-                          right: MediaQuery.of(context).size.width * 0.006,
-                          top: MediaQuery.of(context).size.width * 0.006),
-                      child: Container(
-                        height: MediaQuery.of(context).size.width * 0.03,
-                        decoration: BoxDecoration(
-                          color: widget.selected == "members"
-                              ? Colors.white
-                              : primaryThemeColor,
-                          borderRadius: const BorderRadius.only(
-                              topRight: Radius.circular(5),
-                              bottomRight: Radius.circular(5)),
-                        ),
-                        child: Padding(
-                          padding: EdgeInsets.all(
-                              MediaQuery.of(context).size.width * 0.006),
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.person,
-                                size: MediaQuery.of(context).size.width * 0.012,
+                  (userType == 2 || userType == 3)
+                      ? InkWell(
+                          onTap: () {
+                            Get.toNamed(
+                              MembersView.membersRouteName,
+                            );
+                          },
+                          child: Padding(
+                            padding: EdgeInsets.only(
+                                right:
+                                    MediaQuery.of(context).size.width * 0.006,
+                                top: MediaQuery.of(context).size.width * 0.006),
+                            child: Container(
+                              height: MediaQuery.of(context).size.width * 0.03,
+                              decoration: BoxDecoration(
                                 color: widget.selected == "members"
-                                    ? primaryThemeColor
-                                    : Colors.white,
+                                    ? Colors.white
+                                    : primaryThemeColor,
+                                borderRadius: const BorderRadius.only(
+                                    topRight: Radius.circular(5),
+                                    bottomRight: Radius.circular(5)),
                               ),
-                              SizedBox(
-                                width:
-                                    MediaQuery.of(context).size.width * 0.012,
+                              child: Padding(
+                                padding: EdgeInsets.all(
+                                    MediaQuery.of(context).size.width * 0.006),
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      Icons.person,
+                                      size: MediaQuery.of(context).size.width *
+                                          0.012,
+                                      color: widget.selected == "members"
+                                          ? primaryThemeColor
+                                          : Colors.white,
+                                    ),
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.012,
+                                    ),
+                                    Text(
+                                      "MEMBERS",
+                                      style: TextStyle(
+                                          fontSize: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.009,
+                                          fontWeight: FontWeight.w700,
+                                          color: widget.selected == "members"
+                                              ? primaryThemeColor
+                                              : Colors.white),
+                                    )
+                                  ],
+                                ),
                               ),
-                              Text(
-                                "MEMBERS",
-                                style: TextStyle(
-                                    fontSize:
-                                        MediaQuery.of(context).size.width *
-                                            0.009,
-                                    fontWeight: FontWeight.w700,
-                                    color: widget.selected == "members"
-                                        ? primaryThemeColor
-                                        : Colors.white),
-                              )
-                            ],
+                            ),
                           ),
-                        ),
-                      ),
-                    ),
-                  ),
+                        )
+                      : SizedBox(),
 
                   // Planned Demand
-                  InkWell(
-                    onTap: () {
-                      // Get.toNamed(PlannedDemandPage.routeName);
-                    },
-                    child: Padding(
-                      padding: EdgeInsets.only(
-                          right: MediaQuery.of(context).size.width * 0.006,
-                          top: MediaQuery.of(context).size.width * 0.006),
-                      child: Container(
-                        height: MediaQuery.of(context).size.width * 0.03,
-                        decoration: BoxDecoration(
-                          color: widget.selected == "invite-members"
-                              ? Colors.white
-                              : primaryThemeColor,
-                          borderRadius: const BorderRadius.only(
-                              topRight: Radius.circular(5),
-                              bottomRight: Radius.circular(5)),
-                        ),
-                        child: Padding(
-                          padding: EdgeInsets.all(
-                              MediaQuery.of(context).size.width * 0.006),
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.share,
-                                size: MediaQuery.of(context).size.width * 0.012,
+                  (userType == 2 || userType == 3)
+                      ? InkWell(
+                          onTap: () {
+                            // Get.toNamed(PlannedDemandPage.routeName);
+                          },
+                          child: Padding(
+                            padding: EdgeInsets.only(
+                                right:
+                                    MediaQuery.of(context).size.width * 0.006,
+                                top: MediaQuery.of(context).size.width * 0.006),
+                            child: Container(
+                              height: MediaQuery.of(context).size.width * 0.03,
+                              decoration: BoxDecoration(
                                 color: widget.selected == "invite-members"
-                                    ? primaryThemeColor
-                                    : Colors.white,
+                                    ? Colors.white
+                                    : primaryThemeColor,
+                                borderRadius: const BorderRadius.only(
+                                    topRight: Radius.circular(5),
+                                    bottomRight: Radius.circular(5)),
                               ),
-                              SizedBox(
-                                width:
-                                    MediaQuery.of(context).size.width * 0.012,
+                              child: Padding(
+                                padding: EdgeInsets.all(
+                                    MediaQuery.of(context).size.width * 0.006),
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      Icons.share,
+                                      size: MediaQuery.of(context).size.width *
+                                          0.012,
+                                      color: widget.selected == "invite-members"
+                                          ? primaryThemeColor
+                                          : Colors.white,
+                                    ),
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.012,
+                                    ),
+                                    Text(
+                                      "INVITE MEMBERS",
+                                      style: TextStyle(
+                                          fontSize: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.009,
+                                          fontWeight: FontWeight.w700,
+                                          color: widget.selected ==
+                                                  "invite-members"
+                                              ? primaryThemeColor
+                                              : Colors.white),
+                                    )
+                                  ],
+                                ),
                               ),
-                              Text(
-                                "INVITE MEMBERS",
-                                style: TextStyle(
-                                    fontSize:
-                                        MediaQuery.of(context).size.width *
-                                            0.009,
-                                    fontWeight: FontWeight.w700,
-                                    color: widget.selected == "invite-members"
-                                        ? primaryThemeColor
-                                        : Colors.white),
-                              )
-                            ],
+                            ),
                           ),
-                        ),
-                      ),
-                    ),
-                  ),
+                        )
+                      : SizedBox(),
 
                   // Vessel Arrival
-                  InkWell(
-                    onTap: () {
-                      Get.toNamed(
-                        VisitorsView.visitorsRouteName,
-                      );
-                    },
-                    child: Padding(
-                      padding: EdgeInsets.only(
-                          right: MediaQuery.of(context).size.width * 0.006,
-                          top: MediaQuery.of(context).size.width * 0.006),
-                      child: Container(
-                        height: MediaQuery.of(context).size.width * 0.03,
-                        decoration: BoxDecoration(
-                          color: widget.selected == "visitors"
-                              ? Colors.white
-                              : primaryThemeColor,
-                          borderRadius: const BorderRadius.only(
-                              topRight: Radius.circular(5),
-                              bottomRight: Radius.circular(5)),
-                        ),
-                        child: Padding(
-                          padding: EdgeInsets.all(
-                              MediaQuery.of(context).size.width * 0.006),
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.visibility,
-                                size: MediaQuery.of(context).size.width * 0.012,
+                  (userType == 2 || userType == 3)
+                      ? InkWell(
+                          onTap: () {
+                            Get.toNamed(
+                              VisitorsView.visitorsRouteName,
+                            );
+                          },
+                          child: Padding(
+                            padding: EdgeInsets.only(
+                                right:
+                                    MediaQuery.of(context).size.width * 0.006,
+                                top: MediaQuery.of(context).size.width * 0.006),
+                            child: Container(
+                              height: MediaQuery.of(context).size.width * 0.03,
+                              decoration: BoxDecoration(
                                 color: widget.selected == "visitors"
-                                    ? primaryThemeColor
-                                    : Colors.white,
+                                    ? Colors.white
+                                    : primaryThemeColor,
+                                borderRadius: const BorderRadius.only(
+                                    topRight: Radius.circular(5),
+                                    bottomRight: Radius.circular(5)),
                               ),
-                              SizedBox(
-                                width:
-                                    MediaQuery.of(context).size.width * 0.012,
+                              child: Padding(
+                                padding: EdgeInsets.all(
+                                    MediaQuery.of(context).size.width * 0.006),
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      Icons.visibility,
+                                      size: MediaQuery.of(context).size.width *
+                                          0.012,
+                                      color: widget.selected == "visitors"
+                                          ? primaryThemeColor
+                                          : Colors.white,
+                                    ),
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.012,
+                                    ),
+                                    Text(
+                                      "VISITORS",
+                                      style: TextStyle(
+                                          fontSize: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.009,
+                                          fontWeight: FontWeight.w700,
+                                          color: widget.selected == "visitors"
+                                              ? primaryThemeColor
+                                              : Colors.white),
+                                    )
+                                  ],
+                                ),
                               ),
-                              Text(
-                                "VISITORS",
-                                style: TextStyle(
-                                    fontSize:
-                                        MediaQuery.of(context).size.width *
-                                            0.009,
-                                    fontWeight: FontWeight.w700,
-                                    color: widget.selected == "visitors"
-                                        ? primaryThemeColor
-                                        : Colors.white),
-                              )
-                            ],
+                            ),
                           ),
-                        ),
-                      ),
-                    ),
-                  ),
+                        )
+                      : SizedBox(),
 
-                  InkWell(
-                    onTap: () {
-                      // Get.toNamed(ConsumptionHomepage.ratnagiriRouteName, );
-                    },
-                    child: Padding(
-                      padding: EdgeInsets.only(
-                          right: MediaQuery.of(context).size.width * 0.006,
-                          top: MediaQuery.of(context).size.width * 0.006),
-                      child: Container(
-                        height: MediaQuery.of(context).size.width * 0.03,
-                        decoration: BoxDecoration(
-                          color: widget.selected == "workout-diet-plan"
-                              ? Colors.white
-                              : primaryThemeColor,
-                          borderRadius: const BorderRadius.only(
-                              topRight: Radius.circular(5),
-                              bottomRight: Radius.circular(5)),
-                        ),
-                        child: Padding(
-                          padding: EdgeInsets.all(
-                              MediaQuery.of(context).size.width * 0.006),
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.sports_gymnastics,
-                                size: MediaQuery.of(context).size.width * 0.012,
+                  (userType == 2 || userType == 3)
+                      ? InkWell(
+                          onTap: () {
+                            // Get.toNamed(ConsumptionHomepage.ratnagiriRouteName, );
+                          },
+                          child: Padding(
+                            padding: EdgeInsets.only(
+                                right:
+                                    MediaQuery.of(context).size.width * 0.006,
+                                top: MediaQuery.of(context).size.width * 0.006),
+                            child: Container(
+                              height: MediaQuery.of(context).size.width * 0.03,
+                              decoration: BoxDecoration(
                                 color: widget.selected == "workout-diet-plan"
-                                    ? primaryThemeColor
-                                    : Colors.white,
+                                    ? Colors.white
+                                    : primaryThemeColor,
+                                borderRadius: const BorderRadius.only(
+                                    topRight: Radius.circular(5),
+                                    bottomRight: Radius.circular(5)),
                               ),
-                              SizedBox(
-                                width:
-                                    MediaQuery.of(context).size.width * 0.012,
+                              child: Padding(
+                                padding: EdgeInsets.all(
+                                    MediaQuery.of(context).size.width * 0.006),
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      Icons.sports_gymnastics,
+                                      size: MediaQuery.of(context).size.width *
+                                          0.012,
+                                      color:
+                                          widget.selected == "workout-diet-plan"
+                                              ? primaryThemeColor
+                                              : Colors.white,
+                                    ),
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.012,
+                                    ),
+                                    Text(
+                                      "WORKOUT/DIET PLAN",
+                                      style: TextStyle(
+                                          fontSize: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.009,
+                                          fontWeight: FontWeight.w700,
+                                          color: widget.selected ==
+                                                  "workout-diet-plan"
+                                              ? primaryThemeColor
+                                              : Colors.white),
+                                    )
+                                  ],
+                                ),
                               ),
-                              Text(
-                                "WORKOUT/DIET PLAN",
-                                style: TextStyle(
-                                    fontSize:
-                                        MediaQuery.of(context).size.width *
-                                            0.009,
-                                    fontWeight: FontWeight.w700,
-                                    color:
-                                        widget.selected == "workout-diet-plan"
-                                            ? primaryThemeColor
-                                            : Colors.white),
-                              )
-                            ],
+                            ),
                           ),
-                        ),
-                      ),
-                    ),
-                  ),
+                        )
+                      : SizedBox(),
 
-// Coal Loss Statistics
-                  InkWell(
-                    onTap: () {
-                      Get.toNamed(
-                        TrainerView.trainerRouteName,
-                      );
-                    },
-                    child: Padding(
-                      padding: EdgeInsets.only(
-                          right: MediaQuery.of(context).size.width * 0.006,
-                          top: MediaQuery.of(context).size.width * 0.006),
-                      child: Container(
-                        height: MediaQuery.of(context).size.width * 0.03,
-                        decoration: BoxDecoration(
-                          color: widget.selected == "trainer"
-                              ? Colors.white
-                              : primaryThemeColor,
-                          borderRadius: const BorderRadius.only(
-                              topRight: Radius.circular(5),
-                              bottomRight: Radius.circular(5)),
-                        ),
-                        child: Padding(
-                          padding: EdgeInsets.all(
-                              MediaQuery.of(context).size.width * 0.006),
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.person_sharp,
-                                size: MediaQuery.of(context).size.width * 0.012,
+                  (userType == 2 || userType == 3)
+                      ? InkWell(
+                          onTap: () {
+                            Get.toNamed(
+                              TrainerView.trainerRouteName,
+                            );
+                          },
+                          child: Padding(
+                            padding: EdgeInsets.only(
+                                right:
+                                    MediaQuery.of(context).size.width * 0.006,
+                                top: MediaQuery.of(context).size.width * 0.006),
+                            child: Container(
+                              height: MediaQuery.of(context).size.width * 0.03,
+                              decoration: BoxDecoration(
                                 color: widget.selected == "trainer"
-                                    ? primaryThemeColor
-                                    : Colors.white,
+                                    ? Colors.white
+                                    : primaryThemeColor,
+                                borderRadius: const BorderRadius.only(
+                                    topRight: Radius.circular(5),
+                                    bottomRight: Radius.circular(5)),
                               ),
-                              SizedBox(
-                                width:
-                                    MediaQuery.of(context).size.width * 0.012,
+                              child: Padding(
+                                padding: EdgeInsets.all(
+                                    MediaQuery.of(context).size.width * 0.006),
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      Icons.person_sharp,
+                                      size: MediaQuery.of(context).size.width *
+                                          0.012,
+                                      color: widget.selected == "trainer"
+                                          ? primaryThemeColor
+                                          : Colors.white,
+                                    ),
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.012,
+                                    ),
+                                    Text(
+                                      "TRAINER",
+                                      style: TextStyle(
+                                          fontSize: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.009,
+                                          fontWeight: FontWeight.w700,
+                                          color: widget.selected == "trainer"
+                                              ? primaryThemeColor
+                                              : Colors.white),
+                                    )
+                                  ],
+                                ),
                               ),
-                              Text(
-                                "TRAINER",
-                                style: TextStyle(
-                                    fontSize:
-                                        MediaQuery.of(context).size.width *
-                                            0.009,
-                                    fontWeight: FontWeight.w700,
-                                    color: widget.selected == "trainer"
-                                        ? primaryThemeColor
-                                        : Colors.white),
-                              )
-                            ],
+                            ),
                           ),
-                        ),
-                      ),
-                    ),
-                  ),
+                        )
+                      : SizedBox(),
                 ],
               ),
             ],

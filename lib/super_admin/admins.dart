@@ -73,14 +73,12 @@ class _MembersState extends State<AllAdmins> {
   }
 
   initializeData() {
-    print('in it state started');
+   
     _headerModel = DaviModel(
       rows: adminList,
       columns: _getColumns(context),
     );
-    print('in it state completed');
-    print('aaaaaaaaaaaaaaaa');
-    print(adminList);
+  
     isLoading = false;
     setState(() {});
   }

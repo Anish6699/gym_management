@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gmstest/configs/colors.dart';
+import 'package:gmstest/configs/server_configs.dart';
+import 'package:gmstest/controllers/admin_controllers.dart';
 import 'package:gmstest/controllers/login_controllers.dart';
 import 'package:gmstest/widgets/popup.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class GenericAppBar extends StatefulWidget implements PreferredSizeWidget {
   GenericAppBar(
@@ -28,9 +31,11 @@ class GenericAppBar extends StatefulWidget implements PreferredSizeWidget {
 
 class _GenericAppBarState extends State<GenericAppBar> {
   Map<String, dynamic> userData = {};
+  AdminController adminController = AdminController();
+  List adminBranchList = [];
 
   @override
-  void initState() {
+  initState() {
     super.initState();
   }
 
@@ -61,66 +66,70 @@ class _GenericAppBarState extends State<GenericAppBar> {
       actions: [
         Row(
           children: [
-            Container(
-              height: MediaQuery.of(context).size.width * 0.02,
-              width: MediaQuery.of(context).size.width * 0.2,
-              color: Colors.white,
-              child: DropdownButtonFormField(
-                isExpanded: true,
-                elevation: 1,
-                // value: selectedEntity,
-                items: ['Branch 1', 'Branch 2', 'Branch 3', 'Branch 4'].map(
-                  (String item) {
-                    return DropdownMenuItem(
-                      value: item,
-                      child: Text(
-                        item,
-                        style: TextStyle(
-                            fontSize: MediaQuery.of(context).size.width * 0.008,
-                            color: Colors.black),
-                      ),
-                    );
-                  },
-                ).toList(),
-                onChanged: (value) {},
-                borderRadius: BorderRadius.circular(4),
-                style: TextStyle(
-                    fontSize: MediaQuery.of(context).size.width * 0.08,
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold),
-                icon: Icon(
-                  Icons.keyboard_arrow_down_rounded,
-                  color: primaryGreyColor,
-                  size: MediaQuery.of(context).size.width * 0.011,
-                ),
-                decoration: InputDecoration(
-                  hintText: "Select Branch",
-                  hintStyle: TextStyle(
-                      fontSize: MediaQuery.of(context).size.width * 0.008,
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold),
-                  contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                  fillColor: Colors.white,
-                  focusedBorder: const OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Colors.black,
-                    ),
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(4.0),
-                    ),
-                  ),
-                  border: const OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Colors.black,
-                    ),
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(4.0),
-                    ),
-                  ),
-                ),
-                dropdownColor: Colors.white,
-              ),
-            ),
+            // userType == 2
+            //     ? Container(
+            //         height: MediaQuery.of(context).size.width * 0.02,
+            //         width: MediaQuery.of(context).size.width * 0.2,
+            //         color: Colors.white,
+            //         child: DropdownButtonFormField(
+            //           isExpanded: true,
+            //           elevation: 1,
+            //           // value: selectedEntity,
+            //           items:
+            //               ['Branch 1', 'Branch 2', 'Branch 3', 'Branch 4'].map(
+            //             (String item) {
+            //               return DropdownMenuItem(
+            //                 value: item,
+            //                 child: Text(
+            //                   item,
+            //                   style: TextStyle(
+            //                       fontSize:
+            //                           MediaQuery.of(context).size.width * 0.008,
+            //                       color: Colors.black),
+            //                 ),
+            //               );
+            //             },
+            //           ).toList(),
+            //           onChanged: (value) {},
+            //           borderRadius: BorderRadius.circular(4),
+            //           style: TextStyle(
+            //               fontSize: MediaQuery.of(context).size.width * 0.08,
+            //               color: Colors.black,
+            //               fontWeight: FontWeight.bold),
+            //           icon: Icon(
+            //             Icons.keyboard_arrow_down_rounded,
+            //             color: primaryGreyColor,
+            //             size: MediaQuery.of(context).size.width * 0.011,
+            //           ),
+            //           decoration: InputDecoration(
+            //             hintText: "Select Branch",
+            //             hintStyle: TextStyle(
+            //                 fontSize: MediaQuery.of(context).size.width * 0.008,
+            //                 color: Colors.black,
+            //                 fontWeight: FontWeight.bold),
+            //             contentPadding: EdgeInsets.symmetric(horizontal: 10),
+            //             fillColor: Colors.white,
+            //             focusedBorder: const OutlineInputBorder(
+            //               borderSide: BorderSide(
+            //                 color: Colors.black,
+            //               ),
+            //               borderRadius: BorderRadius.all(
+            //                 Radius.circular(4.0),
+            //               ),
+            //             ),
+            //             border: const OutlineInputBorder(
+            //               borderSide: BorderSide(
+            //                 color: Colors.black,
+            //               ),
+            //               borderRadius: BorderRadius.all(
+            //                 Radius.circular(4.0),
+            //               ),
+            //             ),
+            //           ),
+            //           dropdownColor: Colors.white,
+            //         ),
+            //       )
+            //     : SizedBox(),
             SizedBox(
               width: MediaQuery.of(context).size.width * 0.01,
             ),
@@ -399,8 +408,7 @@ class _GenericAppBarState extends State<GenericAppBar> {
                 ),
                 child: InkWell(
                   onTap: () async {
-                   await loginController.logout();
-                   
+                    await loginController.logout();
                   },
                   child: Icon(
                     Icons.logout,

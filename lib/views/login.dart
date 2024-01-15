@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gmstest/configs/colors.dart';
+import 'package:gmstest/configs/server_configs.dart';
 import 'package:gmstest/controllers/login_controllers.dart';
 import 'package:gmstest/views/dashboards/dashboard.dart';
 import 'package:gmstest/widgets/buttons.dart';
@@ -264,10 +265,35 @@ class _LoginPageState extends State<LoginPage> {
                                                       final prefs =
                                                           await SharedPreferences
                                                               .getInstance();
+                                                      userType = snapshot
+                                                          .data!['user_type'];
+                                                      if (userType == 1) {}
+                                                      if (userType == 2) {
+                                                        adminId = snapshot
+                                                            .data!['user_id'];
+                                                        await prefs.setInt(
+                                                            'adminId',
+                                                            snapshot.data![
+                                                                'user_id']);
+                                                      }
+                                                      if (userType == 3) {
+                                                        branchId = snapshot
+                                                            .data!['user_id'];
+                                                        await prefs.setInt(
+                                                            'branchId',
+                                                            snapshot.data![
+                                                                'user_id']);
+                                                      }
+
                                                       await prefs.setString(
                                                           'token',
                                                           snapshot.data![
                                                               'access_token']);
+                                                      await prefs.setInt(
+                                                          'user_type',
+                                                          snapshot.data![
+                                                              'user_type']);
+
                                                       Get.toNamed(
                                                         Dashboard.routeName,
                                                       );

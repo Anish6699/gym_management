@@ -13,7 +13,7 @@ class LoginController extends GetxController {
     var response = await _httpClient.post(path: 'user-login', body: data);
     print(response['body']);
     var body = json.decode(response['body']) as Map<String, dynamic>;
-
+    
     return body;
   }
 
