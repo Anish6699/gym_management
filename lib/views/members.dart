@@ -100,12 +100,14 @@ class _MembersState extends State<MembersView> {
     branchId = prefs.getInt('branchId');
 
     if (userType == 2) {
+      print('Admin login');
       adminBranchList =
           await adminController.getAdminAllBranches(adminId: adminId);
       selectedBranch = adminBranchList.first;
       setDataOnBranchChange();
     }
     if (userType == 3) {
+      print('branch login');
       setDataOnBranchLogin();
     }
   }
@@ -160,7 +162,7 @@ class _MembersState extends State<MembersView> {
     setState(() {});
     print('selected branch ${selectedBranch}');
     var a = await memmberController.getAllMembers(
-        branchId: selectedBranch == null ? selectedBranch['id'] : branchId);
+        branchId: branchId ?? selectedBranch['id']);
 
     List<Map<String, dynamic>> membersList = a.map((dynamic item) {
       if (item is Map<String, dynamic>) {
