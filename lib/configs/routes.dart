@@ -5,7 +5,8 @@ import 'package:gmstest/views/dashboards/admin_dashboard.dart';
 import 'package:gmstest/views/dashboards/branch_dashboard.dart';
 import 'package:gmstest/views/dashboards/dashboard.dart';
 import 'package:gmstest/views/login.dart';
-import 'package:gmstest/views/members.dart';
+import 'package:gmstest/views/members/member_profile.dart';
+import 'package:gmstest/views/members/members.dart';
 import 'package:gmstest/views/trainer.dart';
 import 'package:gmstest/views/visitors.dart';
 
@@ -29,6 +30,8 @@ class AppRouter {
         return TrainerView.trainerRoute();
       case AllAdmins.allAdminRouteName:
         return AllAdmins.allAdminsRoute();
+      case MemberProfile.routeName:
+        return MemberProfile.route(settings.arguments);
       case AdminAllBranch.adminAllBranchesRouteName:
         return AdminAllBranch.allAdminsRoute(settings.arguments);
 

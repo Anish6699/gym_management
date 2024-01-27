@@ -6,7 +6,7 @@ import 'package:gmstest/super_admin/admins.dart';
 import 'package:gmstest/views/dashboards/admin_dashboard.dart';
 import 'package:gmstest/views/dashboards/branch_dashboard.dart';
 import 'package:gmstest/views/dashboards/dashboard.dart';
-import 'package:gmstest/views/members.dart';
+import 'package:gmstest/views/members/members.dart';
 import 'package:gmstest/views/trainer.dart';
 import 'package:gmstest/views/visitors.dart';
 import 'package:shared_preferences/shared_preferences.dart';

@@ -9,6 +9,7 @@ import 'package:gmstest/controllers/admin_controllers.dart';
 import 'package:gmstest/controllers/member_controllers.dart';
 import 'package:gmstest/navigation_pane/navigation_pane_closed.dart';
 import 'package:gmstest/navigation_pane/navigation_pane_expanded.dart';
+import 'package:gmstest/views/members/member_profile.dart';
 import 'package:gmstest/widgets/buttons.dart';
 import 'package:gmstest/widgets/generic_appbar.dart';
 import 'package:davi/davi.dart';
@@ -409,7 +410,9 @@ class _MembersState extends State<MembersView> {
         cellBuilder: (context, data) {
           return Center(
               child: InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    Get.toNamed(MemberProfile.routeName,arguments: data.data['id']);
+                  },
                   child: const Tooltip(
                     message: 'View Profile',
                     child: Icon(

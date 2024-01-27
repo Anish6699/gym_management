@@ -9,12 +9,8 @@ final HttpClient _httpClient = HttpClient();
 
 class MemberController extends GetxController {
   Future<List> getAllMembers({required branchId}) async {
-    print('b i d');
-    print(branchId);
     var response = await _httpClient.get(path: 'get-member/$branchId');
-    print(response);
     var a = jsonDecode(response['body']);
-    print(a);
     List body = a['data'] as List;
 
     return body;
@@ -34,7 +30,15 @@ class MemberController extends GetxController {
       Map<String, dynamic> data, branchId) async {
     print(data);
     var response =
-        await _httpClient.post(path: 'edit-admin/$branchId', body: data);
+        await _httpClient.post(path: 'edit-member/$branchId', body: data);
+    print(response['body']);
+    var body = json.decode(response['body']) as Map<String, dynamic>;
+
+    return body;
+  }
+
+  Future<Map<String, dynamic>> getSingleMember(memberId) async {
+    var response = await _httpClient.get(path: 'member-profile/$memberId');
     print(response['body']);
     var body = json.decode(response['body']) as Map<String, dynamic>;
 
