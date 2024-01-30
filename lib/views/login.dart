@@ -68,7 +68,7 @@ class _LoginPageState extends State<LoginPage> {
         Expanded(
           flex: 2,
           child: Scaffold(
-            backgroundColor: tertiaryGreyColor,
+            // backgroundColor: tertiaryGreyColor,
             body: Form(
                 key: _formKey,
                 child: Container(
@@ -79,7 +79,12 @@ class _LoginPageState extends State<LoginPage> {
                       mainAxisSize: MainAxisSize.min,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        SizedBox(
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(3.0),
+                            color: Colors.white,
+                          ),
+
                           // width: MediaQuery.of(context).size.height * 0.2,
                           height: MediaQuery.of(context).size.height * 0.08,
                           child: Image.asset(
@@ -108,12 +113,12 @@ class _LoginPageState extends State<LoginPage> {
                                 child: TextFormField(
                                   decoration: const InputDecoration(
                                       border: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color: secondaryBorderGreyColor),
+                                        borderSide:
+                                            BorderSide(color: Colors.black),
                                       ),
                                       focusedBorder: OutlineInputBorder(
                                         borderSide: BorderSide(
-                                            color: primaryThemeColor),
+                                            color: secondaryBorderGreyColor),
                                       )),
                                   controller: emailController,
                                   keyboardType: TextInputType.emailAddress,
@@ -151,12 +156,12 @@ class _LoginPageState extends State<LoginPage> {
                                   autocorrect: false,
                                   decoration: const InputDecoration(
                                       border: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color: secondaryBorderGreyColor),
+                                        borderSide:
+                                            BorderSide(color: Colors.black),
                                       ),
                                       focusedBorder: OutlineInputBorder(
                                         borderSide: BorderSide(
-                                            color: primaryThemeColor),
+                                            color: secondaryBorderGreyColor),
                                       )),
                                   controller: passwordController,
                                   onFieldSubmitted: (e) {
@@ -359,7 +364,7 @@ class _LoginPageState extends State<LoginPage> {
                             'New User?',
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
-                                color: primaryThemeColor),
+                                color: Colors.white),
                           ),
                         )
                       ],

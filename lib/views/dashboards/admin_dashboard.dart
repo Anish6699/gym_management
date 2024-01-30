@@ -41,8 +41,11 @@ class _DashboardState extends State<AdminDashboard>
         isNavOpen
             ? Expanded(
                 flex: 2,
-                child: InventoryNavigationPaneExpanded(
-                    selected: "admin-dashboard"),
+                child:
+                    // SideMenu()
+
+                    InventoryNavigationPaneExpanded(
+                        selected: "admin-dashboard"),
               )
             : SizedBox(
                 width: MediaQuery.of(context).size.width * 0.05,

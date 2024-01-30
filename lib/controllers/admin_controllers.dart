@@ -68,4 +68,32 @@ class AdminController extends GetxController {
 
     return body;
   }
+   Future<Map<String, dynamic>> addBranchPlan(
+      Map<String, dynamic> data, int branchId) async {
+    print(data);
+    var response =
+        await _httpClient.post(path: 'add-branch-plan/$branchId', body: data);
+    print(response['body']);
+    var body = json.decode(response['body']) as Map<String, dynamic>;
+
+    return body;
+  }
+   Future<Map<String, dynamic>> payPending(
+      Map<String, dynamic> data, int branchId) async {
+    print(data);
+    var response =
+        await _httpClient.post(path: 'pay-branch-pending/$branchId', body: data);
+    print(response['body']);
+    var body = json.decode(response['body']) as Map<String, dynamic>;
+
+    return body;
+  }
+
+  Future<Map<String, dynamic>> getSingleMember(branchId) async {
+    var response = await _httpClient.get(path: 'branch-profile/$branchId');
+    print(response['body']);
+    var body = json.decode(response['body']) as Map<String, dynamic>;
+
+    return body;
+  }
 }

@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gmstest/configs/colors.dart';
@@ -63,22 +65,8 @@ class _InventoryNavigationPaneExpandedState
           child: ListView(
             controller: scrollcontroller,
             children: [
-              Container(
-                height: MediaQuery.of(context).size.height * 0.075,
-                color: Colors.white,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      color: Colors.transparent,
-                      // width: MediaQuery.of(context).size.height * 0.2,
-                      height: MediaQuery.of(context).size.height * 0.05,
-                      child: Image.asset(
-                        'assets/logopng2.png',
-                      ),
-                    ),
-                  ],
-                ),
+              DrawerHeader(
+                child: Image.asset("assets/images/logo.png"),
               ),
               Column(
                 children: [
@@ -102,7 +90,7 @@ class _InventoryNavigationPaneExpandedState
                               decoration: BoxDecoration(
                                 color: widget.selected == "dashboard"
                                     ? Colors.white
-                                    : primaryThemeColor,
+                                    : Colors.transparent,
                                 borderRadius: const BorderRadius.only(
                                     topRight: Radius.circular(5),
                                     bottomRight: Radius.circular(5)),
@@ -160,7 +148,7 @@ class _InventoryNavigationPaneExpandedState
                               decoration: BoxDecoration(
                                 color: widget.selected == "admin-dashboard"
                                     ? Colors.white
-                                    : primaryThemeColor,
+                                    : Colors.transparent,
                                 borderRadius: const BorderRadius.only(
                                     topRight: Radius.circular(5),
                                     bottomRight: Radius.circular(5)),
@@ -220,7 +208,7 @@ class _InventoryNavigationPaneExpandedState
                               decoration: BoxDecoration(
                                 color: widget.selected == "branch-dashboard"
                                     ? Colors.white
-                                    : primaryThemeColor,
+                                    : Colors.transparent,
                                 borderRadius: const BorderRadius.only(
                                     topRight: Radius.circular(5),
                                     bottomRight: Radius.circular(5)),
@@ -281,7 +269,7 @@ class _InventoryNavigationPaneExpandedState
                               decoration: BoxDecoration(
                                 color: widget.selected == "allAdmin"
                                     ? Colors.white
-                                    : primaryThemeColor,
+                                    : Colors.transparent,
                                 borderRadius: const BorderRadius.only(
                                     topRight: Radius.circular(5),
                                     bottomRight: Radius.circular(5)),
@@ -340,7 +328,7 @@ class _InventoryNavigationPaneExpandedState
                               decoration: BoxDecoration(
                                 color: widget.selected == "members"
                                     ? Colors.white
-                                    : primaryThemeColor,
+                                    : Colors.transparent,
                                 borderRadius: const BorderRadius.only(
                                     topRight: Radius.circular(5),
                                     bottomRight: Radius.circular(5)),
@@ -398,7 +386,7 @@ class _InventoryNavigationPaneExpandedState
                               decoration: BoxDecoration(
                                 color: widget.selected == "invite-members"
                                     ? Colors.white
-                                    : primaryThemeColor,
+                                    : Colors.transparent,
                                 borderRadius: const BorderRadius.only(
                                     topRight: Radius.circular(5),
                                     bottomRight: Radius.circular(5)),
@@ -459,7 +447,7 @@ class _InventoryNavigationPaneExpandedState
                               decoration: BoxDecoration(
                                 color: widget.selected == "visitors"
                                     ? Colors.white
-                                    : primaryThemeColor,
+                                    : Colors.transparent,
                                 borderRadius: const BorderRadius.only(
                                     topRight: Radius.circular(5),
                                     bottomRight: Radius.circular(5)),
@@ -516,7 +504,7 @@ class _InventoryNavigationPaneExpandedState
                               decoration: BoxDecoration(
                                 color: widget.selected == "workout-diet-plan"
                                     ? Colors.white
-                                    : primaryThemeColor,
+                                    : Colors.transparent,
                                 borderRadius: const BorderRadius.only(
                                     topRight: Radius.circular(5),
                                     bottomRight: Radius.circular(5)),
@@ -577,7 +565,7 @@ class _InventoryNavigationPaneExpandedState
                               decoration: BoxDecoration(
                                 color: widget.selected == "trainer"
                                     ? Colors.white
-                                    : primaryThemeColor,
+                                    : Colors.transparent,
                                 borderRadius: const BorderRadius.only(
                                     topRight: Radius.circular(5),
                                     bottomRight: Radius.circular(5)),

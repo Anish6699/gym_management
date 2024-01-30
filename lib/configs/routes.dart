@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gmstest/super_admin/admins.dart';
-import 'package:gmstest/super_admin/branches.dart';
+import 'package:gmstest/super_admin/branch/branch_view.dart';
+import 'package:gmstest/super_admin/branch/branches.dart';
 import 'package:gmstest/views/dashboards/admin_dashboard.dart';
 import 'package:gmstest/views/dashboards/branch_dashboard.dart';
 import 'package:gmstest/views/dashboards/dashboard.dart';
@@ -32,6 +33,8 @@ class AppRouter {
         return AllAdmins.allAdminsRoute();
       case MemberProfile.routeName:
         return MemberProfile.route(settings.arguments);
+      case BranchProfile.routeName:
+        return BranchProfile.route(settings.arguments);
       case AdminAllBranch.adminAllBranchesRouteName:
         return AdminAllBranch.allAdminsRoute(settings.arguments);
 

@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 
-const primaryThemeColor = Colors.black; // Color.fromRGBO(39, 68, 160, 1);
+const primaryColor = Color(0xFF2697FF);
+const secondaryColor = Color(0xFF2A2D3E);
+const bgColor = Color(0xFF212332);
+
+const primaryThemeColor = Color.fromARGB(255, 32, 33, 42);
+// Color.fromARGB(209, 39, 38, 38); // Color.fromRGBO(39, 68, 160, 1);
 const primaryLightColor = Colors.white;
 const primaryGreyColor = Color.fromRGBO(28, 30, 32, 0.5);
 const primaryDarkBlueColor = Color.fromRGBO(26, 73, 155, 1);

@@ -45,6 +45,28 @@ class MemberController extends GetxController {
     return body;
   }
 
+  Future<Map<String, dynamic>> addMemberPlan(
+      Map<String, dynamic> data, int memberId) async {
+    print(data);
+    var response =
+        await _httpClient.post(path: 'add-member-plan/$memberId', body: data);
+    print(response['body']);
+    var body = json.decode(response['body']) as Map<String, dynamic>;
+
+    return body;
+  }
+
+  Future<Map<String, dynamic>> payPending(
+      Map<String, dynamic> data, int memberId) async {
+    print(data);
+    var response = await _httpClient.post(
+        path: 'pay-member-pending/$memberId', body: data);
+    print(response['body']);
+    var body = json.decode(response['body']) as Map<String, dynamic>;
+
+    return body;
+  }
+
   //////////////////////////////////////Visitors////////////////////////////////////////
   ///
   ///
