@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:gmstest/configs/colors.dart';
 import 'package:gmstest/configs/server_configs.dart';
@@ -7,6 +8,7 @@ import 'package:gmstest/views/dashboards/dashboard.dart';
 import 'package:gmstest/widgets/buttons.dart';
 import 'package:gmstest/widgets/popup.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -57,14 +59,28 @@ class _LoginPageState extends State<LoginPage> {
     return Row(
       children: [
         Expanded(
-          flex: 2,
-          child: Image.asset(
-            'assets/gym_icon.png',
-            height: MediaQuery.of(context).size.height,
-            fit: BoxFit.fill,
-            filterQuality: FilterQuality.high,
-          ),
-        ),
+            flex: 2,
+            child: CarouselSlider(
+              items: [
+                SvgPicture.asset('svgs/manGym2.svg'),
+                SvgPicture.asset('svgs/gym_women.svg'),
+                SvgPicture.asset('svgs/gym_man3.svg'),
+                SvgPicture.asset('svgs/group_gyming3.svg'),
+                SvgPicture.asset('svgs/gym_women2.svg'),
+                SvgPicture.asset('svgs/streching_men.svg'),
+                SvgPicture.asset('svgs/manGym2.svg'),
+                SvgPicture.asset('svgs/streching_women.svg')
+              ],
+              options: CarouselOptions(autoPlay: true),
+            )
+            //  SvgPicture.asset('assets/manGym2.svg')
+            // Image.asset(
+            //   'assets/gym_icon.png',
+            //   height: MediaQuery.of(context).size.height,
+            //   fit: BoxFit.fill,
+            //   filterQuality: FilterQuality.high,
+            // ),
+            ),
         Expanded(
           flex: 2,
           child: Scaffold(

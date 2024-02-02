@@ -2,8 +2,7 @@ import 'dart:convert';
 
 import 'package:get/get.dart';
 import 'package:gmstest/http/http_client.dart';
-import 'package:gmstest/views/login.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
 
 final HttpClient _httpClient = HttpClient();
 

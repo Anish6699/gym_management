@@ -17,7 +17,7 @@ import 'package:gmstest/widgets/popup.dart';
 import 'package:gmstest/widgets/searchfield.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
-// import 'package:easy_table/easy_table.dart';
+// import 'package:easy_table/easy_table.dart';F
 
 class MembersView extends StatefulWidget {
   const MembersView({Key? key}) : super(key: key);
@@ -485,6 +485,9 @@ class _MembersState extends State<MembersView> {
                   width: MediaQuery.of(context).size.width * 0.2,
                   height: MediaQuery.of(context).size.height * 0.08,
                   child: SearchField()),
+              SizedBox(
+                width: 10,
+              ),
               userType == 2
                   ? Container(
                       width: MediaQuery.of(context).size.width * 0.2,

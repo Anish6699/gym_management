@@ -13,6 +13,7 @@ import 'package:gmstest/widgets/buttons.dart';
 import 'package:gmstest/widgets/generic_appbar.dart';
 import 'package:davi/davi.dart';
 import 'package:gmstest/widgets/popup.dart';
+import 'package:gmstest/widgets/searchfield.dart';
 // import 'package:easy_table/easy_table.dart';
 
 class AllAdmins extends StatefulWidget {
@@ -73,12 +74,11 @@ class _MembersState extends State<AllAdmins> {
   }
 
   initializeData() {
-   
     _headerModel = DaviModel(
       rows: adminList,
       columns: _getColumns(context),
     );
-  
+
     isLoading = false;
     setState(() {});
   }
@@ -326,7 +326,10 @@ class _MembersState extends State<AllAdmins> {
                           'adminId': data.data['id']
                         });
                   },
-                  child: const Icon(Icons.visibility)));
+                  child: const Icon(
+                    Icons.visibility,
+                    color: primaryColor,
+                  )));
         },
 
         width: MediaQuery.of(context).size.width * 0.078,
@@ -878,7 +881,10 @@ class _MembersState extends State<AllAdmins> {
                           );
                         });
                   },
-                  child: const Icon(Icons.edit)));
+                  child: const Icon(
+                    Icons.edit,
+                    color: primaryColor,
+                  )));
         },
 
         width: MediaQuery.of(context).size.width * 0.066,
@@ -919,134 +925,83 @@ class _MembersState extends State<AllAdmins> {
       child: Column(
         children: [
           Row(
+            children: [
+              Text(
+                "All Admins",
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+              Spacer(
+                flex: 2,
+              ),
+              // Expanded(child: SearchField()),
+            ],
+          ),
+          Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Row(
                 children: [
+                  SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.2,
+                      height: MediaQuery.of(context).size.height * 0.08,
+                      child: SearchField()),
+                  SizedBox(
+                    width: 10,
+                  ),
                   Container(
-                    height: mediaQuery.width * 0.03,
-                    width: MediaQuery.of(context).size.width * 0.09,
-                    color: Colors.white,
+                    width: MediaQuery.of(context).size.width * 0.2,
+                    height: MediaQuery.of(context).size.height * 0.08,
+                    decoration: BoxDecoration(
+                      color: secondaryColor,
+                      borderRadius: const BorderRadius.all(Radius.circular(5)),
+                      border: Border.all(color: Colors.transparent),
+                    ),
                     child: DropdownButtonFormField(
                       isExpanded: true,
                       elevation: 1,
-                      value: selectedEntity,
                       items:
                           ['All', 'Active', 'In Active', 'Payment Pending'].map(
-                        (String item) {
+                        (item) {
                           return DropdownMenuItem(
                             value: item,
                             child: Text(
                               item,
                               style: TextStyle(
                                   fontSize:
-                                      MediaQuery.of(context).size.width * 0.008,
-                                  color: Colors.black),
+                                      MediaQuery.of(context).size.width * 0.01,
+                                  color: Colors.white),
                             ),
                           );
                         },
                       ).toList(),
-                      onChanged: (value) {
-                        selectedEntity = value!;
-                        searchController.text = '';
-                        setState(() {});
-                        changeTableData();
-                        // getRatnagiriRevisionList();
-                      },
+                      onChanged: (value) {},
                       borderRadius: BorderRadius.circular(4),
                       style: TextStyle(
                           fontSize: MediaQuery.of(context).size.width * 0.08,
-                          color: Colors.black,
+                          color: Colors.white,
                           fontWeight: FontWeight.bold),
                       icon: Icon(
                         Icons.keyboard_arrow_down_rounded,
-                        color: primaryGreyColor,
-                        size: MediaQuery.of(context).size.width * 0.011,
-                      ),
-                      decoration: const InputDecoration(
-                        hintText: "Select Filter",
-                        // hintStyle: TextStyle(
-                        //     fontSize:
-                        //         MediaQuery.of(context).size.width *
-                        //             0.08,
-                        //     color: Colors.black,
-                        //     fontWeight: FontWeight.bold),
-                        contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                        fillColor: Colors.white,
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Colors.black,
-                          ),
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(4.0),
-                          ),
-                        ),
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Colors.black,
-                          ),
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(4.0),
-                          ),
-                        ),
-                      ),
-                      dropdownColor: Colors.white,
-                    ),
-                  ),
-                  SizedBox(
-                    width: mediaQuery.width * 0.01,
-                  ),
-                  Container(
-                    height: mediaQuery.width * 0.03,
-                    width: mediaQuery.width * 0.2,
-                    color: Colors.white,
-                    child: TextFormField(
-                      keyboardType: TextInputType.number,
-                      expands: true,
-                      minLines: null,
-                      maxLines: null,
-                      controller: searchController,
-                      onChanged: (value) {
-                        if (searchController.text.isEmpty) {
-                          changeTableData();
-                        }
-                        setState(() {});
-                      },
-                      style: TextStyle(
-                        fontSize: mediaQuery.width * 0.008,
+                        color: Colors.white,
+                        size: MediaQuery.of(context).size.width * 0.015,
                       ),
                       decoration: InputDecoration(
-                        hintText: 'Search here...',
+                        hintText: "Select Filter",
                         hintStyle: TextStyle(
-                          fontSize: MediaQuery.of(context).size.width * 0.008,
-                        ),
-                        suffixIcon: InkWell(
-                          onTap: searchController.text.isNotEmpty
-                              ? () {
-                                  setSearchData();
-                                }
-                              : null,
-                          child: Icon(
-                            Icons.search,
-                            color: searchController.text.isNotEmpty
-                                ? Colors.black
-                                : primaryGreyColor,
-                            size: MediaQuery.of(context).size.width * 0.015,
+                            fontSize: MediaQuery.of(context).size.width * 0.01,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold),
+                        contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                        fillColor: Colors.white,
+                        border: const OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.transparent,
                           ),
                         ),
-                        errorStyle:
-                            TextStyle(fontSize: mediaQuery.width * 0.006),
-                        contentPadding: const EdgeInsets.only(left: 10),
-                        fillColor: Colors.white,
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(4.0),
-                          borderSide:
-                              const BorderSide(color: secondaryBorderGreyColor),
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(4.0),
-                          borderSide:
-                              const BorderSide(color: secondaryBorderGreyColor),
+                        focusedBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.transparent,
+                          ),
                         ),
                       ),
                     ),
@@ -1059,11 +1014,12 @@ class _MembersState extends State<AllAdmins> {
                   SizedBox(
                     // margin:
                     //     EdgeInsets.only(right: MediaQuery.of(context).size.width * 0.01),
+                    height: MediaQuery.of(context).size.height * 0.08,
                     width: MediaQuery.of(context).size.width * 0.12,
                     child: ElevatedButton(
                       style: ButtonStyle(
                           backgroundColor:
-                              MaterialStateProperty.all<Color>(darkGreenColor),
+                              MaterialStateProperty.all<Color>(primaryColor),
                           shape:
                               MaterialStateProperty.all<RoundedRectangleBorder>(
                                   const RoundedRectangleBorder(
@@ -1657,9 +1613,9 @@ class _MembersState extends State<AllAdmins> {
           ),
           Container(
             padding: const EdgeInsets.all(5),
-            height: MediaQuery.of(context).size.height * 0.8,
+            height: MediaQuery.of(context).size.height * 0.78,
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: secondaryColor,
               borderRadius: BorderRadius.circular(5),
             ),
             child: isLoading == true
@@ -1671,16 +1627,17 @@ class _MembersState extends State<AllAdmins> {
                     autofocus: true,
                     child: DaviTheme(
                       data: DaviThemeData(
-                        columnDividerThickness: 0.1,
+                        columnDividerThickness: 0.0,
                         decoration: BoxDecoration(
-                          border: Border.all(color: primaryThemeColor),
+                          border: Border.all(width: 0),
                         ),
                         columnDividerColor: primaryThemeColor,
                         scrollbar: const TableScrollbarThemeData(
                           pinnedHorizontalColor: Colors.transparent,
                           unpinnedHorizontalColor: Colors.transparent,
                           verticalColor: Colors.transparent,
-                          borderThickness: 0.0,
+                          borderThickness: 0.5,
+                          verticalBorderColor: secondaryBorderGreyColor,
                           columnDividerColor: Colors.transparent,
                           thickness: 10.0,
                           horizontalOnlyWhenNeeded: true,
@@ -1693,22 +1650,23 @@ class _MembersState extends State<AllAdmins> {
                           //     MediaQuery.of(context).size.height * 0.05,
                           // ascendingIcon: Icons.arrow_drop_up,
                           // descendingIcon: Icons.arrow_drop_down,
-                          height: MediaQuery.of(context).size.height * 0.1,
+                          height: MediaQuery.of(context).size.height * 0.07,
                         ),
                         header: const HeaderThemeData(
                           columnDividerColor: Colors.transparent,
                           bottomBorderColor: Colors.transparent,
-                          color: Colors.black,
+                          color: primaryThemeColor,
                         ),
                         row: RowThemeData(
                           color: (rowIndex) {
-                            return Colors.white;
+                            return secondaryColor;
                           },
-                          dividerColor: Colors.transparent,
+                          dividerColor:
+                              secondaryBorderGreyColor.withOpacity(0.2),
                         ),
                         cell: CellThemeData(
                           contentHeight:
-                              MediaQuery.of(context).size.height * 0.07,
+                              MediaQuery.of(context).size.height * 0.08,
                         ),
                       ),
                       child: Davi(
@@ -1760,16 +1718,15 @@ class _MembersState extends State<AllAdmins> {
         Expanded(
           flex: 9,
           child: Scaffold(
-            backgroundColor: lightBlueColor,
-            appBar: GenericAppBar(
-              onNavbarIconPressed: () {
-                setState(() {
-                  isNavOpen = !isNavOpen;
-                });
-              },
-              title: 'All Admins',
-              toolbarHeight: MediaQuery.of(context).size.height * 0.075,
-            ),
+            // appBar: GenericAppBar(
+            //   onNavbarIconPressed: () {
+            //     setState(() {
+            //       isNavOpen = !isNavOpen;
+            //     });
+            //   },
+            //   title: 'All Admins',
+            //   toolbarHeight: MediaQuery.of(context).size.height * 0.075,
+            // ),
             body: _body(mediaQuery),
           ),
         ),

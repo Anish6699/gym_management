@@ -1408,7 +1408,7 @@ class _MembersState extends State<AdminAllBranch> {
             padding: const EdgeInsets.all(5),
             height: MediaQuery.of(context).size.height * 0.7,
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: secondaryColor,
               borderRadius: BorderRadius.circular(5),
             ),
             child: isLoading == true
@@ -1420,16 +1420,17 @@ class _MembersState extends State<AdminAllBranch> {
                     autofocus: true,
                     child: DaviTheme(
                       data: DaviThemeData(
-                        columnDividerThickness: 0.1,
+                        columnDividerThickness: 0.0,
                         decoration: BoxDecoration(
-                          border: Border.all(color: primaryThemeColor),
+                          border: Border.all(width: 0),
                         ),
                         columnDividerColor: primaryThemeColor,
                         scrollbar: const TableScrollbarThemeData(
                           pinnedHorizontalColor: Colors.transparent,
                           unpinnedHorizontalColor: Colors.transparent,
                           verticalColor: Colors.transparent,
-                          borderThickness: 0.0,
+                          borderThickness: 0.5,
+                          verticalBorderColor: secondaryBorderGreyColor,
                           columnDividerColor: Colors.transparent,
                           thickness: 10.0,
                           horizontalOnlyWhenNeeded: true,
@@ -1442,22 +1443,23 @@ class _MembersState extends State<AdminAllBranch> {
                           //     MediaQuery.of(context).size.height * 0.05,
                           // ascendingIcon: Icons.arrow_drop_up,
                           // descendingIcon: Icons.arrow_drop_down,
-                          height: MediaQuery.of(context).size.height * 0.1,
+                          height: MediaQuery.of(context).size.height * 0.07,
                         ),
                         header: const HeaderThemeData(
                           columnDividerColor: Colors.transparent,
                           bottomBorderColor: Colors.transparent,
-                          color: Colors.black,
+                          color: primaryThemeColor,
                         ),
                         row: RowThemeData(
                           color: (rowIndex) {
-                            return Colors.white;
+                            return secondaryColor;
                           },
-                          dividerColor: Colors.transparent,
+                          dividerColor:
+                              secondaryBorderGreyColor.withOpacity(0.2),
                         ),
                         cell: CellThemeData(
                           contentHeight:
-                              MediaQuery.of(context).size.height * 0.07,
+                              MediaQuery.of(context).size.height * 0.08,
                         ),
                       ),
                       child: Davi(
@@ -1509,7 +1511,6 @@ class _MembersState extends State<AdminAllBranch> {
         Expanded(
           flex: 9,
           child: Scaffold(
-            backgroundColor: lightBlueColor,
             appBar: GenericAppBar(
               onNavbarIconPressed: () {
                 setState(() {
