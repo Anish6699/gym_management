@@ -64,7 +64,7 @@ class _LoginPageState extends State<LoginPage> {
               items: [
                 SvgPicture.asset('svgs/manGym2.svg'),
                 SvgPicture.asset('svgs/gym_women.svg'),
-                SvgPicture.asset('svgs/gym_man3.svg'),
+                // SvgPicture.asset('svgs/gym_man3.svg'),
                 SvgPicture.asset('svgs/group_gyming3.svg'),
                 SvgPicture.asset('svgs/gym_women2.svg'),
                 SvgPicture.asset('svgs/streching_men.svg'),

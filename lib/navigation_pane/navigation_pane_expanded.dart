@@ -6,7 +6,7 @@ import 'package:gmstest/configs/colors.dart';
 import 'package:gmstest/configs/server_configs.dart';
 import 'package:gmstest/super_admin/admins.dart';
 import 'package:gmstest/views/dashboards/admin_dashboard.dart';
-import 'package:gmstest/views/dashboards/branch_dashboard.dart';
+import 'package:gmstest/views/dashboards/branch/branch_dashboard.dart';
 import 'package:gmstest/views/dashboards/dashboard.dart';
 import 'package:gmstest/views/login.dart';
 import 'package:gmstest/views/members/members.dart';
@@ -111,17 +111,8 @@ class _InventoryNavigationPaneExpandedState
                                               0.006),
                                       child: Row(
                                         children: [
-                                          Icon(
-                                            Icons.dashboard_outlined,
-                                            size: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.012,
-                                            color:
-                                                widget.selected == "dashboard"
-                                                    ? primaryThemeColor
-                                                    : Colors.white,
-                                          ),
+                                          Image.asset(
+                                              'assets/icon/business-report.png'),
                                           SizedBox(
                                             width: MediaQuery.of(context)
                                                     .size
@@ -179,17 +170,19 @@ class _InventoryNavigationPaneExpandedState
                                               0.006),
                                       child: Row(
                                         children: [
-                                          Icon(
-                                            Icons.dashboard_outlined,
-                                            size: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.012,
-                                            color: widget.selected ==
-                                                    "admin-dashboard"
-                                                ? primaryThemeColor
-                                                : Colors.white,
-                                          ),
+                                          // Icon(
+                                          //   Icons.dashboard_outlined,
+                                          //   size: MediaQuery.of(context)
+                                          //           .size
+                                          //           .width *
+                                          //       0.012,
+                                          //   color: widget.selected ==
+                                          //           "admin-dashboard"
+                                          //       ? primaryThemeColor
+                                          //       : Colors.white,
+                                          // ),
+                                          Image.asset(
+                                              'assets/icon/business-report.png'),
                                           SizedBox(
                                             width: MediaQuery.of(context)
                                                     .size
@@ -247,17 +240,19 @@ class _InventoryNavigationPaneExpandedState
                                               0.006),
                                       child: Row(
                                         children: [
-                                          Icon(
-                                            Icons.dashboard_outlined,
-                                            size: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.012,
-                                            color: widget.selected ==
-                                                    "branch-dashboard"
-                                                ? primaryThemeColor
-                                                : Colors.white,
-                                          ),
+                                          // Icon(
+                                          //   Icons.dashboard_outlined,
+                                          //   size: MediaQuery.of(context)
+                                          //           .size
+                                          //           .width *
+                                          //       0.012,
+                                          //   color: widget.selected ==
+                                          //           "branch-dashboard"
+                                          //       ? primaryThemeColor
+                                          //       : Colors.white,
+                                          // ),
+                                          Image.asset(
+                                              'assets/icon/business-report.png'),
                                           SizedBox(
                                             width: MediaQuery.of(context)
                                                     .size
@@ -382,16 +377,17 @@ class _InventoryNavigationPaneExpandedState
                                               0.006),
                                       child: Row(
                                         children: [
-                                          Icon(
-                                            Icons.person,
-                                            size: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.012,
-                                            color: widget.selected == "members"
-                                                ? primaryThemeColor
-                                                : Colors.white,
-                                          ),
+                                          // Icon(
+                                          //   Icons.person,
+                                          //   size: MediaQuery.of(context)
+                                          //           .size
+                                          //           .width *
+                                          //       0.012,
+                                          //   color: widget.selected == "members"
+                                          //       ? primaryThemeColor
+                                          //       : Colors.white,
+                                          // ),
+                                          Image.asset('assets/icon/people.png'),
                                           SizedBox(
                                             width: MediaQuery.of(context)
                                                     .size
@@ -448,17 +444,8 @@ class _InventoryNavigationPaneExpandedState
                                               0.006),
                                       child: Row(
                                         children: [
-                                          Icon(
-                                            Icons.share,
-                                            size: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.012,
-                                            color: widget.selected ==
-                                                    "invite-members"
-                                                ? primaryThemeColor
-                                                : Colors.white,
-                                          ),
+                                          Image.asset(
+                                              'assets/icon/notification.png'),
                                           SizedBox(
                                             width: MediaQuery.of(context)
                                                     .size
@@ -466,7 +453,7 @@ class _InventoryNavigationPaneExpandedState
                                                 0.012,
                                           ),
                                           Text(
-                                            "INVITE MEMBERS",
+                                            "SEND NOTIFICATIONS",
                                             style: TextStyle(
                                                 fontSize: MediaQuery.of(context)
                                                         .size
@@ -517,16 +504,8 @@ class _InventoryNavigationPaneExpandedState
                                               0.006),
                                       child: Row(
                                         children: [
-                                          Icon(
-                                            Icons.visibility,
-                                            size: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.012,
-                                            color: widget.selected == "visitors"
-                                                ? primaryThemeColor
-                                                : Colors.white,
-                                          ),
+                                          Image.asset(
+                                              'assets/icon/visitors.png'),
                                           SizedBox(
                                             width: MediaQuery.of(context)
                                                     .size
@@ -554,72 +533,72 @@ class _InventoryNavigationPaneExpandedState
                               )
                             : SizedBox(),
 
-                        (userType == 2 || userType == 3)
-                            ? InkWell(
-                                onTap: () {
-                                  // Get.toNamed(ConsumptionHomepage.ratnagiriRouteName, );
-                                },
-                                child: Padding(
-                                  padding: EdgeInsets.only(
-                                      right: MediaQuery.of(context).size.width *
-                                          0.006,
-                                      top: MediaQuery.of(context).size.width *
-                                          0.006),
-                                  child: Container(
-                                    height: MediaQuery.of(context).size.width *
-                                        0.03,
-                                    decoration: BoxDecoration(
-                                      color:
-                                          widget.selected == "workout-diet-plan"
-                                              ? Colors.white
-                                              : Colors.transparent,
-                                      borderRadius: const BorderRadius.only(
-                                          topRight: Radius.circular(5),
-                                          bottomRight: Radius.circular(5)),
-                                    ),
-                                    child: Padding(
-                                      padding: EdgeInsets.all(
-                                          MediaQuery.of(context).size.width *
-                                              0.006),
-                                      child: Row(
-                                        children: [
-                                          Icon(
-                                            Icons.sports_gymnastics,
-                                            size: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.012,
-                                            color: widget.selected ==
-                                                    "workout-diet-plan"
-                                                ? primaryThemeColor
-                                                : Colors.white,
-                                          ),
-                                          SizedBox(
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.012,
-                                          ),
-                                          Text(
-                                            "WORKOUT/DIET PLAN",
-                                            style: TextStyle(
-                                                fontSize: MediaQuery.of(context)
-                                                        .size
-                                                        .width *
-                                                    0.009,
-                                                fontWeight: FontWeight.w700,
-                                                color: widget.selected ==
-                                                        "workout-diet-plan"
-                                                    ? primaryThemeColor
-                                                    : Colors.white),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              )
-                            : SizedBox(),
+                        // (userType == 2 || userType == 3)
+                        //     ? InkWell(
+                        //         onTap: () {
+                        //           // Get.toNamed(ConsumptionHomepage.ratnagiriRouteName, );
+                        //         },
+                        //         child: Padding(
+                        //           padding: EdgeInsets.only(
+                        //               right: MediaQuery.of(context).size.width *
+                        //                   0.006,
+                        //               top: MediaQuery.of(context).size.width *
+                        //                   0.006),
+                        //           child: Container(
+                        //             height: MediaQuery.of(context).size.width *
+                        //                 0.03,
+                        //             decoration: BoxDecoration(
+                        //               color:
+                        //                   widget.selected == "workout-diet-plan"
+                        //                       ? Colors.white
+                        //                       : Colors.transparent,
+                        //               borderRadius: const BorderRadius.only(
+                        //                   topRight: Radius.circular(5),
+                        //                   bottomRight: Radius.circular(5)),
+                        //             ),
+                        //             child: Padding(
+                        //               padding: EdgeInsets.all(
+                        //                   MediaQuery.of(context).size.width *
+                        //                       0.006),
+                        //               child: Row(
+                        //                 children: [
+                        //                   Icon(
+                        //                     Icons.sports_gymnastics,
+                        //                     size: MediaQuery.of(context)
+                        //                             .size
+                        //                             .width *
+                        //                         0.012,
+                        //                     color: widget.selected ==
+                        //                             "workout-diet-plan"
+                        //                         ? primaryThemeColor
+                        //                         : Colors.white,
+                        //                   ),
+                        //                   SizedBox(
+                        //                     width: MediaQuery.of(context)
+                        //                             .size
+                        //                             .width *
+                        //                         0.012,
+                        //                   ),
+                        //                   Text(
+                        //                     "WORKOUT/DIET PLAN",
+                        //                     style: TextStyle(
+                        //                         fontSize: MediaQuery.of(context)
+                        //                                 .size
+                        //                                 .width *
+                        //                             0.009,
+                        //                         fontWeight: FontWeight.w700,
+                        //                         color: widget.selected ==
+                        //                                 "workout-diet-plan"
+                        //                             ? primaryThemeColor
+                        //                             : Colors.white),
+                        //                   )
+                        //                 ],
+                        //               ),
+                        //             ),
+                        //           ),
+                        //         ),
+                        //       )
+                        //     : SizedBox(),
 
                         (userType == 2 || userType == 3)
                             ? InkWell(
@@ -651,16 +630,7 @@ class _InventoryNavigationPaneExpandedState
                                               0.006),
                                       child: Row(
                                         children: [
-                                          Icon(
-                                            Icons.person_sharp,
-                                            size: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.012,
-                                            color: widget.selected == "trainer"
-                                                ? primaryThemeColor
-                                                : Colors.white,
-                                          ),
+                                          Image.asset('assets/icon/coach.png'),
                                           SizedBox(
                                             width: MediaQuery.of(context)
                                                     .size

@@ -364,13 +364,16 @@ class _MembersState extends State<MembersView> {
         headerTextStyle: const TextStyle(
             fontWeight: FontWeight.bold, color: primaryLightColor),
 
-        name: 'Payment Status',
+        name: 'Pending Amount',
 
         // pinStatus: PinStatus.left,
 
         sortable: true,
+        cellBuilder: (context, row) {
+          return Text(row.data['latest_plan']['unpaid_amount']);
+        },
 
-        stringValue: (row) => row['payment_status'],
+        // stringValue: (row) => row['payment_status'],
 
         cellAlignment: Alignment.center,
 

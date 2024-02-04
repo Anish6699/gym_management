@@ -3,7 +3,7 @@ import 'package:gmstest/super_admin/admins.dart';
 import 'package:gmstest/super_admin/branch/branch_view.dart';
 import 'package:gmstest/super_admin/branch/branches.dart';
 import 'package:gmstest/views/dashboards/admin_dashboard.dart';
-import 'package:gmstest/views/dashboards/branch_dashboard.dart';
+import 'package:gmstest/views/dashboards/branch/branch_dashboard.dart';
 import 'package:gmstest/views/dashboards/dashboard.dart';
 import 'package:gmstest/views/login.dart';
 import 'package:gmstest/views/members/member_profile.dart';
