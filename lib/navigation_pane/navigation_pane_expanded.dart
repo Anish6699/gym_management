@@ -10,6 +10,7 @@ import 'package:gmstest/views/dashboards/branch/branch_dashboard.dart';
 import 'package:gmstest/views/dashboards/dashboard.dart';
 import 'package:gmstest/views/login.dart';
 import 'package:gmstest/views/members/members.dart';
+import 'package:gmstest/views/send_notifications.dart';
 import 'package:gmstest/views/trainer.dart';
 import 'package:gmstest/views/visitors.dart';
 import 'package:gmstest/widgets/buttons.dart';
@@ -50,6 +51,26 @@ class _InventoryNavigationPaneExpandedState
     setState(() {});
   }
 
+  String getAssetPath() {
+    switch (widget.selected) {
+      case "dashboard":
+      case "admin-dashboard":
+      case "branch-dashboard":
+        return 'assets/icon/business-report.png';
+      case "members":
+        return 'assets/icon/people.png';
+      case "invite-members":
+        return 'assets/icon/notification.png';
+      case "visitors":
+        return 'assets/icon/visitors.png';
+      case "trainer":
+        return 'assets/icon/coach.png';
+      default:
+        // Return a default asset path in case the selected value does not match any case
+        return 'assets/icon/default.png';
+    }
+  }
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -74,8 +95,13 @@ class _InventoryNavigationPaneExpandedState
                   controller: scrollcontroller,
                   children: [
                     DrawerHeader(
-                      child: Image.asset("assets/manGym.png"),
-                    ),
+                        child: Padding(
+                      padding: const EdgeInsets.all(32.0),
+                      child: Image.asset(getAssetPath()),
+                    )
+
+                        //  Image.asset("assets/manGym.png"),
+                        ),
                     Column(
                       children: [
                         const SizedBox(
@@ -419,7 +445,7 @@ class _InventoryNavigationPaneExpandedState
                         (userType == 2 || userType == 3)
                             ? InkWell(
                                 onTap: () {
-                                  // Get.toNamed(PlannedDemandPage.routeName);
+                                  Get.toNamed(SendNotificationView.routeName);
                                 },
                                 child: Padding(
                                   padding: EdgeInsets.only(

@@ -8,8 +8,16 @@ import 'package:shared_preferences/shared_preferences.dart';
 final HttpClient _httpClient = HttpClient();
 
 class MemberController extends GetxController {
-  Future<List> getAllMembers({required branchId}) async {
-    var response = await _httpClient.get(path: 'get-member/$branchId');
+  Future<List> getAllMembers(
+      {required branchId, required searchKeyword, required statusId}) async {
+    print('branchId  $branchId');
+    print('searchKeyword  $searchKeyword');
+    print('statusId  $statusId');
+
+    var response = await _httpClient.post(path: 'get-member/$branchId', body: {
+      'search': searchKeyword,
+      'status': statusId == -1 ? null : statusId
+    });
     var a = jsonDecode(response['body']);
     List body = a['data'] as List;
 
@@ -17,10 +25,8 @@ class MemberController extends GetxController {
   }
 
   Future<Map<String, dynamic>> addMember(Map<String, dynamic> data) async {
-    print(data);
-    print('addding memberrrrrrrrr');
     var response = await _httpClient.post(path: 'add-member', body: data);
-    print(response['body']);
+
     var body = json.decode(response['body']) as Map<String, dynamic>;
 
     return body;
@@ -28,10 +34,9 @@ class MemberController extends GetxController {
 
   Future<Map<String, dynamic>> editMember(
       Map<String, dynamic> data, branchId) async {
-    print(data);
     var response =
         await _httpClient.post(path: 'edit-member/$branchId', body: data);
-    print(response['body']);
+
     var body = json.decode(response['body']) as Map<String, dynamic>;
 
     return body;
@@ -39,7 +44,7 @@ class MemberController extends GetxController {
 
   Future<Map<String, dynamic>> getSingleMember(memberId) async {
     var response = await _httpClient.get(path: 'member-profile/$memberId');
-    print(response['body']);
+
     var body = json.decode(response['body']) as Map<String, dynamic>;
 
     return body;
@@ -47,10 +52,9 @@ class MemberController extends GetxController {
 
   Future<Map<String, dynamic>> addMemberPlan(
       Map<String, dynamic> data, int memberId) async {
-    print(data);
     var response =
         await _httpClient.post(path: 'add-member-plan/$memberId', body: data);
-    print(response['body']);
+
     var body = json.decode(response['body']) as Map<String, dynamic>;
 
     return body;
@@ -58,10 +62,9 @@ class MemberController extends GetxController {
 
   Future<Map<String, dynamic>> payPending(
       Map<String, dynamic> data, int memberId) async {
-    print(data);
     var response = await _httpClient.post(
         path: 'pay-member-pending/$memberId', body: data);
-    print(response['body']);
+
     var body = json.decode(response['body']) as Map<String, dynamic>;
 
     return body;
@@ -71,22 +74,18 @@ class MemberController extends GetxController {
   ///
   ///
   Future<List> getAllVisitors({required branchId}) async {
-    print('b i d');
-    print(branchId);
     var response = await _httpClient.get(path: 'visitor-list/$branchId');
-    print(response);
+
     var a = jsonDecode(response['body']);
-    print(a);
+
     List body = a['data'] as List;
 
     return body;
   }
 
   Future<Map<String, dynamic>> addVisitor(Map<String, dynamic> data) async {
-    print(data);
-    print('addding memberrrrrrrrr');
     var response = await _httpClient.post(path: 'add-visitor', body: data);
-    print(response['body']);
+
     var body = json.decode(response['body']) as Map<String, dynamic>;
 
     return body;
@@ -94,10 +93,9 @@ class MemberController extends GetxController {
 
   Future<Map<String, dynamic>> editVisitor(
       Map<String, dynamic> data, branchId) async {
-    print(data);
     var response =
         await _httpClient.post(path: 'edit-visitor/$branchId', body: data);
-    print(response['body']);
+
     var body = json.decode(response['body']) as Map<String, dynamic>;
 
     return body;

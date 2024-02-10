@@ -8,6 +8,7 @@ import 'package:gmstest/views/dashboards/dashboard.dart';
 import 'package:gmstest/views/login.dart';
 import 'package:gmstest/views/members/member_profile.dart';
 import 'package:gmstest/views/members/members.dart';
+import 'package:gmstest/views/send_notifications.dart';
 import 'package:gmstest/views/trainer.dart';
 import 'package:gmstest/views/visitors.dart';
 
@@ -37,6 +38,8 @@ class AppRouter {
         return BranchProfile.route(settings.arguments);
       case AdminAllBranch.adminAllBranchesRouteName:
         return AdminAllBranch.allAdminsRoute(settings.arguments);
+      case SendNotificationView.routeName:
+        return SendNotificationView.route(settings.arguments);
 
       default:
         return Dashboard.route();

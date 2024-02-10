@@ -93,7 +93,6 @@ class _VisitorsState extends State<VisitorsView> {
   }
 
   setInitialData() async {
-    print('set initial data');
     final prefs = await SharedPreferences.getInstance();
 
     userType = prefs.getInt('user_type');
@@ -101,14 +100,12 @@ class _VisitorsState extends State<VisitorsView> {
     branchId = prefs.getInt('branchId');
 
     if (userType == 2) {
-      print('Admin login');
       adminBranchList =
           await adminController.getAdminAllBranches(adminId: adminId);
       selectedBranch = adminBranchList.first;
       setDataOnBranchChange();
     }
     if (userType == 3) {
-      print('branch login');
       setDataOnBranchLogin();
     }
   }
@@ -116,7 +113,7 @@ class _VisitorsState extends State<VisitorsView> {
   setDataOnBranchLogin() async {
     isLoading = true;
     setState(() {});
-    print('selected branch ${selectedBranch}');
+
     var a = await visitorController.getAllVisitors(branchId: branchId);
 
     List<Map<String, dynamic>> visitorsList = a.map((dynamic item) {
@@ -161,7 +158,7 @@ class _VisitorsState extends State<VisitorsView> {
   setDataOnBranchChange() async {
     isLoading = true;
     setState(() {});
-    print('selected branch ${selectedBranch}');
+
     var a = await visitorController.getAllVisitors(
         branchId: branchId ?? selectedBranch['id']);
 
@@ -310,7 +307,7 @@ class _VisitorsState extends State<VisitorsView> {
         cellOverflow: TextOverflow.visible,
       ),
       DaviColumn(
-        width: MediaQuery.of(context).size.width * 0.08,
+        width: MediaQuery.of(context).size.width * 0.15,
 
         headerPadding: EdgeInsets.zero,
 
@@ -319,31 +316,66 @@ class _VisitorsState extends State<VisitorsView> {
         headerTextStyle: const TextStyle(
             fontWeight: FontWeight.bold, color: primaryLightColor),
 
-        name: 'Visitor Status',
+        name: 'Address',
 
         // pinStatus: PinStatus.left,
 
         sortable: true,
-        cellBuilder: (context, row) {
-          return Container(
-            decoration: BoxDecoration(
-                color: row.data['status'] == 0
-                    ? Color.fromARGB(255, 76, 209, 76)
-                    : Color.fromARGB(255, 177, 54, 46),
-                borderRadius: BorderRadius.all(Radius.circular(5))),
-            child: Padding(
-              padding:
-                  EdgeInsets.only(top: 4.0, bottom: 4, left: 16, right: 16),
-              child: Text(
-                row.data['status'] == 0 ? 'Active' : 'In-Active',
-                style:
-                    TextStyle(fontWeight: FontWeight.w900, color: Colors.white),
-              ),
-            ),
-          );
-        },
 
-        // stringValue: (row) => row['status'].toString(),
+        stringValue: (row) => row['addr'],
+
+        cellAlignment: Alignment.center,
+
+        headerAlignment: Alignment.center,
+
+        resizable: false,
+
+        cellOverflow: TextOverflow.visible,
+      ),
+      DaviColumn(
+        width: MediaQuery.of(context).size.width * 0.15,
+
+        headerPadding: EdgeInsets.zero,
+
+        cellPadding: EdgeInsets.zero,
+
+        headerTextStyle: const TextStyle(
+            fontWeight: FontWeight.bold, color: primaryLightColor),
+
+        name: 'Email',
+
+        // pinStatus: PinStatus.left,
+
+        sortable: true,
+
+        stringValue: (row) => row['email'],
+
+        cellAlignment: Alignment.center,
+
+        headerAlignment: Alignment.center,
+
+        resizable: false,
+
+        cellOverflow: TextOverflow.visible,
+      ),
+      DaviColumn(
+        width: MediaQuery.of(context).size.width * 0.15,
+
+        headerPadding: EdgeInsets.zero,
+
+        cellPadding: EdgeInsets.zero,
+
+        headerTextStyle: const TextStyle(
+            fontWeight: FontWeight.bold, color: primaryLightColor),
+
+        name: 'Visited Date',
+
+        // pinStatus: PinStatus.left,
+
+        sortable: true,
+
+        stringValue: (row) =>
+            DateFormat('d MMM yyyy').format(DateTime.parse(row['created_at'])),
 
         cellAlignment: Alignment.center,
 
@@ -363,77 +395,13 @@ class _VisitorsState extends State<VisitorsView> {
         headerTextStyle: const TextStyle(
             fontWeight: FontWeight.bold, color: primaryLightColor),
 
-        name: 'Payment Status',
+        name: 'Age',
 
         // pinStatus: PinStatus.left,
 
         sortable: true,
 
-        stringValue: (row) => row['payment_status'],
-
-        cellAlignment: Alignment.center,
-
-        headerAlignment: Alignment.center,
-
-        resizable: false,
-
-        cellOverflow: TextOverflow.visible,
-      ),
-      DaviColumn(
-        width: MediaQuery.of(context).size.width * 0.12,
-
-        headerPadding: EdgeInsets.zero,
-
-        cellPadding: EdgeInsets.zero,
-
-        headerTextStyle: const TextStyle(
-            fontWeight: FontWeight.bold, color: primaryLightColor),
-
-        name: 'Trainer',
-
-        // pinStatus: PinStatus.left,
-
-        sortable: true,
-
-        stringValue: (row) => row['Trainer'],
-
-        cellAlignment: Alignment.center,
-
-        headerAlignment: Alignment.center,
-
-        resizable: false,
-
-        cellOverflow: TextOverflow.visible,
-      ),
-      DaviColumn(
-        name: 'Profile',
-        cellBuilder: (context, data) {
-          return Center(
-              child: InkWell(
-                  onTap: () {},
-                  child: const Tooltip(
-                    message: 'View Profile',
-                    child: Icon(
-                      Icons.person,
-                      color: primaryDarkGreenColor,
-                    ),
-                  )));
-        },
-
-        width: MediaQuery.of(context).size.width * 0.066,
-
-        headerPadding: EdgeInsets.zero,
-
-        cellPadding: EdgeInsets.zero,
-
-        headerTextStyle: const TextStyle(
-            fontWeight: FontWeight.bold, color: primaryLightColor),
-
-        // pinStatus: PinStatus.left,
-
-        sortable: true,
-
-        stringValue: (row) => '',
+        stringValue: (row) => row['age'].toString(),
 
         cellAlignment: Alignment.center,
 

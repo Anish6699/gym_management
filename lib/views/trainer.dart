@@ -7,6 +7,7 @@ import 'package:gmstest/configs/colors.dart';
 import 'package:gmstest/configs/server_configs.dart';
 import 'package:gmstest/controllers/admin_controllers.dart';
 import 'package:gmstest/controllers/member_controllers.dart';
+import 'package:gmstest/controllers/trainers_controller.dart';
 import 'package:gmstest/navigation_pane/navigation_pane_closed.dart';
 import 'package:gmstest/navigation_pane/navigation_pane_expanded.dart';
 import 'package:gmstest/views/members/member_profile.dart';
@@ -55,14 +56,14 @@ class _MembersState extends State<TrainerView> {
   TextEditingController email = TextEditingController();
   TextEditingController address = TextEditingController();
   TextEditingController referenceController = TextEditingController();
-  TextEditingController totalAmmountController = TextEditingController();
-  TextEditingController paidAmmountController = TextEditingController();
+  TextEditingController experienceController = TextEditingController();
+  TextEditingController secondaryMobileNo = TextEditingController();
   TextEditingController fromDateController = TextEditingController();
   TextEditingController toDateController = TextEditingController();
 
-  List<Map<String, dynamic>> membersList = [];
+  List<Map<String, dynamic>> trainerList = [];
   AdminController adminController = AdminController();
-  MemberController memmberController = MemberController();
+  TrainerController trainerController = TrainerController();
   List adminBranchList = [];
   DateTime selectedDateTime = DateTime.now();
 
@@ -117,19 +118,19 @@ class _MembersState extends State<TrainerView> {
   setDataOnBranchLogin() async {
     isLoading = true;
     setState(() {});
-    print('selected branch ${selectedBranch}');
-    var a = await memmberController.getAllMembers(branchId: branchId);
 
-    List<Map<String, dynamic>> membersList = a.map((dynamic item) {
+    var a = await trainerController.getAllTrainer(branchId: branchId);
+
+    List<Map<String, dynamic>> trainerList = a.map((dynamic item) {
       if (item is Map<String, dynamic>) {
         return item;
       } else {
         return {'data': item};
       }
     }).toList();
-
+    print(' trainerrrr ${trainerList}');
     _headerModel = DaviModel(
-      rows: membersList,
+      rows: trainerList,
       columns: _getColumns(context),
     );
     isLoading = false;
@@ -143,7 +144,7 @@ class _MembersState extends State<TrainerView> {
 
   initializeData() {
     _headerModel = DaviModel(
-      rows: membersList,
+      rows: trainerList,
       columns: _getColumns(context),
     );
 
@@ -162,11 +163,10 @@ class _MembersState extends State<TrainerView> {
   setDataOnBranchChange() async {
     isLoading = true;
     setState(() {});
-    print('selected branch ${selectedBranch}');
-    var a = await memmberController.getAllMembers(
+    var a = await trainerController.getAllTrainer(
         branchId: branchId ?? selectedBranch['id']);
 
-    List<Map<String, dynamic>> membersList = a.map((dynamic item) {
+    List<Map<String, dynamic>> trainerList = a.map((dynamic item) {
       if (item is Map<String, dynamic>) {
         return item;
       } else {
@@ -174,8 +174,10 @@ class _MembersState extends State<TrainerView> {
       }
     }).toList();
 
+    print(' trainerrrr ${trainerList}');
+
     _headerModel = DaviModel(
-      rows: membersList,
+      rows: trainerList,
       columns: _getColumns(context),
     );
     isLoading = false;
@@ -190,7 +192,7 @@ class _MembersState extends State<TrainerView> {
     //     searchText: searchController.text);
 
     _headerModel = DaviModel(
-      rows: membersList,
+      rows: trainerList,
       columns: _getColumns(context),
     );
     isLoading = false;
@@ -300,7 +302,7 @@ class _MembersState extends State<TrainerView> {
 
         sortable: true,
 
-        stringValue: (row) => row['email'],
+        stringValue: (row) => row['email'] ?? '-',
 
         cellAlignment: Alignment.center,
 
@@ -311,7 +313,7 @@ class _MembersState extends State<TrainerView> {
         cellOverflow: TextOverflow.visible,
       ),
       DaviColumn(
-        width: MediaQuery.of(context).size.width * 0.08,
+        width: MediaQuery.of(context).size.width * 0.15,
 
         headerPadding: EdgeInsets.zero,
 
@@ -320,31 +322,13 @@ class _MembersState extends State<TrainerView> {
         headerTextStyle: const TextStyle(
             fontWeight: FontWeight.bold, color: primaryLightColor),
 
-        name: 'Status',
+        name: 'Experience',
 
         // pinStatus: PinStatus.left,
 
         sortable: true,
-        cellBuilder: (context, row) {
-          return Container(
-            decoration: BoxDecoration(
-                color: row.data['status'] == 0
-                    ? Color.fromARGB(255, 76, 209, 76)
-                    : Color.fromARGB(255, 177, 54, 46),
-                borderRadius: BorderRadius.all(Radius.circular(5))),
-            child: Padding(
-              padding:
-                  EdgeInsets.only(top: 4.0, bottom: 4, left: 16, right: 16),
-              child: Text(
-                row.data['status'] == 0 ? 'Active' : 'In-Active',
-                style:
-                    TextStyle(fontWeight: FontWeight.w900, color: Colors.white),
-              ),
-            ),
-          );
-        },
 
-        // stringValue: (row) => row['status'].toString(),
+        stringValue: (row) => row['experience'].toString(),
 
         cellAlignment: Alignment.center,
 
@@ -355,24 +339,7 @@ class _MembersState extends State<TrainerView> {
         cellOverflow: TextOverflow.visible,
       ),
       DaviColumn(
-        name: 'Profile',
-        cellBuilder: (context, data) {
-          return Center(
-              child: InkWell(
-                  onTap: () {
-                    Get.toNamed(MemberProfile.routeName,
-                        arguments: data.data['id']);
-                  },
-                  child: const Tooltip(
-                    message: 'View Profile',
-                    child: Icon(
-                      Icons.person,
-                      color: primaryColor,
-                    ),
-                  )));
-        },
-
-        width: MediaQuery.of(context).size.width * 0.066,
+        width: MediaQuery.of(context).size.width * 0.15,
 
         headerPadding: EdgeInsets.zero,
 
@@ -381,11 +348,40 @@ class _MembersState extends State<TrainerView> {
         headerTextStyle: const TextStyle(
             fontWeight: FontWeight.bold, color: primaryLightColor),
 
+        name: 'Certificates',
+
         // pinStatus: PinStatus.left,
 
         sortable: true,
 
-        stringValue: (row) => '',
+        stringValue: (row) => row['cerficates']?.toString() ?? '-',
+
+        cellAlignment: Alignment.center,
+
+        headerAlignment: Alignment.center,
+
+        resizable: false,
+
+        cellOverflow: TextOverflow.visible,
+      ),
+      DaviColumn(
+        width: MediaQuery.of(context).size.width * 0.15,
+
+        headerPadding: EdgeInsets.zero,
+
+        cellPadding: EdgeInsets.zero,
+
+        headerTextStyle: const TextStyle(
+            fontWeight: FontWeight.bold, color: primaryLightColor),
+
+        name: 'Trainer Created',
+
+        // pinStatus: PinStatus.left,
+
+        sortable: true,
+
+        stringValue: (row) =>
+            DateFormat('d MMM yyyy').format(DateTime.parse(row['created_at'])),
 
         cellAlignment: Alignment.center,
 
@@ -584,7 +580,7 @@ class _MembersState extends State<TrainerView> {
                           return GenericDialogBox(
                             enableSecondaryButton: true,
                             isLoader: false,
-                            title: "Add Member",
+                            title: "Add Trainer",
                             primaryButtonText: 'Add',
                             secondaryButtonText: 'Cancel',
                             content: SizedBox(
@@ -798,7 +794,7 @@ class _MembersState extends State<TrainerView> {
                                             children: [
                                               const Flexible(
                                                 child: SelectableText(
-                                                  'Refrenced By',
+                                                  'Experience',
                                                   style: TextStyle(
                                                       fontWeight:
                                                           FontWeight.bold),
@@ -828,11 +824,10 @@ class _MembersState extends State<TrainerView> {
                                                                     primaryThemeColor),
                                                           )),
                                                   controller:
-                                                      referenceController,
+                                                      experienceController,
                                                   keyboardType: TextInputType
                                                       .emailAddress,
                                                   enableSuggestions: true,
-                                                  onChanged: (e) {},
                                                   autofocus: true,
                                                   style: TextStyle(
                                                       fontSize:
@@ -979,141 +974,6 @@ class _MembersState extends State<TrainerView> {
                                     Row(
                                       children: [
                                         SizedBox(
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.25,
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                SelectableText(
-                                                  "From Date ",
-                                                  style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-                                                SizedBox(height: 8),
-                                                Container(
-                                                  height: MediaQuery.of(context)
-                                                          .size
-                                                          .height *
-                                                      0.07,
-                                                  child: TextField(
-                                                    style: TextStyle(
-                                                      fontSize:
-                                                          mediaQuery.width *
-                                                              0.008,
-                                                    ),
-                                                    controller:
-                                                        fromDateController,
-                                                    readOnly: true,
-                                                    decoration: InputDecoration(
-                                                      contentPadding:
-                                                          const EdgeInsets.only(
-                                                              left: 10),
-                                                      border:
-                                                          OutlineInputBorder(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(4.0),
-                                                        borderSide:
-                                                            const BorderSide(
-                                                                color:
-                                                                    secondaryBorderGreyColor),
-                                                      ),
-                                                      hintText: 'Select Date ',
-                                                      suffixIcon: IconButton(
-                                                        icon: Icon(Icons
-                                                            .calendar_today),
-                                                        onPressed: () async {
-                                                          fromDateController
-                                                                  .text =
-                                                              await selectedDatee(
-                                                                  context);
-
-                                                          setState(() {});
-                                                        },
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            )),
-                                        SizedBox(
-                                          width: 30,
-                                        ),
-                                        SizedBox(
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.25,
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                SelectableText(
-                                                  "To Date ",
-                                                  style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-                                                SizedBox(height: 8),
-                                                Container(
-                                                  height: MediaQuery.of(context)
-                                                          .size
-                                                          .height *
-                                                      0.07,
-                                                  child: TextField(
-                                                    style: TextStyle(
-                                                      fontSize:
-                                                          mediaQuery.width *
-                                                              0.008,
-                                                    ),
-                                                    controller:
-                                                        toDateController,
-                                                    readOnly: true,
-                                                    decoration: InputDecoration(
-                                                      contentPadding:
-                                                          const EdgeInsets.only(
-                                                              left: 10),
-                                                      border:
-                                                          OutlineInputBorder(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(4.0),
-                                                        borderSide:
-                                                            const BorderSide(
-                                                                color:
-                                                                    secondaryBorderGreyColor),
-                                                      ),
-                                                      hintText: 'Select Date ',
-                                                      suffixIcon: IconButton(
-                                                        icon: Icon(Icons
-                                                            .calendar_today),
-                                                        onPressed: () async {
-                                                          toDateController
-                                                                  .text =
-                                                              await selectedDatee(
-                                                                  context);
-
-                                                          setState(() {});
-                                                        },
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            )),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        SizedBox(
                                           width: MediaQuery.of(context)
                                                   .size
                                                   .width *
@@ -1125,7 +985,7 @@ class _MembersState extends State<TrainerView> {
                                             children: [
                                               const Flexible(
                                                 child: SelectableText(
-                                                  'Total Ammount',
+                                                  'Secondary Mobile No',
                                                   style: TextStyle(
                                                       fontWeight:
                                                           FontWeight.bold),
@@ -1154,71 +1014,7 @@ class _MembersState extends State<TrainerView> {
                                                                 color:
                                                                     primaryThemeColor),
                                                           )),
-                                                  controller:
-                                                      totalAmmountController,
-                                                  keyboardType: TextInputType
-                                                      .emailAddress,
-                                                  enableSuggestions: true,
-                                                  autofocus: true,
-                                                  style: TextStyle(
-                                                      fontSize:
-                                                          MediaQuery.of(context)
-                                                                  .size
-                                                                  .height *
-                                                              0.02),
-                                                  textAlignVertical:
-                                                      TextAlignVertical.center,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          width: 30,
-                                        ),
-                                        SizedBox(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.25,
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              const Flexible(
-                                                child: SelectableText(
-                                                  'Paid Ammount',
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                ),
-                                              ),
-                                              const SizedBox(
-                                                height: 8,
-                                              ),
-                                              SizedBox(
-                                                height: MediaQuery.of(context)
-                                                        .size
-                                                        .height *
-                                                    0.07,
-                                                child: TextFormField(
-                                                  decoration:
-                                                      const InputDecoration(
-                                                          border:
-                                                              OutlineInputBorder(
-                                                            borderSide: BorderSide(
-                                                                color:
-                                                                    secondaryBorderGreyColor),
-                                                          ),
-                                                          focusedBorder:
-                                                              OutlineInputBorder(
-                                                            borderSide: BorderSide(
-                                                                color:
-                                                                    primaryThemeColor),
-                                                          )),
-                                                  controller:
-                                                      paidAmmountController,
+                                                  controller: secondaryMobileNo,
                                                   keyboardType: TextInputType
                                                       .emailAddress,
                                                   enableSuggestions: true,
@@ -1251,7 +1047,7 @@ class _MembersState extends State<TrainerView> {
                                   context: context,
                                   builder: (context) {
                                     return FutureBuilder(
-                                      future: memmberController.addMember({
+                                      future: trainerController.addTrainer({
                                         'branch_id':
                                             branchId ?? selectedBranch['id'],
                                         'first_name':
@@ -1276,17 +1072,14 @@ class _MembersState extends State<TrainerView> {
                                             referenceController.text == ''
                                                 ? null
                                                 : referenceController.text,
-                                        'start_date':
-                                            fromDateController.text == ''
+                                        'experience':
+                                            experienceController.text == ''
                                                 ? null
-                                                : fromDateController.text,
-                                        'end_date': toDateController.text == ''
-                                            ? null
-                                            : toDateController.text,
-                                        'price': totalAmmountController.text,
-                                        'paid_amount':
-                                            paidAmmountController.text,
-                                        'status': 0
+                                                : experienceController.text,
+                                        'secondary_mobile_no':
+                                            secondaryMobileNo.text == ''
+                                                ? null
+                                                : secondaryMobileNo.text,
                                       }),
                                       builder: (context, snapshot) {
                                         return snapshot.connectionState ==
@@ -1372,7 +1165,7 @@ class _MembersState extends State<TrainerView> {
                           );
                         });
                   },
-                  title: 'Add Member',
+                  title: 'Add Trainer',
                 ),
               ),
             ],

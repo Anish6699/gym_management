@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_typing_uninitialized_variables
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 import 'package:gmstest/configs/colors.dart';
@@ -66,6 +67,14 @@ class _MembersState extends State<MembersView> {
   List adminBranchList = [];
   DateTime selectedDateTime = DateTime.now();
 
+  List<Map<String, dynamic>> filterList = [
+    {'id': -1, 'name': 'All'},
+    {'id': 0, 'name': 'Active'},
+    {'id': 1, 'name': 'In-Active'},
+    {'id': 2, 'name': 'Payment Pending'}
+  ];
+  var selectedStatus;
+
   var selectedBranch;
   @override
   void initState() {
@@ -118,7 +127,10 @@ class _MembersState extends State<MembersView> {
     isLoading = true;
     setState(() {});
     print('selected branch ${selectedBranch}');
-    var a = await memmberController.getAllMembers(branchId: branchId);
+    var a = await memmberController.getAllMembers(
+        branchId: branchId,
+        searchKeyword: searchController.text,
+        statusId: selectedStatus);
 
     List<Map<String, dynamic>> membersList = a.map((dynamic item) {
       if (item is Map<String, dynamic>) {
@@ -164,7 +176,9 @@ class _MembersState extends State<MembersView> {
     setState(() {});
     print('selected branch ${selectedBranch}');
     var a = await memmberController.getAllMembers(
-        branchId: branchId ?? selectedBranch['id']);
+        branchId: branchId ?? selectedBranch['id'],
+        searchKeyword: searchController.text,
+        statusId: selectedStatus);
 
     List<Map<String, dynamic>> membersList = a.map((dynamic item) {
       if (item is Map<String, dynamic>) {
@@ -370,7 +384,10 @@ class _MembersState extends State<MembersView> {
 
         sortable: true,
         cellBuilder: (context, row) {
-          return Text(row.data['latest_plan']['unpaid_amount']);
+          return Text(
+            row.data['unpaid_amount'] ?? '-',
+            style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+          );
         },
 
         // stringValue: (row) => row['payment_status'],
@@ -487,7 +504,39 @@ class _MembersState extends State<MembersView> {
               SizedBox(
                   width: MediaQuery.of(context).size.width * 0.2,
                   height: MediaQuery.of(context).size.height * 0.08,
-                  child: SearchField()),
+                  child: TextField(
+                    controller: searchController,
+                    decoration: InputDecoration(
+                      hintText: "Search",
+                      fillColor: secondaryColor,
+                      filled: true,
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide.none,
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(10)),
+                      ),
+                      suffixIcon: InkWell(
+                        onTap: () {
+                          setDataOnBranchChange();
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                              right: 8.0, top: 3, bottom: 3),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: primaryColor,
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(10)),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: SvgPicture.asset("assets/Search.svg"),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  )),
               SizedBox(
                 width: 10,
               ),
@@ -570,14 +619,15 @@ class _MembersState extends State<MembersView> {
                   border: Border.all(color: Colors.transparent),
                 ),
                 child: DropdownButtonFormField(
+                  value: selectedStatus,
                   isExpanded: true,
                   elevation: 1,
-                  items: ['All', 'Active', 'In Active', 'Payment Pending'].map(
+                  items: filterList.map(
                     (item) {
                       return DropdownMenuItem(
-                        value: item,
+                        value: item['id'],
                         child: Text(
-                          item,
+                          item['name'],
                           style: TextStyle(
                               fontSize:
                                   MediaQuery.of(context).size.width * 0.01,
@@ -586,7 +636,10 @@ class _MembersState extends State<MembersView> {
                       );
                     },
                   ).toList(),
-                  onChanged: (value) {},
+                  onChanged: (value) {
+                    selectedStatus = value;
+                    setDataOnBranchChange();
+                  },
                   borderRadius: BorderRadius.circular(4),
                   style: TextStyle(
                       fontSize: MediaQuery.of(context).size.width * 0.08,
