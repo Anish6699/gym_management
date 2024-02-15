@@ -83,17 +83,15 @@ class _SecondaryButtonState extends State<SecondaryButton> {
       decoration: BoxDecoration(
         border: Border.all(
           width: 1.5,
-          color: widget.onPressed == null
-              ? secondaryDarkGreyColor
-              : darkGreenColor,
+          color: widget.onPressed == null ? secondaryDarkGreyColor : Colors.red,
         ),
         borderRadius: BorderRadius.circular(3.0),
       ),
       child: TextButton(
         onPressed: widget.onPressed,
         style: TextButton.styleFrom(
-          backgroundColor: Colors.white,
-          foregroundColor: darkGreenColor,
+          // backgroundColor: Colors.white,
+          foregroundColor: Colors.red,
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(
               Radius.circular(3),

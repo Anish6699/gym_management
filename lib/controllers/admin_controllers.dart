@@ -6,8 +6,9 @@ import 'package:gmstest/http/http_client.dart';
 final HttpClient _httpClient = HttpClient();
 
 class AdminController extends GetxController {
-  Future<List> getAllAdmin() async {
-    var response = await _httpClient.get(path: 'admin-list');
+  Future<List> getAllAdmin({required String searchKeyword}) async {
+    var response = await _httpClient
+        .post(path: 'admin-list', body: {'search': searchKeyword});
 
     var a = jsonDecode(response['body']);
     List body = a['data'] as List;

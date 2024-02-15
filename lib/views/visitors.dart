@@ -1,6 +1,8 @@
 // ignore_for_file: prefer_typing_uninitialized_variables
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 import 'package:gmstest/configs/colors.dart';
@@ -114,7 +116,8 @@ class _VisitorsState extends State<VisitorsView> {
     isLoading = true;
     setState(() {});
 
-    var a = await visitorController.getAllVisitors(branchId: branchId);
+    var a = await visitorController.getAllVisitors(
+        branchId: branchId, searchKeyword: searchController.text);
 
     List<Map<String, dynamic>> visitorsList = a.map((dynamic item) {
       if (item is Map<String, dynamic>) {
@@ -147,20 +150,13 @@ class _VisitorsState extends State<VisitorsView> {
     setState(() {});
   }
 
-  setSearchData() {
-    if (searchController.text.isNotEmpty) {
-      changeTableDataBySearch();
-    } else {
-      setDataOnBranchChange();
-    }
-  }
-
   setDataOnBranchChange() async {
     isLoading = true;
     setState(() {});
 
     var a = await visitorController.getAllVisitors(
-        branchId: branchId ?? selectedBranch['id']);
+        branchId: branchId ?? selectedBranch['id'],
+        searchKeyword: searchController.text);
 
     List<Map<String, dynamic>> visitorsList = a.map((dynamic item) {
       if (item is Map<String, dynamic>) {
@@ -433,13 +429,13 @@ class _VisitorsState extends State<VisitorsView> {
                 "Visitors",
                 style: Theme.of(context).textTheme.titleLarge,
               ),
-              Spacer(
+              const Spacer(
                 flex: 2,
               ),
               // Expanded(child: SearchField()),
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           Row(
@@ -448,8 +444,40 @@ class _VisitorsState extends State<VisitorsView> {
               SizedBox(
                   width: MediaQuery.of(context).size.width * 0.2,
                   height: MediaQuery.of(context).size.height * 0.08,
-                  child: SearchField()),
-              SizedBox(
+                  child: TextField(
+                    controller: searchController,
+                    decoration: InputDecoration(
+                      hintText: "Search",
+                      fillColor: secondaryColor,
+                      filled: true,
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide.none,
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(10)),
+                      ),
+                      suffixIcon: InkWell(
+                        onTap: () {
+                          setDataOnBranchLogin();
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                              right: 8.0, top: 3, bottom: 3),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: primaryColor,
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(10)),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: SvgPicture.asset("assets/Search.svg"),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  )),
+              const SizedBox(
                 width: 10,
               ),
               userType == 2
@@ -503,7 +531,8 @@ class _VisitorsState extends State<VisitorsView> {
                                   MediaQuery.of(context).size.width * 0.01,
                               color: Colors.white,
                               fontWeight: FontWeight.bold),
-                          contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                          contentPadding:
+                              const EdgeInsets.symmetric(horizontal: 10),
                           fillColor: Colors.white,
                           border: const OutlineInputBorder(
                             borderSide: BorderSide(
@@ -518,7 +547,7 @@ class _VisitorsState extends State<VisitorsView> {
                         ),
                       ),
                     )
-                  : SizedBox(),
+                  : const SizedBox(),
               SizedBox(
                 width: mediaQuery.width * 0.01,
               ),
@@ -564,7 +593,7 @@ class _VisitorsState extends State<VisitorsView> {
                         fontSize: MediaQuery.of(context).size.width * 0.01,
                         color: Colors.white,
                         fontWeight: FontWeight.bold),
-                    contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 10),
                     fillColor: Colors.white,
                     border: const OutlineInputBorder(
                       borderSide: BorderSide(
@@ -637,6 +666,11 @@ class _VisitorsState extends State<VisitorsView> {
                                                         .height *
                                                     0.07,
                                                 child: TextFormField(
+                                                  inputFormatters: [
+                                                    FilteringTextInputFormatter
+                                                        .allow(RegExp(
+                                                            r'[a-zA-Z]')),
+                                                  ],
                                                   decoration:
                                                       const InputDecoration(
                                                           border:
@@ -671,7 +705,7 @@ class _VisitorsState extends State<VisitorsView> {
                                             ],
                                           ),
                                         ),
-                                        SizedBox(
+                                        const SizedBox(
                                           width: 30,
                                         ),
                                         SizedBox(
@@ -701,6 +735,11 @@ class _VisitorsState extends State<VisitorsView> {
                                                         .height *
                                                     0.07,
                                                 child: TextFormField(
+                                                  inputFormatters: [
+                                                    FilteringTextInputFormatter
+                                                        .allow(RegExp(
+                                                            r'[a-zA-Z]')),
+                                                  ],
                                                   decoration:
                                                       const InputDecoration(
                                                           border:
@@ -766,6 +805,11 @@ class _VisitorsState extends State<VisitorsView> {
                                                         .height *
                                                     0.07,
                                                 child: TextFormField(
+                                                  inputFormatters: [
+                                                    FilteringTextInputFormatter
+                                                        .allow(
+                                                            RegExp(r'[0-9]')),
+                                                  ],
                                                   decoration:
                                                       const InputDecoration(
                                                           border:
@@ -799,7 +843,7 @@ class _VisitorsState extends State<VisitorsView> {
                                             ],
                                           ),
                                         ),
-                                        SizedBox(
+                                        const SizedBox(
                                           width: 30,
                                         ),
                                         SizedBox(
@@ -829,6 +873,11 @@ class _VisitorsState extends State<VisitorsView> {
                                                         .height *
                                                     0.07,
                                                 child: TextFormField(
+                                                  inputFormatters: [
+                                                    FilteringTextInputFormatter
+                                                        .allow(
+                                                            RegExp(r'[0-9]')),
+                                                  ],
                                                   decoration:
                                                       const InputDecoration(
                                                           border:
@@ -926,7 +975,7 @@ class _VisitorsState extends State<VisitorsView> {
                                             ],
                                           ),
                                         ),
-                                        SizedBox(
+                                        const SizedBox(
                                           width: 30,
                                         ),
                                         SizedBox(
@@ -1121,7 +1170,7 @@ class _VisitorsState extends State<VisitorsView> {
           SizedBox(
             height: mediaQuery.height * 0.01,
           ),
-          Row(
+          const Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Row(
@@ -1140,7 +1189,7 @@ class _VisitorsState extends State<VisitorsView> {
               borderRadius: BorderRadius.circular(5),
             ),
             child: isLoading == true
-                ? Center(
+                ? const Center(
                     child: CircularProgressIndicator(),
                   )
                 : RawKeyboardListener(

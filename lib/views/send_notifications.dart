@@ -149,7 +149,6 @@ class _SendNotificationState extends State<SendNotificationView>
                                             items: [
                                               'Members',
                                               'Visitors',
-                                              'Branches',
                                               'Trainers',
                                               'Admin'
                                             ].map(

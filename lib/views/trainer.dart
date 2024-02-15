@@ -1,6 +1,8 @@
 // ignore_for_file: prefer_typing_uninitialized_variables
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 import 'package:gmstest/configs/colors.dart';
@@ -119,7 +121,8 @@ class _MembersState extends State<TrainerView> {
     isLoading = true;
     setState(() {});
 
-    var a = await trainerController.getAllTrainer(branchId: branchId);
+    var a = await trainerController.getAllTrainer(
+        branchId: branchId, searchKeyword: searchController.text);
 
     List<Map<String, dynamic>> trainerList = a.map((dynamic item) {
       if (item is Map<String, dynamic>) {
@@ -164,7 +167,8 @@ class _MembersState extends State<TrainerView> {
     isLoading = true;
     setState(() {});
     var a = await trainerController.getAllTrainer(
-        branchId: branchId ?? selectedBranch['id']);
+        branchId: branchId ?? selectedBranch['id'],
+        searchKeyword: searchController.text);
 
     List<Map<String, dynamic>> trainerList = a.map((dynamic item) {
       if (item is Map<String, dynamic>) {
@@ -413,13 +417,13 @@ class _MembersState extends State<TrainerView> {
                 "All Trainer's",
                 style: Theme.of(context).textTheme.titleLarge,
               ),
-              Spacer(
+              const Spacer(
                 flex: 2,
               ),
               // Expanded(child: SearchField()),
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           Row(
@@ -428,8 +432,39 @@ class _MembersState extends State<TrainerView> {
               SizedBox(
                   width: MediaQuery.of(context).size.width * 0.2,
                   height: MediaQuery.of(context).size.height * 0.08,
-                  child: SearchField()),
-              SizedBox(
+                  child: TextField(
+                    controller: searchController,
+                    decoration: InputDecoration(
+                      hintText: "Search",
+                      fillColor: secondaryColor,
+                      filled: true,
+                      border: const OutlineInputBorder(
+                        borderSide: BorderSide.none,
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                      ),
+                      suffixIcon: InkWell(
+                        onTap: () {
+                          setDataOnBranchChange();
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                              right: 8.0, top: 3, bottom: 3),
+                          child: Container(
+                            decoration: const BoxDecoration(
+                              color: primaryColor,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10)),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: SvgPicture.asset("assets/Search.svg"),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  )),
+              const SizedBox(
                 width: 10,
               ),
               userType == 2
@@ -483,7 +518,8 @@ class _MembersState extends State<TrainerView> {
                                   MediaQuery.of(context).size.width * 0.01,
                               color: Colors.white,
                               fontWeight: FontWeight.bold),
-                          contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                          contentPadding:
+                              const EdgeInsets.symmetric(horizontal: 10),
                           fillColor: Colors.white,
                           border: const OutlineInputBorder(
                             borderSide: BorderSide(
@@ -498,7 +534,7 @@ class _MembersState extends State<TrainerView> {
                         ),
                       ),
                     )
-                  : SizedBox(),
+                  : const SizedBox(),
               SizedBox(
                 width: mediaQuery.width * 0.01,
               ),
@@ -544,7 +580,7 @@ class _MembersState extends State<TrainerView> {
                         fontSize: MediaQuery.of(context).size.width * 0.01,
                         color: Colors.white,
                         fontWeight: FontWeight.bold),
-                    contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 10),
                     fillColor: Colors.white,
                     border: const OutlineInputBorder(
                       borderSide: BorderSide(
@@ -617,6 +653,11 @@ class _MembersState extends State<TrainerView> {
                                                         .height *
                                                     0.07,
                                                 child: TextFormField(
+                                                  inputFormatters: [
+                                                    FilteringTextInputFormatter
+                                                        .allow(RegExp(
+                                                            r'[a-zA-Z]')),
+                                                  ],
                                                   decoration:
                                                       const InputDecoration(
                                                           border:
@@ -651,7 +692,7 @@ class _MembersState extends State<TrainerView> {
                                             ],
                                           ),
                                         ),
-                                        SizedBox(
+                                        const SizedBox(
                                           width: 30,
                                         ),
                                         SizedBox(
@@ -681,6 +722,11 @@ class _MembersState extends State<TrainerView> {
                                                         .height *
                                                     0.07,
                                                 child: TextFormField(
+                                                  inputFormatters: [
+                                                    FilteringTextInputFormatter
+                                                        .allow(RegExp(
+                                                            r'[a-zA-Z]')),
+                                                  ],
                                                   decoration:
                                                       const InputDecoration(
                                                           border:
@@ -746,6 +792,11 @@ class _MembersState extends State<TrainerView> {
                                                         .height *
                                                     0.07,
                                                 child: TextFormField(
+                                                  inputFormatters: [
+                                                    FilteringTextInputFormatter
+                                                        .allow(
+                                                            RegExp(r'[0-9]')),
+                                                  ],
                                                   decoration:
                                                       const InputDecoration(
                                                           border:
@@ -779,7 +830,7 @@ class _MembersState extends State<TrainerView> {
                                             ],
                                           ),
                                         ),
-                                        SizedBox(
+                                        const SizedBox(
                                           width: 30,
                                         ),
                                         SizedBox(
@@ -906,7 +957,7 @@ class _MembersState extends State<TrainerView> {
                                             ],
                                           ),
                                         ),
-                                        SizedBox(
+                                        const SizedBox(
                                           width: 30,
                                         ),
                                         SizedBox(
@@ -1000,6 +1051,11 @@ class _MembersState extends State<TrainerView> {
                                                         .height *
                                                     0.07,
                                                 child: TextFormField(
+                                                  inputFormatters: [
+                                                    FilteringTextInputFormatter
+                                                        .allow(
+                                                            RegExp(r'[0-9]')),
+                                                  ],
                                                   decoration:
                                                       const InputDecoration(
                                                           border:
@@ -1181,7 +1237,7 @@ class _MembersState extends State<TrainerView> {
               borderRadius: BorderRadius.circular(5),
             ),
             child: isLoading == true
-                ? Center(
+                ? const Center(
                     child: CircularProgressIndicator(),
                   )
                 : RawKeyboardListener(

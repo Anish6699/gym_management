@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:gmstest/configs/colors.dart';
 import 'package:gmstest/controllers/member_controllers.dart';
@@ -429,6 +430,9 @@ class _MemberProfileState extends State<MemberProfile>
                                                                                   SizedBox(
                                                                                     height: MediaQuery.of(context).size.height * 0.07,
                                                                                     child: TextFormField(
+                                                                                      inputFormatters: [
+                                                                                        FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                                                                                      ],
                                                                                       decoration: const InputDecoration(
                                                                                           border: OutlineInputBorder(
                                                                                             borderSide: BorderSide(color: secondaryBorderGreyColor),
@@ -468,6 +472,9 @@ class _MemberProfileState extends State<MemberProfile>
                                                                                   SizedBox(
                                                                                     height: MediaQuery.of(context).size.height * 0.07,
                                                                                     child: TextFormField(
+                                                                                      inputFormatters: [
+                                                                                        FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                                                                                      ],
                                                                                       decoration: const InputDecoration(
                                                                                           border: OutlineInputBorder(
                                                                                             borderSide: BorderSide(color: secondaryBorderGreyColor),
@@ -618,6 +625,9 @@ class _MemberProfileState extends State<MemberProfile>
                                                                             0.07,
                                                                         child:
                                                                             TextFormField(
+                                                                          inputFormatters: [
+                                                                            FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                                                                          ],
                                                                           decoration: const InputDecoration(
                                                                               border: OutlineInputBorder(
                                                                                 borderSide: BorderSide(color: secondaryBorderGreyColor),

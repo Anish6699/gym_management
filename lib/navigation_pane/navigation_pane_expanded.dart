@@ -54,7 +54,9 @@ class _InventoryNavigationPaneExpandedState
   String getAssetPath() {
     switch (widget.selected) {
       case "dashboard":
+        return 'assets/icon/business-report.png';
       case "admin-dashboard":
+        return 'assets/icon/business-report.png';
       case "branch-dashboard":
         return 'assets/icon/business-report.png';
       case "members":
@@ -64,6 +66,8 @@ class _InventoryNavigationPaneExpandedState
       case "visitors":
         return 'assets/icon/visitors.png';
       case "trainer":
+        return 'assets/icon/coach.png';
+      case "allAdmin":
         return 'assets/icon/coach.png';
       default:
         // Return a default asset path in case the selected value does not match any case

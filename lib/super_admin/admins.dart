@@ -2,6 +2,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 import 'package:gmstest/configs/colors.dart';
@@ -63,7 +64,8 @@ class _MembersState extends State<AllAdmins> {
   }
 
   getAdminData() async {
-    adminList = await adminController.getAllAdmin();
+    adminList =
+        await adminController.getAllAdmin(searchKeyword: searchController.text);
     print('aaaaaaaaaaaaaaaa');
     print(adminList);
     initializeData();
@@ -930,7 +932,7 @@ class _MembersState extends State<AllAdmins> {
                 "All Admins",
                 style: Theme.of(context).textTheme.titleLarge,
               ),
-              Spacer(
+              const Spacer(
                 flex: 2,
               ),
               // Expanded(child: SearchField()),
@@ -944,8 +946,40 @@ class _MembersState extends State<AllAdmins> {
                   SizedBox(
                       width: MediaQuery.of(context).size.width * 0.2,
                       height: MediaQuery.of(context).size.height * 0.08,
-                      child: SearchField()),
-                  SizedBox(
+                      child: TextField(
+                        controller: searchController,
+                        decoration: InputDecoration(
+                          hintText: "Search",
+                          fillColor: secondaryColor,
+                          filled: true,
+                          border: const OutlineInputBorder(
+                            borderSide: BorderSide.none,
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10)),
+                          ),
+                          suffixIcon: InkWell(
+                            onTap: () {
+                              getAdminData();
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                  right: 8.0, top: 3, bottom: 3),
+                              child: Container(
+                                decoration: const BoxDecoration(
+                                  color: primaryColor,
+                                  borderRadius: BorderRadius.all(
+                                      Radius.circular(10)),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: SvgPicture.asset("assets/Search.svg"),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      )),
+                  const SizedBox(
                     width: 10,
                   ),
                   Container(
@@ -991,7 +1025,7 @@ class _MembersState extends State<AllAdmins> {
                             fontSize: MediaQuery.of(context).size.width * 0.01,
                             color: Colors.white,
                             fontWeight: FontWeight.bold),
-                        contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 10),
                         fillColor: Colors.white,
                         border: const OutlineInputBorder(
                           borderSide: BorderSide(
@@ -1619,7 +1653,7 @@ class _MembersState extends State<AllAdmins> {
               borderRadius: BorderRadius.circular(5),
             ),
             child: isLoading == true
-                ? Center(
+                ? const Center(
                     child: CircularProgressIndicator(),
                   )
                 : RawKeyboardListener(

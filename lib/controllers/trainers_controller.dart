@@ -8,8 +8,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 final HttpClient _httpClient = HttpClient();
 
 class TrainerController extends GetxController {
-  Future<List> getAllTrainer({required branchId}) async {
-    var response = await _httpClient.get(path: 'trainer-list/$branchId');
+  Future<List> getAllTrainer(
+      {required branchId, required searchKeyword}) async {
+    var response =
+        await _httpClient.post(path: 'trainer-list/$branchId', body: {
+      'search': searchKeyword,
+    });
     var a = jsonDecode(response['body']);
     List body = a['data'] as List;
 

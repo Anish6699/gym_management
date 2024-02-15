@@ -73,8 +73,14 @@ class MemberController extends GetxController {
   //////////////////////////////////////Visitors////////////////////////////////////////
   ///
   ///
-  Future<List> getAllVisitors({required branchId}) async {
-    var response = await _httpClient.get(path: 'visitor-list/$branchId');
+  Future<List> getAllVisitors(
+      {required branchId, required searchKeyword}) async {
+    print('searchKeyword');
+    print(searchKeyword);
+    var response =
+        await _httpClient.post(path: 'visitor-list/$branchId', body: {
+      'search': searchKeyword,
+    });
 
     var a = jsonDecode(response['body']);
 

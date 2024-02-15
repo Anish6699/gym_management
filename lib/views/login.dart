@@ -4,6 +4,8 @@ import 'package:get/get.dart';
 import 'package:gmstest/configs/colors.dart';
 import 'package:gmstest/configs/server_configs.dart';
 import 'package:gmstest/controllers/login_controllers.dart';
+import 'package:gmstest/views/dashboards/admin_dashboard.dart';
+import 'package:gmstest/views/dashboards/branch/branch_dashboard.dart';
 import 'package:gmstest/views/dashboards/dashboard.dart';
 import 'package:gmstest/widgets/buttons.dart';
 import 'package:gmstest/widgets/popup.dart';
@@ -315,9 +317,23 @@ class _LoginPageState extends State<LoginPage> {
                                                           snapshot.data![
                                                               'user_type']);
 
-                                                      Get.toNamed(
-                                                        Dashboard.routeName,
-                                                      );
+                                                      if (userType == 1) {
+                                                        Get.toNamed(
+                                                          Dashboard.routeName,
+                                                        );
+                                                      } else if (userType ==
+                                                          2) {
+                                                        Get.toNamed(
+                                                          AdminDashboard
+                                                              .routeName,
+                                                        );
+                                                      } else if (userType ==
+                                                          3) {
+                                                        Get.toNamed(
+                                                          BranchDashboard
+                                                              .routeName,
+                                                        );
+                                                      }
                                                     },
                                                   )
                                                 : GenericDialogBox(

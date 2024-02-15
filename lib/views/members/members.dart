@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_typing_uninitialized_variables
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
@@ -343,16 +344,16 @@ class _MembersState extends State<MembersView> {
           return Container(
             decoration: BoxDecoration(
                 color: row.data['status'] == 0
-                    ? Color.fromARGB(255, 76, 209, 76)
-                    : Color.fromARGB(255, 177, 54, 46),
-                borderRadius: BorderRadius.all(Radius.circular(5))),
+                    ? const Color.fromARGB(255, 76, 209, 76)
+                    : const Color.fromARGB(255, 177, 54, 46),
+                borderRadius: const BorderRadius.all(Radius.circular(5))),
             child: Padding(
-              padding:
-                  EdgeInsets.only(top: 4.0, bottom: 4, left: 16, right: 16),
+              padding: const EdgeInsets.only(
+                  top: 4.0, bottom: 4, left: 16, right: 16),
               child: Text(
                 row.data['status'] == 0 ? 'Active' : 'In-Active',
-                style:
-                    TextStyle(fontWeight: FontWeight.w900, color: Colors.white),
+                style: const TextStyle(
+                    fontWeight: FontWeight.w900, color: Colors.white),
               ),
             ),
           );
@@ -386,7 +387,8 @@ class _MembersState extends State<MembersView> {
         cellBuilder: (context, row) {
           return Text(
             row.data['unpaid_amount'] ?? '-',
-            style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+            style:
+                const TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
           );
         },
 
@@ -489,13 +491,13 @@ class _MembersState extends State<MembersView> {
                 "Members",
                 style: Theme.of(context).textTheme.titleLarge,
               ),
-              Spacer(
+              const Spacer(
                 flex: 2,
               ),
               // Expanded(child: SearchField()),
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           Row(
@@ -510,10 +512,9 @@ class _MembersState extends State<MembersView> {
                       hintText: "Search",
                       fillColor: secondaryColor,
                       filled: true,
-                      border: OutlineInputBorder(
+                      border: const OutlineInputBorder(
                         borderSide: BorderSide.none,
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(10)),
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
                       ),
                       suffixIcon: InkWell(
                         onTap: () {
@@ -523,10 +524,10 @@ class _MembersState extends State<MembersView> {
                           padding: const EdgeInsets.only(
                               right: 8.0, top: 3, bottom: 3),
                           child: Container(
-                            decoration: BoxDecoration(
+                            decoration: const BoxDecoration(
                               color: primaryColor,
                               borderRadius:
-                                  const BorderRadius.all(Radius.circular(10)),
+                                  BorderRadius.all(Radius.circular(10)),
                             ),
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
@@ -537,7 +538,7 @@ class _MembersState extends State<MembersView> {
                       ),
                     ),
                   )),
-              SizedBox(
+              const SizedBox(
                 width: 10,
               ),
               userType == 2
@@ -591,7 +592,8 @@ class _MembersState extends State<MembersView> {
                                   MediaQuery.of(context).size.width * 0.01,
                               color: Colors.white,
                               fontWeight: FontWeight.bold),
-                          contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                          contentPadding:
+                              const EdgeInsets.symmetric(horizontal: 10),
                           fillColor: Colors.white,
                           border: const OutlineInputBorder(
                             borderSide: BorderSide(
@@ -606,7 +608,7 @@ class _MembersState extends State<MembersView> {
                         ),
                       ),
                     )
-                  : SizedBox(),
+                  : const SizedBox(),
               SizedBox(
                 width: mediaQuery.width * 0.01,
               ),
@@ -656,7 +658,7 @@ class _MembersState extends State<MembersView> {
                         fontSize: MediaQuery.of(context).size.width * 0.01,
                         color: Colors.white,
                         fontWeight: FontWeight.bold),
-                    contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 10),
                     fillColor: Colors.white,
                     border: const OutlineInputBorder(
                       borderSide: BorderSide(
@@ -729,6 +731,11 @@ class _MembersState extends State<MembersView> {
                                                         .height *
                                                     0.07,
                                                 child: TextFormField(
+                                                  inputFormatters: [
+                                                    FilteringTextInputFormatter
+                                                        .allow(RegExp(
+                                                            r'[a-zA-Z]')),
+                                                  ],
                                                   decoration:
                                                       const InputDecoration(
                                                           border:
@@ -741,7 +748,7 @@ class _MembersState extends State<MembersView> {
                                                               OutlineInputBorder(
                                                             borderSide: BorderSide(
                                                                 color:
-                                                                    primaryThemeColor),
+                                                                    primaryDarkGreenColor),
                                                           )),
                                                   controller:
                                                       firstNameController,
@@ -763,7 +770,7 @@ class _MembersState extends State<MembersView> {
                                             ],
                                           ),
                                         ),
-                                        SizedBox(
+                                        const SizedBox(
                                           width: 30,
                                         ),
                                         SizedBox(
@@ -793,6 +800,11 @@ class _MembersState extends State<MembersView> {
                                                         .height *
                                                     0.07,
                                                 child: TextFormField(
+                                                  inputFormatters: [
+                                                    FilteringTextInputFormatter
+                                                        .allow(RegExp(
+                                                            r'[a-zA-Z]')),
+                                                  ],
                                                   decoration:
                                                       const InputDecoration(
                                                           border:
@@ -805,7 +817,7 @@ class _MembersState extends State<MembersView> {
                                                               OutlineInputBorder(
                                                             borderSide: BorderSide(
                                                                 color:
-                                                                    primaryThemeColor),
+                                                                    primaryDarkGreenColor),
                                                           )),
                                                   controller:
                                                       lastNameController,
@@ -858,6 +870,11 @@ class _MembersState extends State<MembersView> {
                                                         .height *
                                                     0.07,
                                                 child: TextFormField(
+                                                  inputFormatters: [
+                                                    FilteringTextInputFormatter
+                                                        .allow(
+                                                            RegExp(r'[0-9]')),
+                                                  ],
                                                   decoration:
                                                       const InputDecoration(
                                                           border:
@@ -870,7 +887,7 @@ class _MembersState extends State<MembersView> {
                                                               OutlineInputBorder(
                                                             borderSide: BorderSide(
                                                                 color:
-                                                                    primaryThemeColor),
+                                                                    primaryDarkGreenColor),
                                                           )),
                                                   controller: primaryMobileNo,
                                                   keyboardType: TextInputType
@@ -891,7 +908,7 @@ class _MembersState extends State<MembersView> {
                                             ],
                                           ),
                                         ),
-                                        SizedBox(
+                                        const SizedBox(
                                           width: 30,
                                         ),
                                         SizedBox(
@@ -921,6 +938,11 @@ class _MembersState extends State<MembersView> {
                                                         .height *
                                                     0.07,
                                                 child: TextFormField(
+                                                  inputFormatters: [
+                                                    FilteringTextInputFormatter
+                                                        .allow(RegExp(
+                                                            r'[a-zA-Z]')),
+                                                  ],
                                                   decoration:
                                                       const InputDecoration(
                                                           border:
@@ -933,7 +955,7 @@ class _MembersState extends State<MembersView> {
                                                               OutlineInputBorder(
                                                             borderSide: BorderSide(
                                                                 color:
-                                                                    primaryThemeColor),
+                                                                    primaryDarkGreenColor),
                                                           )),
                                                   controller:
                                                       referenceController,
@@ -998,7 +1020,7 @@ class _MembersState extends State<MembersView> {
                                                               OutlineInputBorder(
                                                             borderSide: BorderSide(
                                                                 color:
-                                                                    primaryThemeColor),
+                                                                    primaryDarkGreenColor),
                                                           )),
                                                   controller: email,
                                                   keyboardType: TextInputType
@@ -1019,7 +1041,7 @@ class _MembersState extends State<MembersView> {
                                             ],
                                           ),
                                         ),
-                                        SizedBox(
+                                        const SizedBox(
                                           width: 30,
                                         ),
                                         SizedBox(
@@ -1061,7 +1083,7 @@ class _MembersState extends State<MembersView> {
                                                               OutlineInputBorder(
                                                             borderSide: BorderSide(
                                                                 color:
-                                                                    primaryThemeColor),
+                                                                    primaryDarkGreenColor),
                                                           )),
                                                   controller: address,
                                                   keyboardType: TextInputType
@@ -1097,13 +1119,13 @@ class _MembersState extends State<MembersView> {
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                               children: [
-                                                SelectableText(
+                                                const SelectableText(
                                                   "From Date ",
                                                   style: TextStyle(
                                                     fontWeight: FontWeight.bold,
                                                   ),
                                                 ),
-                                                SizedBox(height: 8),
+                                                const SizedBox(height: 8),
                                                 Container(
                                                   height: MediaQuery.of(context)
                                                           .size
@@ -1134,7 +1156,7 @@ class _MembersState extends State<MembersView> {
                                                       ),
                                                       hintText: 'Select Date ',
                                                       suffixIcon: IconButton(
-                                                        icon: Icon(Icons
+                                                        icon: const Icon(Icons
                                                             .calendar_today),
                                                         onPressed: () async {
                                                           fromDateController
@@ -1150,7 +1172,7 @@ class _MembersState extends State<MembersView> {
                                                 ),
                                               ],
                                             )),
-                                        SizedBox(
+                                        const SizedBox(
                                           width: 30,
                                         ),
                                         SizedBox(
@@ -1164,13 +1186,13 @@ class _MembersState extends State<MembersView> {
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                               children: [
-                                                SelectableText(
+                                                const SelectableText(
                                                   "To Date ",
                                                   style: TextStyle(
                                                     fontWeight: FontWeight.bold,
                                                   ),
                                                 ),
-                                                SizedBox(height: 8),
+                                                const SizedBox(height: 8),
                                                 Container(
                                                   height: MediaQuery.of(context)
                                                           .size
@@ -1201,7 +1223,7 @@ class _MembersState extends State<MembersView> {
                                                       ),
                                                       hintText: 'Select Date ',
                                                       suffixIcon: IconButton(
-                                                        icon: Icon(Icons
+                                                        icon: const Icon(Icons
                                                             .calendar_today),
                                                         onPressed: () async {
                                                           toDateController
@@ -1248,6 +1270,11 @@ class _MembersState extends State<MembersView> {
                                                         .height *
                                                     0.07,
                                                 child: TextFormField(
+                                                  inputFormatters: [
+                                                    FilteringTextInputFormatter
+                                                        .allow(
+                                                            RegExp(r'[0-9]')),
+                                                  ],
                                                   decoration:
                                                       const InputDecoration(
                                                           border:
@@ -1260,7 +1287,7 @@ class _MembersState extends State<MembersView> {
                                                               OutlineInputBorder(
                                                             borderSide: BorderSide(
                                                                 color:
-                                                                    primaryThemeColor),
+                                                                    primaryDarkGreenColor),
                                                           )),
                                                   controller:
                                                       totalAmmountController,
@@ -1281,7 +1308,7 @@ class _MembersState extends State<MembersView> {
                                             ],
                                           ),
                                         ),
-                                        SizedBox(
+                                        const SizedBox(
                                           width: 30,
                                         ),
                                         SizedBox(
@@ -1311,6 +1338,11 @@ class _MembersState extends State<MembersView> {
                                                         .height *
                                                     0.07,
                                                 child: TextFormField(
+                                                  inputFormatters: [
+                                                    FilteringTextInputFormatter
+                                                        .allow(
+                                                            RegExp(r'[0-9]')),
+                                                  ],
                                                   decoration:
                                                       const InputDecoration(
                                                           border:
@@ -1323,7 +1355,7 @@ class _MembersState extends State<MembersView> {
                                                               OutlineInputBorder(
                                                             borderSide: BorderSide(
                                                                 color:
-                                                                    primaryThemeColor),
+                                                                    primaryDarkGreenColor),
                                                           )),
                                                   controller:
                                                       paidAmmountController,
@@ -1496,7 +1528,7 @@ class _MembersState extends State<MembersView> {
               borderRadius: BorderRadius.circular(5),
             ),
             child: isLoading == true
-                ? Center(
+                ? const Center(
                     child: CircularProgressIndicator(),
                   )
                 : RawKeyboardListener(
