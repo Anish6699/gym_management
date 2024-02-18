@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:gmstest/configs/colors.dart';
 import 'package:gmstest/navigation_pane/navigation_pane_closed.dart';
 import 'package:gmstest/navigation_pane/navigation_pane_expanded.dart';
 import 'package:gmstest/views/dashboards/branch/branch_dashboard1.dart';
-import 'package:gmstest/widgets/generic_appbar.dart';
 
 class BranchDashboard extends StatefulWidget {
   const BranchDashboard({super.key});

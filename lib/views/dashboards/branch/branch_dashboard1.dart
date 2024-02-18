@@ -243,7 +243,7 @@ class _Dashboard1ViewState extends State<Dashboard1View> {
               Container(
                 width: 20,
                 height: 20,
-                color: Colors.green,
+                color: Color.fromRGBO(35, 182, 230, 1),
               ),
               Text(
                 "  - Active Member's    ",
@@ -254,7 +254,7 @@ class _Dashboard1ViewState extends State<Dashboard1View> {
               Container(
                 width: 20,
                 height: 20,
-                color: primaryDarkYellowColor,
+                color: Color.fromRGBO(2, 211, 154, 1),
               ),
               Text(
                 "  - In-Active Member's    ",

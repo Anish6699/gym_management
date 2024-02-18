@@ -1,10 +1,19 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:gmstest/configs/colors.dart';
+import 'package:gmstest/configs/mail_template.dart';
+import 'package:gmstest/configs/server_configs.dart';
+import 'package:gmstest/controllers/admin_controllers.dart';
+import 'package:gmstest/controllers/login_controllers.dart';
 import 'package:gmstest/navigation_pane/navigation_pane_closed.dart';
 import 'package:gmstest/navigation_pane/navigation_pane_expanded.dart';
 import 'package:gmstest/views/profilewidgets/reusablecomponents.dart';
 import 'package:gmstest/widgets/buttons.dart';
+import 'package:gmstest/widgets/popup.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SendNotificationView extends StatefulWidget {
   const SendNotificationView({super.key});
@@ -26,10 +35,39 @@ class _SendNotificationState extends State<SendNotificationView>
   bool isNavOpen = true;
 
   DateTime selectedDateTime = DateTime.now();
+  TextEditingController messageController = TextEditingController();
+  TextEditingController subjectController = TextEditingController();
+
+  AdminController adminController = AdminController();
+  List adminBranchList = [];
+  var selectedBranch;
 
   @override
   void initState() {
+    setInitialData();
     super.initState();
+  }
+
+  setInitialData() async {
+    print('set initial data');
+    final prefs = await SharedPreferences.getInstance();
+
+    userType = prefs.getInt('user_type');
+    adminId = prefs.getInt('adminId');
+    branchId = prefs.getInt('branchId');
+
+    if (userType == 2) {
+      print('Admin login');
+      adminBranchList =
+          await adminController.getAdminAllBranches(adminId: adminId);
+      selectedBranch = adminBranchList.first;
+      // setDataOnBranchChange();
+      setState(() {});
+    }
+    if (userType == 3) {
+      print('branch login');
+      // setDataOnBranchLogin();
+    }
   }
 
   String formatDate(String dateString) {
@@ -146,17 +184,12 @@ class _SendNotificationState extends State<SendNotificationView>
                                             value: selectedAudience,
                                             isExpanded: true,
                                             elevation: 1,
-                                            items: [
-                                              'Members',
-                                              'Visitors',
-                                              'Trainers',
-                                              'Admin'
-                                            ].map(
+                                            items: mailFilterList.map(
                                               (item) {
                                                 return DropdownMenuItem(
                                                   value: item,
                                                   child: Text(
-                                                    item,
+                                                    item['name'],
                                                     style: TextStyle(
                                                         fontSize: MediaQuery.of(
                                                                     context)
@@ -170,6 +203,12 @@ class _SendNotificationState extends State<SendNotificationView>
                                             ).toList(),
                                             onChanged: (value) {
                                               selectedAudience = value;
+                                              subjectController.text =
+                                                  selectedAudience['subjet'];
+                                              messageController.text =
+                                                  selectedAudience[
+                                                      'mail_content'];
+
                                               setState(() {});
                                             },
                                             borderRadius:
@@ -217,7 +256,7 @@ class _SendNotificationState extends State<SendNotificationView>
                                                   .width *
                                               0.01,
                                         ),
-                                        selectedAudience == 'Members'
+                                        userType == 2
                                             ? Container(
                                                 width: MediaQuery.of(context)
                                                         .size
@@ -239,17 +278,13 @@ class _SendNotificationState extends State<SendNotificationView>
                                                 child: DropdownButtonFormField(
                                                   isExpanded: true,
                                                   elevation: 1,
-                                                  items: [
-                                                    'All',
-                                                    'Active',
-                                                    'In Active',
-                                                    'Payment Pending'
-                                                  ].map(
+                                                  value: selectedBranch,
+                                                  items: adminBranchList.map(
                                                     (item) {
                                                       return DropdownMenuItem(
                                                         value: item,
                                                         child: Text(
-                                                          item,
+                                                          item['branch_name'],
                                                           style: TextStyle(
                                                               fontSize: MediaQuery.of(
                                                                           context)
@@ -262,7 +297,10 @@ class _SendNotificationState extends State<SendNotificationView>
                                                       );
                                                     },
                                                   ).toList(),
-                                                  onChanged: (value) {},
+                                                  onChanged: (value) {
+                                                    selectedBranch = value;
+                                                    setState(() {});
+                                                  },
                                                   borderRadius:
                                                       BorderRadius.circular(4),
                                                   style: TextStyle(
@@ -284,7 +322,7 @@ class _SendNotificationState extends State<SendNotificationView>
                                                         0.015,
                                                   ),
                                                   decoration: InputDecoration(
-                                                    hintText: "Select Filter",
+                                                    hintText: "Select Branch",
                                                     hintStyle: TextStyle(
                                                         fontSize: MediaQuery.of(
                                                                     context)
@@ -295,9 +333,18 @@ class _SendNotificationState extends State<SendNotificationView>
                                                         fontWeight:
                                                             FontWeight.bold),
                                                     contentPadding:
-                                                        EdgeInsets.symmetric(
+                                                        const EdgeInsets
+                                                            .symmetric(
                                                             horizontal: 10),
+                                                    fillColor: Colors.white,
                                                     border:
+                                                        const OutlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                        color:
+                                                            Colors.transparent,
+                                                      ),
+                                                    ),
+                                                    focusedBorder:
                                                         const OutlineInputBorder(
                                                       borderSide: BorderSide(
                                                         color:
@@ -307,12 +354,38 @@ class _SendNotificationState extends State<SendNotificationView>
                                                   ),
                                                 ),
                                               )
-                                            : SizedBox(),
+                                            : const SizedBox(),
                                       ],
                                     ),
                                     Padding(
-                                      padding: const EdgeInsets.all(8.0),
+                                      padding: const EdgeInsets.all(4.0),
                                       child: TextField(
+                                        controller: subjectController,
+                                        decoration: InputDecoration(
+                                          hintText: "Subject",
+                                          hintStyle: TextStyle(
+                                              fontSize: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.01,
+                                              color: const Color.fromARGB(
+                                                  255, 172, 171, 171),
+                                              fontWeight: FontWeight.w400),
+                                          contentPadding: EdgeInsets.symmetric(
+                                              horizontal: 20, vertical: 20),
+                                          border: const OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Colors.transparent,
+                                            ),
+                                          ),
+                                        ),
+                                        maxLines: 1,
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(4.0),
+                                      child: TextField(
+                                        controller: messageController,
                                         decoration: InputDecoration(
                                           hintText:
                                               "Start writing Mail..........",
@@ -332,17 +405,155 @@ class _SendNotificationState extends State<SendNotificationView>
                                             ),
                                           ),
                                         ),
-                                        maxLines: 12,
+                                        maxLines: 10,
                                       ),
                                     ),
                                     Padding(
-                                      padding: const EdgeInsets.all(8.0),
+                                      padding: const EdgeInsets.all(4.0),
                                       child: Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.end,
                                         children: [
                                           PrimaryButton(
-                                              onPressed: () {},
+                                              onPressed: () {
+                                                if (selectedAudience != null &&
+                                                    subjectController
+                                                        .text.isNotEmpty &&
+                                                    messageController
+                                                        .text.isNotEmpty) {
+                                                  showDialog(
+                                                      barrierDismissible: false,
+                                                      context: context,
+                                                      builder: (context) {
+                                                        return GenericDialogBox(
+                                                          closeButtonEnabled:
+                                                              false,
+                                                          enableSecondaryButton:
+                                                              true,
+                                                          isLoader: false,
+                                                          message:
+                                                              "Are you Sure want to Send Mail",
+                                                          primaryButtonText:
+                                                              "Confirm",
+                                                          secondaryButtonText:
+                                                              "Cancel",
+                                                          onSecondaryButtonPressed:
+                                                              () {
+                                                            Get.back();
+                                                          },
+                                                          onPrimaryButtonPressed:
+                                                              () {
+                                                            showDialog(
+                                                                barrierDismissible:
+                                                                    false,
+                                                                context:
+                                                                    context,
+                                                                builder:
+                                                                    (context) {
+                                                                  return FutureBuilder(
+                                                                    future: LoginController()
+                                                                        .sendNotifications({
+                                                                      'branch_id':
+                                                                          branchId ??
+                                                                              selectedBranch['id'],
+                                                                      'subject':
+                                                                          subjectController
+                                                                              .text,
+                                                                      'message':
+                                                                          messageController
+                                                                              .text,
+                                                                      'mail_to':
+                                                                          selectedAudience[
+                                                                              'name']
+                                                                    }),
+                                                                    builder:
+                                                                        (context,
+                                                                            snapshot) {
+                                                                      print(
+                                                                          'snapshotttt datatatatat');
+                                                                      print(snapshot
+                                                                          .data);
+                                                                      return snapshot.connectionState ==
+                                                                              ConnectionState.waiting
+                                                                          ? GenericDialogBox(
+                                                                              enableSecondaryButton: false,
+                                                                              isLoader: true,
+                                                                              content: Padding(
+                                                                                padding: const EdgeInsets.all(8.0),
+                                                                                child: SizedBox(
+                                                                                  width: MediaQuery.of(context).size.width * 0.04,
+                                                                                  height: MediaQuery.of(context).size.width * 0.06,
+                                                                                  child: const Center(
+                                                                                    child: Column(
+                                                                                      mainAxisAlignment: MainAxisAlignment.center,
+                                                                                      children: [
+                                                                                        CircularProgressIndicator(
+                                                                                          color: primaryDarkBlueColor,
+                                                                                        ),
+                                                                                      ],
+                                                                                    ),
+                                                                                  ),
+                                                                                ),
+                                                                              ),
+                                                                            )
+                                                                          : snapshot.data!['body'].toString() == '1'
+                                                                              ? GenericDialogBox(
+                                                                                  closeButtonEnabled: false,
+                                                                                  enablePrimaryButton: true,
+                                                                                  enableSecondaryButton: false,
+                                                                                  isLoader: false,
+                                                                                  content: Padding(
+                                                                                    padding: const EdgeInsets.all(8.0),
+                                                                                    child: SizedBox(
+                                                                                      width: MediaQuery.of(context).size.width * 0.04,
+                                                                                      height: MediaQuery.of(context).size.width * 0.06,
+                                                                                      child: const Center(
+                                                                                        child: Column(
+                                                                                          mainAxisAlignment: MainAxisAlignment.center,
+                                                                                          children: [
+                                                                                            Text('Mail Sent Successfully')
+                                                                                          ],
+                                                                                        ),
+                                                                                      ),
+                                                                                    ),
+                                                                                  ),
+                                                                                  primaryButtonText: 'Ok',
+                                                                                  onPrimaryButtonPressed: () async {
+                                                                                    Get.back();
+                                                                                    Get.back();
+                                                                                  },
+                                                                                )
+                                                                              : GenericDialogBox(
+                                                                                  enableSecondaryButton: false,
+                                                                                  primaryButtonText: 'Ok',
+                                                                                  isLoader: false,
+                                                                                  content: Padding(
+                                                                                    padding: const EdgeInsets.all(8.0),
+                                                                                    child: SizedBox(
+                                                                                      width: MediaQuery.of(context).size.width * 0.04,
+                                                                                      height: MediaQuery.of(context).size.width * 0.06,
+                                                                                      child: const Center(
+                                                                                        child: Column(
+                                                                                          mainAxisAlignment: MainAxisAlignment.center,
+                                                                                          children: [
+                                                                                            Text('Something went Wrong')
+                                                                                          ],
+                                                                                        ),
+                                                                                      ),
+                                                                                    ),
+                                                                                  ),
+                                                                                  onPrimaryButtonPressed: () {
+                                                                                    Get.back();
+                                                                                  },
+                                                                                );
+                                                                    },
+                                                                  );
+                                                                });
+                                                          },
+                                                        );
+                                                      });
+                                                }
+                                              },
                                               title: 'Send Mail')
                                         ],
                                       ),

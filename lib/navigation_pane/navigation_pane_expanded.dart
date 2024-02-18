@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gmstest/configs/colors.dart';
 import 'package:gmstest/configs/server_configs.dart';
+import 'package:gmstest/controllers/login_controllers.dart';
 import 'package:gmstest/super_admin/admins.dart';
 import 'package:gmstest/views/dashboards/admin_dashboard.dart';
 import 'package:gmstest/views/dashboards/branch/branch_dashboard.dart';
 import 'package:gmstest/views/dashboards/dashboard.dart';
+import 'package:gmstest/views/expense_tracker.dart';
 import 'package:gmstest/views/login.dart';
 import 'package:gmstest/views/members/members.dart';
 import 'package:gmstest/views/send_notifications.dart';
@@ -69,6 +71,8 @@ class _InventoryNavigationPaneExpandedState
         return 'assets/icon/coach.png';
       case "allAdmin":
         return 'assets/icon/coach.png';
+      case "expense-tracker":
+        return 'assets/icon/budget.png';
       default:
         // Return a default asset path in case the selected value does not match any case
         return 'assets/icon/default.png';
@@ -168,7 +172,7 @@ class _InventoryNavigationPaneExpandedState
                                   ),
                                 ),
                               )
-                            : SizedBox(),
+                            : const SizedBox(),
                         userType == 2
                             ? InkWell(
                                 onTap: () {
@@ -238,7 +242,7 @@ class _InventoryNavigationPaneExpandedState
                                   ),
                                 ),
                               )
-                            : SizedBox(),
+                            : const SizedBox(),
                         (userType == 2 || userType == 3)
                             ? InkWell(
                                 onTap: () {
@@ -308,7 +312,7 @@ class _InventoryNavigationPaneExpandedState
                                   ),
                                 ),
                               )
-                            : SizedBox(),
+                            : const SizedBox(),
 
                         userType == 1
                             ? InkWell(
@@ -375,7 +379,7 @@ class _InventoryNavigationPaneExpandedState
                                   ),
                                 ),
                               )
-                            : SizedBox(),
+                            : const SizedBox(),
 
                         (userType == 2 || userType == 3)
                             ? InkWell(
@@ -443,7 +447,7 @@ class _InventoryNavigationPaneExpandedState
                                   ),
                                 ),
                               )
-                            : SizedBox(),
+                            : const SizedBox(),
 
                         // Planned Demand
                         (userType == 2 || userType == 3)
@@ -501,7 +505,7 @@ class _InventoryNavigationPaneExpandedState
                                   ),
                                 ),
                               )
-                            : SizedBox(),
+                            : const SizedBox(),
 
                         // Vessel Arrival
                         (userType == 2 || userType == 3)
@@ -561,7 +565,7 @@ class _InventoryNavigationPaneExpandedState
                                   ),
                                 ),
                               )
-                            : SizedBox(),
+                            : const SizedBox(),
 
                         // (userType == 2 || userType == 3)
                         //     ? InkWell(
@@ -686,12 +690,69 @@ class _InventoryNavigationPaneExpandedState
                                   ),
                                 ),
                               )
-                            : SizedBox(),
+                            : const SizedBox(),
+
+                        (userType == 2 || userType == 3)
+                            ? InkWell(
+                                onTap: () {
+                                  Get.toNamed(
+                                    ExpenseTrackerView.routeName,
+                                  );
+                                },
+                                child: Padding(
+                                  padding: EdgeInsets.only(
+                                      right: MediaQuery.of(context).size.width *
+                                          0.006,
+                                      top: MediaQuery.of(context).size.width *
+                                          0.006),
+                                  child: Container(
+                                    height: MediaQuery.of(context).size.width *
+                                        0.03,
+                                    decoration: BoxDecoration(
+                                      color:
+                                          widget.selected == "expense-tracker"
+                                              ? Colors.white
+                                              : Colors.transparent,
+                                      borderRadius: const BorderRadius.only(
+                                          topRight: Radius.circular(5),
+                                          bottomRight: Radius.circular(5)),
+                                    ),
+                                    child: Padding(
+                                      padding: EdgeInsets.all(
+                                          MediaQuery.of(context).size.width *
+                                              0.006),
+                                      child: Row(
+                                        children: [
+                                          Image.asset('assets/icon/budget.png'),
+                                          SizedBox(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.012,
+                                          ),
+                                          Text(
+                                            "Expence Tracker",
+                                            style: TextStyle(
+                                                fontSize: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.009,
+                                                fontWeight: FontWeight.w700,
+                                                color: widget.selected ==
+                                                        "expense-tracker"
+                                                    ? primaryThemeColor
+                                                    : Colors.white),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              )
+                            : const SizedBox(),
                         InkWell(
                           onTap: () {
-                            Get.offAllNamed(
-                              LoginPage.routeName,
-                            );
+                            LoginController().logout();
                           },
                           child: Padding(
                             padding: EdgeInsets.only(
@@ -700,7 +761,7 @@ class _InventoryNavigationPaneExpandedState
                                 top: MediaQuery.of(context).size.width * 0.006),
                             child: Container(
                               height: MediaQuery.of(context).size.width * 0.03,
-                              decoration: BoxDecoration(
+                              decoration: const BoxDecoration(
                                 color: Colors.transparent,
                                 borderRadius: BorderRadius.only(
                                     topRight: Radius.circular(5),

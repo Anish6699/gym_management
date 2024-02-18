@@ -8,7 +8,7 @@ import 'package:charts_flutter/src/text_element.dart' as element;
 import 'package:charts_flutter/src/text_element.dart' as ts;
 import 'package:charts_flutter/src/text_style.dart' as style;
 import 'package:flutter/material.dart';
-import 'package:gmstest/configs/colors.dart';
+import 'package:flutter/material.dart' as mat;
 
 class CustomCircleSymbolRenderer extends CircleSymbolRenderer {
   CustomCircleSymbolRenderer(this.value);
@@ -116,8 +116,8 @@ class _OrdinalComboBarLineChartState extends State<StackBarGraphWidget> {
   List<List<OrdinalSales>> modifiedList = [];
   int xAxisLength = 0;
   List randomColors = [
-    primaryDarkYellowColor,
-    Colors.green,
+    mat.Color.fromRGBO(35, 182, 230, 1),
+    mat.Color.fromRGBO(2, 211, 154, 1)
   ];
   @override
   void initState() {
@@ -170,7 +170,7 @@ class _OrdinalComboBarLineChartState extends State<StackBarGraphWidget> {
               animate: true,
               barGroupingType: charts.BarGroupingType.stacked,
               // barRendererDecorator: charts.BarLabelDecorator<String>(),
-              domainAxis: charts.OrdinalAxisSpec(
+              domainAxis: const charts.OrdinalAxisSpec(
                 renderSpec: charts.SmallTickRendererSpec(
                   labelStyle: charts.TextStyleSpec(
                     color: charts.MaterialPalette.white,

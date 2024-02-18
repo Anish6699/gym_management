@@ -9,14 +9,20 @@ final HttpClient _httpClient = HttpClient();
 
 class MemberController extends GetxController {
   Future<List> getAllMembers(
-      {required branchId, required searchKeyword, required statusId}) async {
+      {required branchId,
+      required searchKeyword,
+      required statusId,
+      required startDate,
+      required endDate}) async {
     print('branchId  $branchId');
     print('searchKeyword  $searchKeyword');
     print('statusId  $statusId');
 
     var response = await _httpClient.post(path: 'get-member/$branchId', body: {
       'search': searchKeyword,
-      'status': statusId == -1 ? null : statusId
+      'status': statusId == -1 ? null : statusId,
+      'start_date': startDate,
+      'end_date': endDate
     });
     var a = jsonDecode(response['body']);
     List body = a['data'] as List;
@@ -74,13 +80,19 @@ class MemberController extends GetxController {
   ///
   ///
   Future<List> getAllVisitors(
-      {required branchId, required searchKeyword}) async {
+      {required branchId,
+      required searchKeyword,
+      required startDate,
+      required endDate}) async {
     print('searchKeyword');
     print(searchKeyword);
-    var response =
-        await _httpClient.post(path: 'visitor-list/$branchId', body: {
-      'search': searchKeyword,
-    });
+    var response = await _httpClient.post(
+        path: 'visitor-list/$branchId',
+        body: {
+          'search': searchKeyword,
+          'start_date': startDate,
+          'end_date': endDate
+        });
 
     var a = jsonDecode(response['body']);
 
@@ -98,9 +110,9 @@ class MemberController extends GetxController {
   }
 
   Future<Map<String, dynamic>> editVisitor(
-      Map<String, dynamic> data, branchId) async {
+      Map<String, dynamic> data, visitorId) async {
     var response =
-        await _httpClient.post(path: 'edit-visitor/$branchId', body: data);
+        await _httpClient.post(path: 'edit-visitor/$visitorId', body: data);
 
     var body = json.decode(response['body']) as Map<String, dynamic>;
 

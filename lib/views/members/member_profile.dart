@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:gmstest/configs/colors.dart';
+import 'package:gmstest/configs/server_configs.dart';
 import 'package:gmstest/controllers/member_controllers.dart';
 import 'package:gmstest/navigation_pane/navigation_pane_closed.dart';
 import 'package:gmstest/navigation_pane/navigation_pane_expanded.dart';
@@ -44,6 +45,21 @@ class _MemberProfileState extends State<MemberProfile>
   TextEditingController paidAmmot = TextEditingController();
   DateTime selectedDateTime = DateTime.now();
 
+  //edit//
+  TextEditingController firstNameController = TextEditingController();
+
+  TextEditingController lastNameController = TextEditingController();
+  TextEditingController primaryMobileNo = TextEditingController();
+  TextEditingController email = TextEditingController();
+  TextEditingController address = TextEditingController();
+  TextEditingController referenceController = TextEditingController();
+  TextEditingController ageController = TextEditingController();
+  TextEditingController heightController = TextEditingController();
+  TextEditingController weightController = TextEditingController();
+  TextEditingController bloodGroupController = TextEditingController();
+  TextEditingController trainerController = TextEditingController();
+  TextEditingController secondaryMobileNoController = TextEditingController();
+
   @override
   void initState() {
     print('argumentsssssssssssssssssssss ${Get.arguments}');
@@ -63,11 +79,721 @@ class _MemberProfileState extends State<MemberProfile>
 
   initializeData() async {
     var a = await memmberController.getSingleMember(Get.arguments);
-    membersData = a['data'];
-    planList = a['plan_details'];
-    print('dataaaaaaaaaaaaaaaaaaaaaa');
-    print(membersData);
-    setState(() {});
+    if (a.toString() == 'null' || a.toString() == 'Null') {
+      Get.offAllNamed(MembersView.membersRouteName);
+    } else {
+      membersData = a['data'];
+      planList = a['plan_details'];
+      print('dataaaaaaaaaaaaaaaaaaaaaa');
+      print(membersData);
+      firstNameController.text = membersData['first_name'] ?? '';
+      lastNameController.text = membersData['last_name'] ?? '';
+      primaryMobileNo.text = membersData['primary_mobile_no'] ?? '';
+      secondaryMobileNoController.text =
+          membersData['secondary_mobile_no'] ?? '';
+      trainerController.text = membersData['trainer_id'] ?? '';
+      address.text = membersData['addr'] ?? '';
+      email.text = membersData['email'] ?? '';
+      referenceController.text = membersData['reference'] ?? '';
+      ageController.text = membersData['age']?.toString() ?? '';
+      heightController.text = membersData['height'] ?? '';
+      weightController.text = membersData['weight'] ?? '';
+      bloodGroupController.text = membersData['blood_group'] ?? '';
+      setState(() {});
+    }
+  }
+
+  editProfile() {
+    var mediaQuery = MediaQuery.of(context).size;
+    showDialog(
+        context: context,
+        builder: (context) {
+          return GenericDialogBox(
+            enableSecondaryButton: true,
+            isLoader: false,
+            title: "Edit Member",
+            primaryButtonText: 'update',
+            secondaryButtonText: 'Cancel',
+            content: SizedBox(
+              height: mediaQuery.height * 0.7,
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.25,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Flexible(
+                                child: SelectableText(
+                                  'First Name',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 8,
+                              ),
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.07,
+                                child: TextFormField(
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.allow(
+                                        RegExp(r'[a-zA-Z]')),
+                                  ],
+                                  decoration: const InputDecoration(
+                                      border: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: secondaryBorderGreyColor),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: primaryDarkGreenColor),
+                                      )),
+                                  controller: firstNameController,
+                                  keyboardType: TextInputType.emailAddress,
+                                  enableSuggestions: true,
+                                  onChanged: (e) {},
+                                  autofocus: true,
+                                  style: TextStyle(
+                                      fontSize:
+                                          MediaQuery.of(context).size.height *
+                                              0.02),
+                                  textAlignVertical: TextAlignVertical.center,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 30,
+                        ),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.25,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Flexible(
+                                child: SelectableText(
+                                  'Last Name',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 8,
+                              ),
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.07,
+                                child: TextFormField(
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.allow(
+                                        RegExp(r'[a-zA-Z]')),
+                                  ],
+                                  decoration: const InputDecoration(
+                                      border: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: secondaryBorderGreyColor),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: primaryDarkGreenColor),
+                                      )),
+                                  controller: lastNameController,
+                                  keyboardType: TextInputType.emailAddress,
+                                  enableSuggestions: true,
+                                  onChanged: (e) {},
+                                  autofocus: true,
+                                  style: TextStyle(
+                                      fontSize:
+                                          MediaQuery.of(context).size.height *
+                                              0.02),
+                                  textAlignVertical: TextAlignVertical.center,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.25,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Flexible(
+                                child: SelectableText(
+                                  'Primary Mobile No',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 8,
+                              ),
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.07,
+                                child: TextFormField(
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.allow(
+                                        RegExp(r'[0-9]')),
+                                  ],
+                                  decoration: const InputDecoration(
+                                      border: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: secondaryBorderGreyColor),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: primaryDarkGreenColor),
+                                      )),
+                                  controller: primaryMobileNo,
+                                  keyboardType: TextInputType.emailAddress,
+                                  enableSuggestions: true,
+                                  onChanged: (e) {},
+                                  autofocus: true,
+                                  style: TextStyle(
+                                      fontSize:
+                                          MediaQuery.of(context).size.height *
+                                              0.02),
+                                  textAlignVertical: TextAlignVertical.center,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 30,
+                        ),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.25,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Flexible(
+                                child: SelectableText(
+                                  'Refrenced By',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 8,
+                              ),
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.07,
+                                child: TextFormField(
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.allow(
+                                        RegExp(r'[a-zA-Z]')),
+                                  ],
+                                  decoration: const InputDecoration(
+                                      border: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: secondaryBorderGreyColor),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: primaryDarkGreenColor),
+                                      )),
+                                  controller: referenceController,
+                                  keyboardType: TextInputType.emailAddress,
+                                  enableSuggestions: true,
+                                  onChanged: (e) {},
+                                  autofocus: true,
+                                  style: TextStyle(
+                                      fontSize:
+                                          MediaQuery.of(context).size.height *
+                                              0.02),
+                                  textAlignVertical: TextAlignVertical.center,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.25,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Flexible(
+                                child: SelectableText(
+                                  'Trainer',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 8,
+                              ),
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.07,
+                                child: TextFormField(
+                                  decoration: const InputDecoration(
+                                      border: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: secondaryBorderGreyColor),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: primaryDarkGreenColor),
+                                      )),
+                                  controller: trainerController,
+                                  keyboardType: TextInputType.emailAddress,
+                                  enableSuggestions: true,
+                                  onChanged: (e) {},
+                                  autofocus: true,
+                                  style: TextStyle(
+                                      fontSize:
+                                          MediaQuery.of(context).size.height *
+                                              0.02),
+                                  textAlignVertical: TextAlignVertical.center,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 30,
+                        ),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.25,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Flexible(
+                                child: SelectableText(
+                                  'Secondary Mobile No',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 8,
+                              ),
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.07,
+                                child: TextFormField(
+                                  decoration: const InputDecoration(
+                                      border: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: secondaryBorderGreyColor),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: primaryDarkGreenColor),
+                                      )),
+                                  controller: secondaryMobileNoController,
+                                  keyboardType: TextInputType.emailAddress,
+                                  enableSuggestions: true,
+                                  onChanged: (e) {},
+                                  autofocus: true,
+                                  style: TextStyle(
+                                      fontSize:
+                                          MediaQuery.of(context).size.height *
+                                              0.02),
+                                  textAlignVertical: TextAlignVertical.center,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.25,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Flexible(
+                                child: SelectableText(
+                                  'Email',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 8,
+                              ),
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.07,
+                                child: TextFormField(
+                                  decoration: const InputDecoration(
+                                      border: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: secondaryBorderGreyColor),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: primaryDarkGreenColor),
+                                      )),
+                                  controller: email,
+                                  keyboardType: TextInputType.emailAddress,
+                                  enableSuggestions: true,
+                                  onChanged: (e) {},
+                                  autofocus: true,
+                                  style: TextStyle(
+                                      fontSize:
+                                          MediaQuery.of(context).size.height *
+                                              0.02),
+                                  textAlignVertical: TextAlignVertical.center,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 30,
+                        ),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.25,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Flexible(
+                                child: SelectableText(
+                                  'Address',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 8,
+                              ),
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.07,
+                                child: TextFormField(
+                                  decoration: const InputDecoration(
+                                      border: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: secondaryBorderGreyColor),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: primaryDarkGreenColor),
+                                      )),
+                                  controller: address,
+                                  keyboardType: TextInputType.emailAddress,
+                                  enableSuggestions: true,
+                                  onChanged: (e) {},
+                                  autofocus: true,
+                                  style: TextStyle(
+                                      fontSize:
+                                          MediaQuery.of(context).size.height *
+                                              0.02),
+                                  textAlignVertical: TextAlignVertical.center,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.25,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Flexible(
+                                child: SelectableText(
+                                  'Age',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 8,
+                              ),
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.07,
+                                child: TextFormField(
+                                  decoration: const InputDecoration(
+                                      border: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: secondaryBorderGreyColor),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: primaryDarkGreenColor),
+                                      )),
+                                  controller: ageController,
+                                  keyboardType: TextInputType.emailAddress,
+                                  enableSuggestions: true,
+                                  onChanged: (e) {},
+                                  autofocus: true,
+                                  style: TextStyle(
+                                      fontSize:
+                                          MediaQuery.of(context).size.height *
+                                              0.02),
+                                  textAlignVertical: TextAlignVertical.center,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 30,
+                        ),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.25,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Flexible(
+                                child: SelectableText(
+                                  'Height',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 8,
+                              ),
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.07,
+                                child: TextFormField(
+                                  decoration: const InputDecoration(
+                                      border: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: secondaryBorderGreyColor),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: primaryDarkGreenColor),
+                                      )),
+                                  controller: heightController,
+                                  keyboardType: TextInputType.emailAddress,
+                                  enableSuggestions: true,
+                                  onChanged: (e) {},
+                                  autofocus: true,
+                                  style: TextStyle(
+                                      fontSize:
+                                          MediaQuery.of(context).size.height *
+                                              0.02),
+                                  textAlignVertical: TextAlignVertical.center,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.25,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Flexible(
+                                child: SelectableText(
+                                  'Weight',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 8,
+                              ),
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.07,
+                                child: TextFormField(
+                                  decoration: const InputDecoration(
+                                      border: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: secondaryBorderGreyColor),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: primaryDarkGreenColor),
+                                      )),
+                                  controller: weightController,
+                                  keyboardType: TextInputType.emailAddress,
+                                  enableSuggestions: true,
+                                  onChanged: (e) {},
+                                  autofocus: true,
+                                  style: TextStyle(
+                                      fontSize:
+                                          MediaQuery.of(context).size.height *
+                                              0.02),
+                                  textAlignVertical: TextAlignVertical.center,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 30,
+                        ),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.25,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Flexible(
+                                child: SelectableText(
+                                  'Blood Group',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 8,
+                              ),
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.07,
+                                child: TextFormField(
+                                  decoration: const InputDecoration(
+                                      border: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: secondaryBorderGreyColor),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: primaryDarkGreenColor),
+                                      )),
+                                  controller: bloodGroupController,
+                                  keyboardType: TextInputType.emailAddress,
+                                  enableSuggestions: true,
+                                  onChanged: (e) {},
+                                  autofocus: true,
+                                  style: TextStyle(
+                                      fontSize:
+                                          MediaQuery.of(context).size.height *
+                                              0.02),
+                                  textAlignVertical: TextAlignVertical.center,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            onSecondaryButtonPressed: () {
+              Get.back();
+            },
+            onPrimaryButtonPressed: () {
+              showDialog(
+                  barrierDismissible: false,
+                  context: context,
+                  builder: (context) {
+                    return FutureBuilder(
+                      future: memmberController.editMember({
+                        'first_name': firstNameController.text == ''
+                            ? null
+                            : firstNameController.text,
+                        'last_name': lastNameController.text == ''
+                            ? null
+                            : lastNameController.text,
+                        'primary_mobile_no': primaryMobileNo.text == ''
+                            ? null
+                            : primaryMobileNo.text,
+                        'email_id': email.text == '' ? null : email.text,
+                        'addr': address.text == '' ? null : address.text,
+                        'reference': referenceController.text == ''
+                            ? null
+                            : referenceController.text,
+                        'trainer_id': trainerController.text == ''
+                            ? null
+                            : trainerController.text,
+                        'age': ageController.text == ''
+                            ? null
+                            : ageController.text,
+                        'height': heightController.text,
+                        'secondary_mobile_no': secondaryMobileNoController.text,
+                        'blood_group': bloodGroupController.text
+                      }, membersData['id']),
+                      builder: (context, snapshot) {
+                        return snapshot.connectionState ==
+                                ConnectionState.waiting
+                            ? GenericDialogBox(
+                                enableSecondaryButton: false,
+                                isLoader: true,
+                                content: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: SizedBox(
+                                    width: MediaQuery.of(context).size.width *
+                                        0.04,
+                                    height: MediaQuery.of(context).size.width *
+                                        0.06,
+                                    child: const Center(
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          CircularProgressIndicator(
+                                            color: primaryDarkBlueColor,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              )
+                            : GenericDialogBox(
+                                closeButtonEnabled: false,
+                                enablePrimaryButton: true,
+                                enableSecondaryButton: false,
+                                isLoader: false,
+                                content: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: SizedBox(
+                                    width: MediaQuery.of(context).size.width *
+                                        0.04,
+                                    height: MediaQuery.of(context).size.width *
+                                        0.06,
+                                    child: Center(
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(snapshot.data!['message'])
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                primaryButtonText: 'Ok',
+                                onPrimaryButtonPressed: () async {
+                                  Get.offAllNamed(
+                                    MembersView.membersRouteName,
+                                  );
+                                },
+                              );
+                      },
+                    );
+                  });
+            },
+          );
+        });
   }
 
   Future<String> selectedDatee(BuildContext context) async {
@@ -128,7 +854,7 @@ class _MemberProfileState extends State<MemberProfile>
               body: SafeArea(
                   child: Stack(children: [
             membersData.isEmpty
-                ? Center(
+                ? const Center(
                     child: CircularProgressIndicator(
                     color: Colors.white,
                   ))
@@ -137,7 +863,7 @@ class _MemberProfileState extends State<MemberProfile>
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Container(
-                              margin: EdgeInsets.fromLTRB(30, 10, 30, 0),
+                              margin: const EdgeInsets.fromLTRB(30, 10, 30, 0),
                               child: Stack(children: [
                                 Container(
                                   width: _width,
@@ -159,7 +885,7 @@ class _MemberProfileState extends State<MemberProfile>
                                               CrossAxisAlignment.center,
                                           children: [
                                         /// card header
-                                        Container(
+                                        SizedBox(
                                             width: double.infinity,
                                             child: Row(
                                                 crossAxisAlignment:
@@ -193,7 +919,12 @@ class _MemberProfileState extends State<MemberProfile>
                                                       '',
                                                       Colors.white,
                                                       Colors.green),
-                                                  const Spacer(flex: 1)
+                                                  const Spacer(flex: 1),
+                                                  PrimaryButton(
+                                                      onPressed: () {
+                                                        editProfile();
+                                                      },
+                                                      title: 'Edit Profile')
                                                 ])),
                                         const SizedBox(height: 50),
                                         LargeBoldTextBlack(
@@ -243,11 +974,11 @@ class _MemberProfileState extends State<MemberProfile>
                                             ]),
 
                                         /// description
-                                        Divider(
+                                        const Divider(
                                             height: 30,
                                             thickness: 1,
                                             color: primaryThemeColor),
-                                        Container(
+                                        SizedBox(
                                             width: double.infinity,
                                             child: Row(
                                                 crossAxisAlignment:
@@ -329,14 +1060,14 @@ class _MemberProfileState extends State<MemberProfile>
                                                                                   mainAxisAlignment: MainAxisAlignment.start,
                                                                                   crossAxisAlignment: CrossAxisAlignment.start,
                                                                                   children: [
-                                                                                    SelectableText(
+                                                                                    const SelectableText(
                                                                                       "From Date ",
                                                                                       style: TextStyle(
                                                                                         fontWeight: FontWeight.bold,
                                                                                       ),
                                                                                     ),
-                                                                                    SizedBox(height: 8),
-                                                                                    Container(
+                                                                                    const SizedBox(height: 8),
+                                                                                    SizedBox(
                                                                                       height: MediaQuery.of(context).size.height * 0.07,
                                                                                       child: TextField(
                                                                                         style: TextStyle(
@@ -352,7 +1083,7 @@ class _MemberProfileState extends State<MemberProfile>
                                                                                           ),
                                                                                           hintText: 'Select Date ',
                                                                                           suffixIcon: IconButton(
-                                                                                            icon: Icon(Icons.calendar_today),
+                                                                                            icon: const Icon(Icons.calendar_today),
                                                                                             onPressed: () async {
                                                                                               fromDate.text = await selectedDatee(context);
 
@@ -364,7 +1095,7 @@ class _MemberProfileState extends State<MemberProfile>
                                                                                     ),
                                                                                   ],
                                                                                 )),
-                                                                            SizedBox(
+                                                                            const SizedBox(
                                                                               width: 30,
                                                                             ),
                                                                             SizedBox(
@@ -373,14 +1104,14 @@ class _MemberProfileState extends State<MemberProfile>
                                                                                   mainAxisAlignment: MainAxisAlignment.start,
                                                                                   crossAxisAlignment: CrossAxisAlignment.start,
                                                                                   children: [
-                                                                                    SelectableText(
+                                                                                    const SelectableText(
                                                                                       "To Date ",
                                                                                       style: TextStyle(
                                                                                         fontWeight: FontWeight.bold,
                                                                                       ),
                                                                                     ),
-                                                                                    SizedBox(height: 8),
-                                                                                    Container(
+                                                                                    const SizedBox(height: 8),
+                                                                                    SizedBox(
                                                                                       height: MediaQuery.of(context).size.height * 0.07,
                                                                                       child: TextField(
                                                                                         style: TextStyle(
@@ -396,7 +1127,7 @@ class _MemberProfileState extends State<MemberProfile>
                                                                                           ),
                                                                                           hintText: 'Select Date ',
                                                                                           suffixIcon: IconButton(
-                                                                                            icon: Icon(Icons.calendar_today),
+                                                                                            icon: const Icon(Icons.calendar_today),
                                                                                             onPressed: () async {
                                                                                               toDate.text = await selectedDatee(context);
 
@@ -451,7 +1182,7 @@ class _MemberProfileState extends State<MemberProfile>
                                                                                 ],
                                                                               ),
                                                                             ),
-                                                                            SizedBox(
+                                                                            const SizedBox(
                                                                               width: 30,
                                                                             ),
                                                                             SizedBox(
@@ -729,7 +1460,7 @@ class _MemberProfileState extends State<MemberProfile>
                                                       },
                                                       title: 'Pay Pending')
                                                 ])),
-                                        Container(
+                                        SizedBox(
                                             height: MediaQuery.of(context)
                                                     .size
                                                     .height *
@@ -747,7 +1478,7 @@ class _MemberProfileState extends State<MemberProfile>
                                                                 .size
                                                                 .height *
                                                             0.115,
-                                                    color: Color.fromARGB(
+                                                    color: const Color.fromARGB(
                                                         255, 220, 215, 215),
                                                     child: Padding(
                                                       padding:
@@ -814,88 +1545,6 @@ class _MemberProfileState extends State<MemberProfile>
                                             backgroundImage: AssetImage(
                                                 'assets/images/person.png'))))
                               ])),
-                          // Container(
-                          //     margin: EdgeInsets.symmetric(
-                          //         horizontal: _width / 10, vertical: 20),
-                          //     padding: const EdgeInsets.all(10),
-                          //     decoration: BoxDecoration(
-                          //         color: Colors.white,
-                          //         borderRadius: BorderRadius.circular(5),
-                          //         boxShadow: [
-                          //           BoxShadow(
-                          //               color: Colors.black.withOpacity(.1),
-                          //               blurRadius: 5,
-                          //               spreadRadius: 2)
-                          //         ]),
-                          //     child: Row(
-                          //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          //       crossAxisAlignment: CrossAxisAlignment.end,
-                          //       children: [
-                          //         Container(
-                          //             margin:
-                          //                 const EdgeInsets.symmetric(vertical: 20),
-                          //             child: Column(
-                          //                 crossAxisAlignment:
-                          //                     CrossAxisAlignment.center,
-                          //                 children: [
-                          //                   BoldBlackText('Let\'s keep in touch!'),
-                          //                   NormalGreyText(
-                          //                       'Find us on any of these platforms, we respond 1-2 business days.'),
-                          //                   const SizedBox(height: 10),
-                          //                   Row(children: [
-                          //                     const Spacer(flex: 1),
-                          //                     FloatingIconsButtons(
-                          //                         'assets/icon/facebook.svg'),
-                          //                     FloatingIconsButtons(
-                          //                         'assets/icon/linkedin.svg'),
-                          //                     FloatingIconsButtons(
-                          //                         'assets/icon/skype.svg'),
-                          //                     FloatingIconsButtons(
-                          //                         'assets/icon/twitter.svg'),
-                          //                     FloatingIconsButtons(
-                          //                         'assets/icon/youtube.svg'),
-                          //                     const Spacer(flex: 1)
-                          //                   ])
-                          //                 ])),
-                          //         Container(
-                          //             margin: const EdgeInsets.all(20),
-                          //             child: Row(
-                          //                 mainAxisAlignment:
-                          //                     MainAxisAlignment.center,
-                          //                 children: [
-                          //                   Column(
-                          //                       crossAxisAlignment:
-                          //                           CrossAxisAlignment.center,
-                          //                       children: [
-                          //                         NormalGreyText('USEFUL LINKS'),
-                          //                         TextButtons('About Us',
-                          //                             Colors.grey[900]!),
-                          //                         TextButtons(
-                          //                             'Blog', Colors.grey[900]!),
-                          //                         TextButtons(
-                          //                             'Github', Colors.grey[900]!),
-                          //                         TextButtons('Free Products',
-                          //                             Colors.grey[900]!)
-                          //                       ]),
-                          //                   const SizedBox(width: 50),
-                          //                   Column(
-                          //                     crossAxisAlignment:
-                          //                         CrossAxisAlignment.center,
-                          //                     children: [
-                          //                       NormalGreyText('OTHER RESOURCES'),
-                          //                       TextButtons('MIT License',
-                          //                           Colors.grey[900]!),
-                          //                       TextButtons('Terms & Conditions',
-                          //                           Colors.grey[900]!),
-                          //                       TextButtons('Privacy Policy',
-                          //                           Colors.grey[900]!),
-                          //                       TextButtons(
-                          //                           'Contact Us', Colors.grey[900]!)
-                          //                     ],
-                          //                   )
-                          //                 ]))
-                          //       ],
-                          //     ))
                         ]),
                   )
           ]))),

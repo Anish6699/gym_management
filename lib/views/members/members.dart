@@ -67,6 +67,8 @@ class _MembersState extends State<MembersView> {
   MemberController memmberController = MemberController();
   List adminBranchList = [];
   DateTime selectedDateTime = DateTime.now();
+  TextEditingController filterFromDateController = TextEditingController();
+  TextEditingController filterToDateController = TextEditingController();
 
   List<Map<String, dynamic>> filterList = [
     {'id': -1, 'name': 'All'},
@@ -131,7 +133,9 @@ class _MembersState extends State<MembersView> {
     var a = await memmberController.getAllMembers(
         branchId: branchId,
         searchKeyword: searchController.text,
-        statusId: selectedStatus);
+        statusId: selectedStatus,
+        startDate: filterFromDateController.text,
+        endDate: filterToDateController.text);
 
     List<Map<String, dynamic>> membersList = a.map((dynamic item) {
       if (item is Map<String, dynamic>) {
@@ -179,7 +183,9 @@ class _MembersState extends State<MembersView> {
     var a = await memmberController.getAllMembers(
         branchId: branchId ?? selectedBranch['id'],
         searchKeyword: searchController.text,
-        statusId: selectedStatus);
+        statusId: selectedStatus,
+        startDate: filterFromDateController.text,
+        endDate: filterToDateController.text);
 
     List<Map<String, dynamic>> membersList = a.map((dynamic item) {
       if (item is Map<String, dynamic>) {
@@ -504,9 +510,12 @@ class _MembersState extends State<MembersView> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.2,
+                  width: MediaQuery.of(context).size.width * 0.17,
                   height: MediaQuery.of(context).size.height * 0.08,
                   child: TextField(
+                    style: TextStyle(
+                      fontSize: MediaQuery.of(context).size.width * 0.008,
+                    ),
                     controller: searchController,
                     decoration: InputDecoration(
                       hintText: "Search",
@@ -543,7 +552,7 @@ class _MembersState extends State<MembersView> {
               ),
               userType == 2
                   ? Container(
-                      width: MediaQuery.of(context).size.width * 0.2,
+                      width: MediaQuery.of(context).size.width * 0.1,
                       height: MediaQuery.of(context).size.height * 0.08,
                       decoration: BoxDecoration(
                         color: secondaryColor,
@@ -577,7 +586,7 @@ class _MembersState extends State<MembersView> {
                         },
                         borderRadius: BorderRadius.circular(4),
                         style: TextStyle(
-                            fontSize: MediaQuery.of(context).size.width * 0.08,
+                            fontSize: MediaQuery.of(context).size.width * 0.008,
                             color: Colors.white,
                             fontWeight: FontWeight.bold),
                         icon: Icon(
@@ -589,7 +598,7 @@ class _MembersState extends State<MembersView> {
                           hintText: "Select Branch",
                           hintStyle: TextStyle(
                               fontSize:
-                                  MediaQuery.of(context).size.width * 0.01,
+                                  MediaQuery.of(context).size.width * 0.008,
                               color: Colors.white,
                               fontWeight: FontWeight.bold),
                           contentPadding:
@@ -613,7 +622,7 @@ class _MembersState extends State<MembersView> {
                 width: mediaQuery.width * 0.01,
               ),
               Container(
-                width: MediaQuery.of(context).size.width * 0.2,
+                width: MediaQuery.of(context).size.width * 0.11,
                 height: MediaQuery.of(context).size.height * 0.08,
                 decoration: BoxDecoration(
                   color: secondaryColor,
@@ -632,7 +641,7 @@ class _MembersState extends State<MembersView> {
                           item['name'],
                           style: TextStyle(
                               fontSize:
-                                  MediaQuery.of(context).size.width * 0.01,
+                                  MediaQuery.of(context).size.width * 0.008,
                               color: Colors.white),
                         ),
                       );
@@ -655,7 +664,7 @@ class _MembersState extends State<MembersView> {
                   decoration: InputDecoration(
                     hintText: "Select Filter",
                     hintStyle: TextStyle(
-                        fontSize: MediaQuery.of(context).size.width * 0.01,
+                        fontSize: MediaQuery.of(context).size.width * 0.008,
                         color: Colors.white,
                         fontWeight: FontWeight.bold),
                     contentPadding: const EdgeInsets.symmetric(horizontal: 10),
@@ -677,842 +686,79 @@ class _MembersState extends State<MembersView> {
                 width: mediaQuery.width * 0.01,
               ),
               SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.12,
+                  height: MediaQuery.of(context).size.height * 0.08,
+                  child: TextField(
+                    style: TextStyle(
+                      fontSize: mediaQuery.width * 0.008,
+                    ),
+                    controller: filterFromDateController,
+                    readOnly: true,
+                    decoration: InputDecoration(
+                      contentPadding: const EdgeInsets.only(left: 10),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(4.0),
+                        borderSide:
+                            const BorderSide(color: secondaryBorderGreyColor),
+                      ),
+                      hintText: 'From Date ',
+                      suffixIcon: IconButton(
+                        icon: const Icon(Icons.calendar_today),
+                        onPressed: () async {
+                          filterFromDateController.text =
+                              await selectedDatee(context);
+
+                          setDataOnBranchChange();
+                        },
+                      ),
+                    ),
+                  )),
+              SizedBox(
+                width: mediaQuery.width * 0.01,
+              ),
+              SizedBox(
+                width: MediaQuery.of(context).size.width * 0.12,
+                height: MediaQuery.of(context).size.height * 0.08,
+                child: TextField(
+                  style: TextStyle(
+                    fontSize: mediaQuery.width * 0.008,
+                  ),
+                  controller: filterToDateController,
+                  readOnly: true,
+                  decoration: InputDecoration(
+                    contentPadding: const EdgeInsets.only(left: 10),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(4.0),
+                      borderSide:
+                          const BorderSide(color: secondaryBorderGreyColor),
+                    ),
+                    hintText: 'End Date ',
+                    suffixIcon: IconButton(
+                      icon: const Icon(Icons.calendar_today),
+                      onPressed: () async {
+                        filterToDateController.text =
+                            await selectedDatee(context);
+
+                        setDataOnBranchChange();
+                      },
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(
+                width: mediaQuery.width * 0.01,
+              ),
+              SizedBox(
                 height: MediaQuery.of(context).size.height * 0.08,
                 child: PrimaryButton(
                   onPressed: () {
-                    firstNameController.clear();
-
-                    lastNameController.clear();
-                    primaryMobileNo.clear();
-
-                    email.clear();
-                    address.clear();
-
-                    showDialog(
-                        context: context,
-                        builder: (context) {
-                          return GenericDialogBox(
-                            enableSecondaryButton: true,
-                            isLoader: false,
-                            title: "Add Member",
-                            primaryButtonText: 'Add',
-                            secondaryButtonText: 'Cancel',
-                            content: SizedBox(
-                              height: mediaQuery.height * 0.7,
-                              child: SingleChildScrollView(
-                                child: Column(
-                                  children: [
-                                    Row(
-                                      children: [
-                                        SizedBox(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.25,
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              const Flexible(
-                                                child: SelectableText(
-                                                  'First Name',
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                ),
-                                              ),
-                                              const SizedBox(
-                                                height: 8,
-                                              ),
-                                              SizedBox(
-                                                height: MediaQuery.of(context)
-                                                        .size
-                                                        .height *
-                                                    0.07,
-                                                child: TextFormField(
-                                                  inputFormatters: [
-                                                    FilteringTextInputFormatter
-                                                        .allow(RegExp(
-                                                            r'[a-zA-Z]')),
-                                                  ],
-                                                  decoration:
-                                                      const InputDecoration(
-                                                          border:
-                                                              OutlineInputBorder(
-                                                            borderSide: BorderSide(
-                                                                color:
-                                                                    secondaryBorderGreyColor),
-                                                          ),
-                                                          focusedBorder:
-                                                              OutlineInputBorder(
-                                                            borderSide: BorderSide(
-                                                                color:
-                                                                    primaryDarkGreenColor),
-                                                          )),
-                                                  controller:
-                                                      firstNameController,
-                                                  keyboardType: TextInputType
-                                                      .emailAddress,
-                                                  enableSuggestions: true,
-                                                  onChanged: (e) {},
-                                                  autofocus: true,
-                                                  style: TextStyle(
-                                                      fontSize:
-                                                          MediaQuery.of(context)
-                                                                  .size
-                                                                  .height *
-                                                              0.02),
-                                                  textAlignVertical:
-                                                      TextAlignVertical.center,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          width: 30,
-                                        ),
-                                        SizedBox(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.25,
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              const Flexible(
-                                                child: SelectableText(
-                                                  'Last Name',
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                ),
-                                              ),
-                                              const SizedBox(
-                                                height: 8,
-                                              ),
-                                              SizedBox(
-                                                height: MediaQuery.of(context)
-                                                        .size
-                                                        .height *
-                                                    0.07,
-                                                child: TextFormField(
-                                                  inputFormatters: [
-                                                    FilteringTextInputFormatter
-                                                        .allow(RegExp(
-                                                            r'[a-zA-Z]')),
-                                                  ],
-                                                  decoration:
-                                                      const InputDecoration(
-                                                          border:
-                                                              OutlineInputBorder(
-                                                            borderSide: BorderSide(
-                                                                color:
-                                                                    secondaryBorderGreyColor),
-                                                          ),
-                                                          focusedBorder:
-                                                              OutlineInputBorder(
-                                                            borderSide: BorderSide(
-                                                                color:
-                                                                    primaryDarkGreenColor),
-                                                          )),
-                                                  controller:
-                                                      lastNameController,
-                                                  keyboardType: TextInputType
-                                                      .emailAddress,
-                                                  enableSuggestions: true,
-                                                  onChanged: (e) {},
-                                                  autofocus: true,
-                                                  style: TextStyle(
-                                                      fontSize:
-                                                          MediaQuery.of(context)
-                                                                  .size
-                                                                  .height *
-                                                              0.02),
-                                                  textAlignVertical:
-                                                      TextAlignVertical.center,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        SizedBox(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.25,
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              const Flexible(
-                                                child: SelectableText(
-                                                  'Primary Mobile No',
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                ),
-                                              ),
-                                              const SizedBox(
-                                                height: 8,
-                                              ),
-                                              SizedBox(
-                                                height: MediaQuery.of(context)
-                                                        .size
-                                                        .height *
-                                                    0.07,
-                                                child: TextFormField(
-                                                  inputFormatters: [
-                                                    FilteringTextInputFormatter
-                                                        .allow(
-                                                            RegExp(r'[0-9]')),
-                                                  ],
-                                                  decoration:
-                                                      const InputDecoration(
-                                                          border:
-                                                              OutlineInputBorder(
-                                                            borderSide: BorderSide(
-                                                                color:
-                                                                    secondaryBorderGreyColor),
-                                                          ),
-                                                          focusedBorder:
-                                                              OutlineInputBorder(
-                                                            borderSide: BorderSide(
-                                                                color:
-                                                                    primaryDarkGreenColor),
-                                                          )),
-                                                  controller: primaryMobileNo,
-                                                  keyboardType: TextInputType
-                                                      .emailAddress,
-                                                  enableSuggestions: true,
-                                                  onChanged: (e) {},
-                                                  autofocus: true,
-                                                  style: TextStyle(
-                                                      fontSize:
-                                                          MediaQuery.of(context)
-                                                                  .size
-                                                                  .height *
-                                                              0.02),
-                                                  textAlignVertical:
-                                                      TextAlignVertical.center,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          width: 30,
-                                        ),
-                                        SizedBox(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.25,
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              const Flexible(
-                                                child: SelectableText(
-                                                  'Refrenced By',
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                ),
-                                              ),
-                                              const SizedBox(
-                                                height: 8,
-                                              ),
-                                              SizedBox(
-                                                height: MediaQuery.of(context)
-                                                        .size
-                                                        .height *
-                                                    0.07,
-                                                child: TextFormField(
-                                                  inputFormatters: [
-                                                    FilteringTextInputFormatter
-                                                        .allow(RegExp(
-                                                            r'[a-zA-Z]')),
-                                                  ],
-                                                  decoration:
-                                                      const InputDecoration(
-                                                          border:
-                                                              OutlineInputBorder(
-                                                            borderSide: BorderSide(
-                                                                color:
-                                                                    secondaryBorderGreyColor),
-                                                          ),
-                                                          focusedBorder:
-                                                              OutlineInputBorder(
-                                                            borderSide: BorderSide(
-                                                                color:
-                                                                    primaryDarkGreenColor),
-                                                          )),
-                                                  controller:
-                                                      referenceController,
-                                                  keyboardType: TextInputType
-                                                      .emailAddress,
-                                                  enableSuggestions: true,
-                                                  onChanged: (e) {},
-                                                  autofocus: true,
-                                                  style: TextStyle(
-                                                      fontSize:
-                                                          MediaQuery.of(context)
-                                                                  .size
-                                                                  .height *
-                                                              0.02),
-                                                  textAlignVertical:
-                                                      TextAlignVertical.center,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        SizedBox(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.25,
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              const Flexible(
-                                                child: SelectableText(
-                                                  'Email',
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                ),
-                                              ),
-                                              const SizedBox(
-                                                height: 8,
-                                              ),
-                                              SizedBox(
-                                                height: MediaQuery.of(context)
-                                                        .size
-                                                        .height *
-                                                    0.07,
-                                                child: TextFormField(
-                                                  decoration:
-                                                      const InputDecoration(
-                                                          border:
-                                                              OutlineInputBorder(
-                                                            borderSide: BorderSide(
-                                                                color:
-                                                                    secondaryBorderGreyColor),
-                                                          ),
-                                                          focusedBorder:
-                                                              OutlineInputBorder(
-                                                            borderSide: BorderSide(
-                                                                color:
-                                                                    primaryDarkGreenColor),
-                                                          )),
-                                                  controller: email,
-                                                  keyboardType: TextInputType
-                                                      .emailAddress,
-                                                  enableSuggestions: true,
-                                                  onChanged: (e) {},
-                                                  autofocus: true,
-                                                  style: TextStyle(
-                                                      fontSize:
-                                                          MediaQuery.of(context)
-                                                                  .size
-                                                                  .height *
-                                                              0.02),
-                                                  textAlignVertical:
-                                                      TextAlignVertical.center,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          width: 30,
-                                        ),
-                                        SizedBox(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.25,
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              const Flexible(
-                                                child: SelectableText(
-                                                  'Address',
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                ),
-                                              ),
-                                              const SizedBox(
-                                                height: 8,
-                                              ),
-                                              SizedBox(
-                                                height: MediaQuery.of(context)
-                                                        .size
-                                                        .height *
-                                                    0.07,
-                                                child: TextFormField(
-                                                  decoration:
-                                                      const InputDecoration(
-                                                          border:
-                                                              OutlineInputBorder(
-                                                            borderSide: BorderSide(
-                                                                color:
-                                                                    secondaryBorderGreyColor),
-                                                          ),
-                                                          focusedBorder:
-                                                              OutlineInputBorder(
-                                                            borderSide: BorderSide(
-                                                                color:
-                                                                    primaryDarkGreenColor),
-                                                          )),
-                                                  controller: address,
-                                                  keyboardType: TextInputType
-                                                      .emailAddress,
-                                                  enableSuggestions: true,
-                                                  onChanged: (e) {},
-                                                  autofocus: true,
-                                                  style: TextStyle(
-                                                      fontSize:
-                                                          MediaQuery.of(context)
-                                                                  .size
-                                                                  .height *
-                                                              0.02),
-                                                  textAlignVertical:
-                                                      TextAlignVertical.center,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        SizedBox(
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.25,
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                const SelectableText(
-                                                  "From Date ",
-                                                  style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-                                                const SizedBox(height: 8),
-                                                Container(
-                                                  height: MediaQuery.of(context)
-                                                          .size
-                                                          .height *
-                                                      0.07,
-                                                  child: TextField(
-                                                    style: TextStyle(
-                                                      fontSize:
-                                                          mediaQuery.width *
-                                                              0.008,
-                                                    ),
-                                                    controller:
-                                                        fromDateController,
-                                                    readOnly: true,
-                                                    decoration: InputDecoration(
-                                                      contentPadding:
-                                                          const EdgeInsets.only(
-                                                              left: 10),
-                                                      border:
-                                                          OutlineInputBorder(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(4.0),
-                                                        borderSide:
-                                                            const BorderSide(
-                                                                color:
-                                                                    secondaryBorderGreyColor),
-                                                      ),
-                                                      hintText: 'Select Date ',
-                                                      suffixIcon: IconButton(
-                                                        icon: const Icon(Icons
-                                                            .calendar_today),
-                                                        onPressed: () async {
-                                                          fromDateController
-                                                                  .text =
-                                                              await selectedDatee(
-                                                                  context);
-
-                                                          setState(() {});
-                                                        },
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            )),
-                                        const SizedBox(
-                                          width: 30,
-                                        ),
-                                        SizedBox(
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.25,
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                const SelectableText(
-                                                  "To Date ",
-                                                  style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-                                                const SizedBox(height: 8),
-                                                Container(
-                                                  height: MediaQuery.of(context)
-                                                          .size
-                                                          .height *
-                                                      0.07,
-                                                  child: TextField(
-                                                    style: TextStyle(
-                                                      fontSize:
-                                                          mediaQuery.width *
-                                                              0.008,
-                                                    ),
-                                                    controller:
-                                                        toDateController,
-                                                    readOnly: true,
-                                                    decoration: InputDecoration(
-                                                      contentPadding:
-                                                          const EdgeInsets.only(
-                                                              left: 10),
-                                                      border:
-                                                          OutlineInputBorder(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(4.0),
-                                                        borderSide:
-                                                            const BorderSide(
-                                                                color:
-                                                                    secondaryBorderGreyColor),
-                                                      ),
-                                                      hintText: 'Select Date ',
-                                                      suffixIcon: IconButton(
-                                                        icon: const Icon(Icons
-                                                            .calendar_today),
-                                                        onPressed: () async {
-                                                          toDateController
-                                                                  .text =
-                                                              await selectedDatee(
-                                                                  context);
-
-                                                          setState(() {});
-                                                        },
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            )),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        SizedBox(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.25,
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              const Flexible(
-                                                child: SelectableText(
-                                                  'Total Ammount',
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                ),
-                                              ),
-                                              const SizedBox(
-                                                height: 8,
-                                              ),
-                                              SizedBox(
-                                                height: MediaQuery.of(context)
-                                                        .size
-                                                        .height *
-                                                    0.07,
-                                                child: TextFormField(
-                                                  inputFormatters: [
-                                                    FilteringTextInputFormatter
-                                                        .allow(
-                                                            RegExp(r'[0-9]')),
-                                                  ],
-                                                  decoration:
-                                                      const InputDecoration(
-                                                          border:
-                                                              OutlineInputBorder(
-                                                            borderSide: BorderSide(
-                                                                color:
-                                                                    secondaryBorderGreyColor),
-                                                          ),
-                                                          focusedBorder:
-                                                              OutlineInputBorder(
-                                                            borderSide: BorderSide(
-                                                                color:
-                                                                    primaryDarkGreenColor),
-                                                          )),
-                                                  controller:
-                                                      totalAmmountController,
-                                                  keyboardType: TextInputType
-                                                      .emailAddress,
-                                                  enableSuggestions: true,
-                                                  autofocus: true,
-                                                  style: TextStyle(
-                                                      fontSize:
-                                                          MediaQuery.of(context)
-                                                                  .size
-                                                                  .height *
-                                                              0.02),
-                                                  textAlignVertical:
-                                                      TextAlignVertical.center,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          width: 30,
-                                        ),
-                                        SizedBox(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.25,
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              const Flexible(
-                                                child: SelectableText(
-                                                  'Paid Ammount',
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                ),
-                                              ),
-                                              const SizedBox(
-                                                height: 8,
-                                              ),
-                                              SizedBox(
-                                                height: MediaQuery.of(context)
-                                                        .size
-                                                        .height *
-                                                    0.07,
-                                                child: TextFormField(
-                                                  inputFormatters: [
-                                                    FilteringTextInputFormatter
-                                                        .allow(
-                                                            RegExp(r'[0-9]')),
-                                                  ],
-                                                  decoration:
-                                                      const InputDecoration(
-                                                          border:
-                                                              OutlineInputBorder(
-                                                            borderSide: BorderSide(
-                                                                color:
-                                                                    secondaryBorderGreyColor),
-                                                          ),
-                                                          focusedBorder:
-                                                              OutlineInputBorder(
-                                                            borderSide: BorderSide(
-                                                                color:
-                                                                    primaryDarkGreenColor),
-                                                          )),
-                                                  controller:
-                                                      paidAmmountController,
-                                                  keyboardType: TextInputType
-                                                      .emailAddress,
-                                                  enableSuggestions: true,
-                                                  autofocus: true,
-                                                  style: TextStyle(
-                                                      fontSize:
-                                                          MediaQuery.of(context)
-                                                                  .size
-                                                                  .height *
-                                                              0.02),
-                                                  textAlignVertical:
-                                                      TextAlignVertical.center,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            onSecondaryButtonPressed: () {
-                              Get.back();
-                            },
-                            onPrimaryButtonPressed: () {
-                              showDialog(
-                                  barrierDismissible: false,
-                                  context: context,
-                                  builder: (context) {
-                                    return FutureBuilder(
-                                      future: memmberController.addMember({
-                                        'branch_id':
-                                            branchId ?? selectedBranch['id'],
-                                        'first_name':
-                                            firstNameController.text == ''
-                                                ? null
-                                                : firstNameController.text,
-                                        'last_name':
-                                            lastNameController.text == ''
-                                                ? null
-                                                : lastNameController.text,
-                                        'primary_mobile_no':
-                                            primaryMobileNo.text == ''
-                                                ? null
-                                                : primaryMobileNo.text,
-                                        'email': email.text == ''
-                                            ? null
-                                            : email.text,
-                                        'addr': address.text == ''
-                                            ? null
-                                            : address.text,
-                                        'reference':
-                                            referenceController.text == ''
-                                                ? null
-                                                : referenceController.text,
-                                        'start_date':
-                                            fromDateController.text == ''
-                                                ? null
-                                                : fromDateController.text,
-                                        'end_date': toDateController.text == ''
-                                            ? null
-                                            : toDateController.text,
-                                        'price': totalAmmountController.text,
-                                        'paid_amount':
-                                            paidAmmountController.text,
-                                        'status': 0
-                                      }),
-                                      builder: (context, snapshot) {
-                                        return snapshot.connectionState ==
-                                                ConnectionState.waiting
-                                            ? GenericDialogBox(
-                                                enableSecondaryButton: false,
-                                                isLoader: true,
-                                                content: Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: SizedBox(
-                                                    width:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .width *
-                                                            0.04,
-                                                    height:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .width *
-                                                            0.06,
-                                                    child: const Center(
-                                                      child: Column(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .center,
-                                                        children: [
-                                                          CircularProgressIndicator(
-                                                            color:
-                                                                primaryDarkBlueColor,
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              )
-                                            : GenericDialogBox(
-                                                closeButtonEnabled: false,
-                                                enablePrimaryButton: true,
-                                                enableSecondaryButton: false,
-                                                isLoader: false,
-                                                content: Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: SizedBox(
-                                                    width:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .width *
-                                                            0.04,
-                                                    height:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .width *
-                                                            0.06,
-                                                    child: Center(
-                                                      child: Column(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .center,
-                                                        children: [
-                                                          Text(snapshot
-                                                              .data!['message'])
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                                primaryButtonText: 'Ok',
-                                                onPrimaryButtonPressed:
-                                                    () async {
-                                                  Get.offAllNamed(
-                                                    MembersView
-                                                        .membersRouteName,
-                                                  );
-                                                },
-                                              );
-                                      },
-                                    );
-                                  });
-                            },
-                          );
-                        });
+                    searchController.clear();
+                    selectedStatus = null;
+                    filterFromDateController.clear();
+                    filterToDateController.clear();
+                    setDataOnBranchChange();
                   },
-                  title: 'Add Member',
+                  title: 'Clear Filter',
                 ),
               ),
             ],
@@ -1639,6 +885,771 @@ class _MembersState extends State<MembersView> {
             //   toolbarHeight: MediaQuery.of(context).size.height * 0.075,
             // ),
             body: _body(mediaQuery),
+            floatingActionButton: FloatingActionButton(
+              backgroundColor: primaryColor,
+              onPressed: () {
+                firstNameController.clear();
+
+                lastNameController.clear();
+                primaryMobileNo.clear();
+
+                email.clear();
+                address.clear();
+
+                showDialog(
+                    context: context,
+                    builder: (context) {
+                      return GenericDialogBox(
+                        enableSecondaryButton: true,
+                        isLoader: false,
+                        title: "Add Member",
+                        primaryButtonText: 'Add',
+                        secondaryButtonText: 'Cancel',
+                        content: SizedBox(
+                          height: mediaQuery.height * 0.7,
+                          child: SingleChildScrollView(
+                            child: Column(
+                              children: [
+                                Row(
+                                  children: [
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.25,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          const Flexible(
+                                            child: SelectableText(
+                                              'First Name',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            height: 8,
+                                          ),
+                                          SizedBox(
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                0.07,
+                                            child: TextFormField(
+                                              inputFormatters: [
+                                                FilteringTextInputFormatter
+                                                    .allow(RegExp(r'[a-zA-Z]')),
+                                              ],
+                                              decoration: const InputDecoration(
+                                                  border: OutlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                        color:
+                                                            secondaryBorderGreyColor),
+                                                  ),
+                                                  focusedBorder:
+                                                      OutlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                        color:
+                                                            primaryDarkGreenColor),
+                                                  )),
+                                              controller: firstNameController,
+                                              keyboardType:
+                                                  TextInputType.emailAddress,
+                                              enableSuggestions: true,
+                                              onChanged: (e) {},
+                                              autofocus: true,
+                                              style: TextStyle(
+                                                  fontSize:
+                                                      MediaQuery.of(context)
+                                                              .size
+                                                              .height *
+                                                          0.02),
+                                              textAlignVertical:
+                                                  TextAlignVertical.center,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      width: 30,
+                                    ),
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.25,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          const Flexible(
+                                            child: SelectableText(
+                                              'Last Name',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            height: 8,
+                                          ),
+                                          SizedBox(
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                0.07,
+                                            child: TextFormField(
+                                              inputFormatters: [
+                                                FilteringTextInputFormatter
+                                                    .allow(RegExp(r'[a-zA-Z]')),
+                                              ],
+                                              decoration: const InputDecoration(
+                                                  border: OutlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                        color:
+                                                            secondaryBorderGreyColor),
+                                                  ),
+                                                  focusedBorder:
+                                                      OutlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                        color:
+                                                            primaryDarkGreenColor),
+                                                  )),
+                                              controller: lastNameController,
+                                              keyboardType:
+                                                  TextInputType.emailAddress,
+                                              enableSuggestions: true,
+                                              onChanged: (e) {},
+                                              autofocus: true,
+                                              style: TextStyle(
+                                                  fontSize:
+                                                      MediaQuery.of(context)
+                                                              .size
+                                                              .height *
+                                                          0.02),
+                                              textAlignVertical:
+                                                  TextAlignVertical.center,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.25,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          const Flexible(
+                                            child: SelectableText(
+                                              'Primary Mobile No',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            height: 8,
+                                          ),
+                                          SizedBox(
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                0.07,
+                                            child: TextFormField(
+                                              inputFormatters: [
+                                                FilteringTextInputFormatter
+                                                    .allow(RegExp(r'[0-9]')),
+                                              ],
+                                              decoration: const InputDecoration(
+                                                  border: OutlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                        color:
+                                                            secondaryBorderGreyColor),
+                                                  ),
+                                                  focusedBorder:
+                                                      OutlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                        color:
+                                                            primaryDarkGreenColor),
+                                                  )),
+                                              controller: primaryMobileNo,
+                                              keyboardType:
+                                                  TextInputType.emailAddress,
+                                              enableSuggestions: true,
+                                              onChanged: (e) {},
+                                              autofocus: true,
+                                              style: TextStyle(
+                                                  fontSize:
+                                                      MediaQuery.of(context)
+                                                              .size
+                                                              .height *
+                                                          0.02),
+                                              textAlignVertical:
+                                                  TextAlignVertical.center,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      width: 30,
+                                    ),
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.25,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          const Flexible(
+                                            child: SelectableText(
+                                              'Refrenced By',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            height: 8,
+                                          ),
+                                          SizedBox(
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                0.07,
+                                            child: TextFormField(
+                                              inputFormatters: [
+                                                FilteringTextInputFormatter
+                                                    .allow(RegExp(r'[a-zA-Z]')),
+                                              ],
+                                              decoration: const InputDecoration(
+                                                  border: OutlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                        color:
+                                                            secondaryBorderGreyColor),
+                                                  ),
+                                                  focusedBorder:
+                                                      OutlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                        color:
+                                                            primaryDarkGreenColor),
+                                                  )),
+                                              controller: referenceController,
+                                              keyboardType:
+                                                  TextInputType.emailAddress,
+                                              enableSuggestions: true,
+                                              onChanged: (e) {},
+                                              autofocus: true,
+                                              style: TextStyle(
+                                                  fontSize:
+                                                      MediaQuery.of(context)
+                                                              .size
+                                                              .height *
+                                                          0.02),
+                                              textAlignVertical:
+                                                  TextAlignVertical.center,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.25,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          const Flexible(
+                                            child: SelectableText(
+                                              'Email',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            height: 8,
+                                          ),
+                                          SizedBox(
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                0.07,
+                                            child: TextFormField(
+                                              decoration: const InputDecoration(
+                                                  border: OutlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                        color:
+                                                            secondaryBorderGreyColor),
+                                                  ),
+                                                  focusedBorder:
+                                                      OutlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                        color:
+                                                            primaryDarkGreenColor),
+                                                  )),
+                                              controller: email,
+                                              keyboardType:
+                                                  TextInputType.emailAddress,
+                                              enableSuggestions: true,
+                                              onChanged: (e) {},
+                                              autofocus: true,
+                                              style: TextStyle(
+                                                  fontSize:
+                                                      MediaQuery.of(context)
+                                                              .size
+                                                              .height *
+                                                          0.02),
+                                              textAlignVertical:
+                                                  TextAlignVertical.center,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      width: 30,
+                                    ),
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.25,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          const Flexible(
+                                            child: SelectableText(
+                                              'Address',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            height: 8,
+                                          ),
+                                          SizedBox(
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                0.07,
+                                            child: TextFormField(
+                                              decoration: const InputDecoration(
+                                                  border: OutlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                        color:
+                                                            secondaryBorderGreyColor),
+                                                  ),
+                                                  focusedBorder:
+                                                      OutlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                        color:
+                                                            primaryDarkGreenColor),
+                                                  )),
+                                              controller: address,
+                                              keyboardType:
+                                                  TextInputType.emailAddress,
+                                              enableSuggestions: true,
+                                              onChanged: (e) {},
+                                              autofocus: true,
+                                              style: TextStyle(
+                                                  fontSize:
+                                                      MediaQuery.of(context)
+                                                              .size
+                                                              .height *
+                                                          0.02),
+                                              textAlignVertical:
+                                                  TextAlignVertical.center,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.25,
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            const SelectableText(
+                                              "From Date ",
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            const SizedBox(height: 8),
+                                            SizedBox(
+                                              height: MediaQuery.of(context)
+                                                      .size
+                                                      .height *
+                                                  0.07,
+                                              child: TextField(
+                                                style: TextStyle(
+                                                  fontSize:
+                                                      mediaQuery.width * 0.008,
+                                                ),
+                                                controller: fromDateController,
+                                                readOnly: true,
+                                                decoration: InputDecoration(
+                                                  contentPadding:
+                                                      const EdgeInsets.only(
+                                                          left: 10),
+                                                  border: OutlineInputBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            4.0),
+                                                    borderSide: const BorderSide(
+                                                        color:
+                                                            secondaryBorderGreyColor),
+                                                  ),
+                                                  hintText: 'Select Date ',
+                                                  suffixIcon: IconButton(
+                                                    icon: const Icon(
+                                                        Icons.calendar_today),
+                                                    onPressed: () async {
+                                                      fromDateController.text =
+                                                          await selectedDatee(
+                                                              context);
+
+                                                      setState(() {});
+                                                    },
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        )),
+                                    const SizedBox(
+                                      width: 30,
+                                    ),
+                                    SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.25,
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            const SelectableText(
+                                              "To Date ",
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            const SizedBox(height: 8),
+                                            SizedBox(
+                                              height: MediaQuery.of(context)
+                                                      .size
+                                                      .height *
+                                                  0.07,
+                                              child: TextField(
+                                                style: TextStyle(
+                                                  fontSize:
+                                                      mediaQuery.width * 0.008,
+                                                ),
+                                                controller: toDateController,
+                                                readOnly: true,
+                                                decoration: InputDecoration(
+                                                  contentPadding:
+                                                      const EdgeInsets.only(
+                                                          left: 10),
+                                                  border: OutlineInputBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            4.0),
+                                                    borderSide: const BorderSide(
+                                                        color:
+                                                            secondaryBorderGreyColor),
+                                                  ),
+                                                  hintText: 'Select Date ',
+                                                  suffixIcon: IconButton(
+                                                    icon: const Icon(
+                                                        Icons.calendar_today),
+                                                    onPressed: () async {
+                                                      toDateController.text =
+                                                          await selectedDatee(
+                                                              context);
+
+                                                      setState(() {});
+                                                    },
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        )),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.25,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          const Flexible(
+                                            child: SelectableText(
+                                              'Total Ammount',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            height: 8,
+                                          ),
+                                          SizedBox(
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                0.07,
+                                            child: TextFormField(
+                                              inputFormatters: [
+                                                FilteringTextInputFormatter
+                                                    .allow(RegExp(r'[0-9]')),
+                                              ],
+                                              decoration: const InputDecoration(
+                                                  border: OutlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                        color:
+                                                            secondaryBorderGreyColor),
+                                                  ),
+                                                  focusedBorder:
+                                                      OutlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                        color:
+                                                            primaryDarkGreenColor),
+                                                  )),
+                                              controller:
+                                                  totalAmmountController,
+                                              keyboardType:
+                                                  TextInputType.emailAddress,
+                                              enableSuggestions: true,
+                                              autofocus: true,
+                                              style: TextStyle(
+                                                  fontSize:
+                                                      MediaQuery.of(context)
+                                                              .size
+                                                              .height *
+                                                          0.02),
+                                              textAlignVertical:
+                                                  TextAlignVertical.center,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      width: 30,
+                                    ),
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.25,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          const Flexible(
+                                            child: SelectableText(
+                                              'Paid Ammount',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            height: 8,
+                                          ),
+                                          SizedBox(
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                0.07,
+                                            child: TextFormField(
+                                              inputFormatters: [
+                                                FilteringTextInputFormatter
+                                                    .allow(RegExp(r'[0-9]')),
+                                              ],
+                                              decoration: const InputDecoration(
+                                                  border: OutlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                        color:
+                                                            secondaryBorderGreyColor),
+                                                  ),
+                                                  focusedBorder:
+                                                      OutlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                        color:
+                                                            primaryDarkGreenColor),
+                                                  )),
+                                              controller: paidAmmountController,
+                                              keyboardType:
+                                                  TextInputType.emailAddress,
+                                              enableSuggestions: true,
+                                              autofocus: true,
+                                              style: TextStyle(
+                                                  fontSize:
+                                                      MediaQuery.of(context)
+                                                              .size
+                                                              .height *
+                                                          0.02),
+                                              textAlignVertical:
+                                                  TextAlignVertical.center,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        onSecondaryButtonPressed: () {
+                          Get.back();
+                        },
+                        onPrimaryButtonPressed: () {
+                          showDialog(
+                              barrierDismissible: false,
+                              context: context,
+                              builder: (context) {
+                                return FutureBuilder(
+                                  future: memmberController.addMember({
+                                    'branch_id':
+                                        branchId ?? selectedBranch['id'],
+                                    'first_name': firstNameController.text == ''
+                                        ? null
+                                        : firstNameController.text,
+                                    'last_name': lastNameController.text == ''
+                                        ? null
+                                        : lastNameController.text,
+                                    'primary_mobile_no':
+                                        primaryMobileNo.text == ''
+                                            ? null
+                                            : primaryMobileNo.text,
+                                    'email':
+                                        email.text == '' ? null : email.text,
+                                    'addr': address.text == ''
+                                        ? null
+                                        : address.text,
+                                    'reference': referenceController.text == ''
+                                        ? null
+                                        : referenceController.text,
+                                    'start_date': fromDateController.text == ''
+                                        ? null
+                                        : fromDateController.text,
+                                    'end_date': toDateController.text == ''
+                                        ? null
+                                        : toDateController.text,
+                                    'price': totalAmmountController.text,
+                                    'paid_amount': paidAmmountController.text,
+                                    'status': 0
+                                  }),
+                                  builder: (context, snapshot) {
+                                    return snapshot.connectionState ==
+                                            ConnectionState.waiting
+                                        ? GenericDialogBox(
+                                            enableSecondaryButton: false,
+                                            isLoader: true,
+                                            content: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: SizedBox(
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.04,
+                                                height: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.06,
+                                                child: const Center(
+                                                  child: Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      CircularProgressIndicator(
+                                                        color:
+                                                            primaryDarkBlueColor,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          )
+                                        : GenericDialogBox(
+                                            closeButtonEnabled: false,
+                                            enablePrimaryButton: true,
+                                            enableSecondaryButton: false,
+                                            isLoader: false,
+                                            content: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: SizedBox(
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.04,
+                                                height: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.06,
+                                                child: Center(
+                                                  child: Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Text(snapshot
+                                                          .data!['message'])
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            primaryButtonText: 'Ok',
+                                            onPrimaryButtonPressed: () async {
+                                              Get.offAllNamed(
+                                                MembersView.membersRouteName,
+                                              );
+                                            },
+                                          );
+                                  },
+                                );
+                              });
+                        },
+                      );
+                    });
+              },
+              child:
+                  Tooltip(message: "Add Member", child: const Icon(Icons.add)),
+            ),
+            floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
           ),
         ),
       ],

@@ -29,9 +29,9 @@ class TrainerController extends GetxController {
   }
 
   Future<Map<String, dynamic>> editTrainer(
-      Map<String, dynamic> data, branchId) async {
+      Map<String, dynamic> data, trainerId) async {
     var response =
-        await _httpClient.post(path: 'edit-trainer/$branchId', body: data);
+        await _httpClient.post(path: 'edit-trainer/$trainerId', body: data);
 
     var body = json.decode(response['body']) as Map<String, dynamic>;
 

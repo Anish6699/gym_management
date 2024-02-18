@@ -5,6 +5,7 @@ import 'package:gmstest/super_admin/branch/branches.dart';
 import 'package:gmstest/views/dashboards/admin_dashboard.dart';
 import 'package:gmstest/views/dashboards/branch/branch_dashboard.dart';
 import 'package:gmstest/views/dashboards/dashboard.dart';
+import 'package:gmstest/views/expense_tracker.dart';
 import 'package:gmstest/views/login.dart';
 import 'package:gmstest/views/members/member_profile.dart';
 import 'package:gmstest/views/members/members.dart';
@@ -22,6 +23,8 @@ class AppRouter {
         return BranchDashboard.route();
       case AdminDashboard.routeName:
         return AdminDashboard.route();
+      case ExpenseTrackerView.routeName:
+        return ExpenseTrackerView.route();
       case LoginPage.routeName:
         return LoginPage.route();
       case MembersView.membersRouteName:

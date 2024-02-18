@@ -1,6 +1,6 @@
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:gmstest/configs/colors.dart';
 import 'package:gmstest/widgets/buttons.dart';
 
 class GenericDialogBox extends StatelessWidget {
@@ -59,6 +59,7 @@ class GenericDialogBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      backgroundColor: bgColor,
       icon: !isLoader && closeButtonEnabled!
           ? Align(
               alignment: Alignment.centerRight,
@@ -73,7 +74,7 @@ class GenericDialogBox extends StatelessWidget {
                 hoverColor: Colors.transparent,
                 icon: Icon(
                   Icons.close,
-                  color: Colors.black,
+                  color: Colors.red,
                   size: MediaQuery.of(context).size.width * 0.015,
                 ),
               ),
@@ -85,6 +86,7 @@ class GenericDialogBox extends StatelessWidget {
               title ?? '',
               textAlign: TextAlign.center,
               style: TextStyle(
+                color: Colors.white,
                 fontSize: MediaQuery.of(context).size.width * 0.011,
                 fontWeight: FontWeight.bold,
               ),
@@ -92,7 +94,6 @@ class GenericDialogBox extends StatelessWidget {
           : null,
       content: content ??
           Container(
-            color: Colors.white,
             height: height ?? MediaQuery.of(context).size.height * 0.06,
             width: width ??
                 (enableSecondaryButton
@@ -103,7 +104,7 @@ class GenericDialogBox extends StatelessWidget {
                 message ?? '',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  color: Colors.black,
+                  color: Colors.white,
                   fontSize: MediaQuery.of(context).size.width * 0.009,
                 ),
               ),
@@ -118,7 +119,11 @@ class GenericDialogBox extends StatelessWidget {
       actions: !isLoader
           ? [
               enableSecondaryButton
-                  ? SecondaryButton(onPressed: onSecondaryButtonPressed, title: secondaryButtonText!, width: secondaryButtonWidth,)
+                  ? SecondaryButton(
+                      onPressed: onSecondaryButtonPressed,
+                      title: secondaryButtonText!,
+                      width: secondaryButtonWidth,
+                    )
                   : const SizedBox(),
               enablePrimaryButton
                   ? PrimaryButton(
