@@ -10,13 +10,12 @@ import 'package:gmstest/views/dashboards/admin_dashboard.dart';
 import 'package:gmstest/views/dashboards/branch/branch_dashboard.dart';
 import 'package:gmstest/views/dashboards/dashboard.dart';
 import 'package:gmstest/views/expense_tracker.dart';
-import 'package:gmstest/views/login.dart';
 import 'package:gmstest/views/members/members.dart';
 import 'package:gmstest/views/send_notifications.dart';
 import 'package:gmstest/views/trainer.dart';
 import 'package:gmstest/views/visitors.dart';
-import 'package:gmstest/widgets/buttons.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:lottie/lottie.dart';
 
 class InventoryNavigationPaneExpanded extends StatefulWidget {
   InventoryNavigationPaneExpanded({
@@ -104,9 +103,11 @@ class _InventoryNavigationPaneExpandedState
                   children: [
                     DrawerHeader(
                         child: Padding(
-                      padding: const EdgeInsets.all(32.0),
-                      child: Image.asset(getAssetPath()),
-                    )
+                            padding: const EdgeInsets.all(24.0),
+                            child: Lottie.asset(
+                                'assets/animations/member_animation.json')
+                            // Image.asset(getAssetPath()),
+                            )
 
                         //  Image.asset("assets/manGym.png"),
                         ),

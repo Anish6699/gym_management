@@ -63,15 +63,6 @@ class _DashboardState extends State<AdminDashboard>
         Expanded(
           flex: 9,
           child: Scaffold(
-            appBar: GenericAppBar(
-              onNavbarIconPressed: () {
-                setState(() {
-                  isNavOpen = !isNavOpen;
-                });
-              },
-              title: 'Admin Dashboard',
-              toolbarHeight: MediaQuery.of(context).size.height * 0.075,
-            ),
             body: _body(),
           ),
         ),

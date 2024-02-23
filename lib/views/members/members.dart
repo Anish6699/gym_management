@@ -6,6 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 import 'package:gmstest/configs/colors.dart';
+import 'package:gmstest/configs/global_functions.dart';
 import 'package:gmstest/configs/server_configs.dart';
 import 'package:gmstest/controllers/admin_controllers.dart';
 import 'package:gmstest/controllers/member_controllers.dart';
@@ -131,7 +132,7 @@ class _MembersState extends State<MembersView> {
     setState(() {});
     print('selected branch ${selectedBranch}');
     var a = await memmberController.getAllMembers(
-        branchId: branchId,
+        branchId: branchId ?? selectedBranch['id'],
         searchKeyword: searchController.text,
         statusId: selectedStatus,
         startDate: filterFromDateController.text,
@@ -269,7 +270,22 @@ class _MembersState extends State<MembersView> {
 
         sortable: true,
 
-        stringValue: (row) => '${row['first_name']} ${row['last_name']}',
+        cellBuilder: (context, row) {
+          return Tooltip(
+            message: "View Profile",
+            child: InkWell(
+              onTap: () {
+                Get.toNamed(MemberProfile.routeName, arguments: row.data['id']);
+              },
+              child: Text(
+                '${row.data['first_name']} ${row.data['last_name']}',
+                style: TextStyle(color: primaryColor),
+              ),
+            ),
+          );
+        },
+
+        // stringValue: (row) => '${row['first_name']} ${row['last_name']}',
 
         cellAlignment: Alignment.center,
 
@@ -280,7 +296,7 @@ class _MembersState extends State<MembersView> {
         cellOverflow: TextOverflow.visible,
       ),
       DaviColumn(
-        width: MediaQuery.of(context).size.width * 0.09,
+        width: MediaQuery.of(context).size.width * 0.12,
 
         headerPadding: EdgeInsets.zero,
 
@@ -332,7 +348,7 @@ class _MembersState extends State<MembersView> {
         cellOverflow: TextOverflow.visible,
       ),
       DaviColumn(
-        width: MediaQuery.of(context).size.width * 0.08,
+        width: MediaQuery.of(context).size.width * 0.1,
 
         headerPadding: EdgeInsets.zero,
 
@@ -376,7 +392,7 @@ class _MembersState extends State<MembersView> {
         cellOverflow: TextOverflow.visible,
       ),
       DaviColumn(
-        width: MediaQuery.of(context).size.width * 0.1,
+        width: MediaQuery.of(context).size.width * 0.12,
 
         headerPadding: EdgeInsets.zero,
 
@@ -434,47 +450,6 @@ class _MembersState extends State<MembersView> {
 
         cellOverflow: TextOverflow.visible,
       ),
-      DaviColumn(
-        name: 'Profile',
-        cellBuilder: (context, data) {
-          return Center(
-              child: InkWell(
-                  onTap: () {
-                    Get.toNamed(MemberProfile.routeName,
-                        arguments: data.data['id']);
-                  },
-                  child: const Tooltip(
-                    message: 'View Profile',
-                    child: Icon(
-                      Icons.person,
-                      color: primaryColor,
-                    ),
-                  )));
-        },
-
-        width: MediaQuery.of(context).size.width * 0.066,
-
-        headerPadding: EdgeInsets.zero,
-
-        cellPadding: EdgeInsets.zero,
-
-        headerTextStyle: const TextStyle(
-            fontWeight: FontWeight.bold, color: primaryLightColor),
-
-        // pinStatus: PinStatus.left,
-
-        sortable: true,
-
-        stringValue: (row) => '',
-
-        cellAlignment: Alignment.center,
-
-        headerAlignment: Alignment.center,
-
-        resizable: false,
-
-        cellOverflow: TextOverflow.visible,
-      ),
     ];
   }
 
@@ -500,59 +475,9 @@ class _MembersState extends State<MembersView> {
               const Spacer(
                 flex: 2,
               ),
-              // Expanded(child: SearchField()),
-            ],
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.17,
-                  height: MediaQuery.of(context).size.height * 0.08,
-                  child: TextField(
-                    style: TextStyle(
-                      fontSize: MediaQuery.of(context).size.width * 0.008,
-                    ),
-                    controller: searchController,
-                    decoration: InputDecoration(
-                      hintText: "Search",
-                      fillColor: secondaryColor,
-                      filled: true,
-                      border: const OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                      ),
-                      suffixIcon: InkWell(
-                        onTap: () {
-                          setDataOnBranchChange();
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                              right: 8.0, top: 3, bottom: 3),
-                          child: Container(
-                            decoration: const BoxDecoration(
-                              color: primaryColor,
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10)),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: SvgPicture.asset("assets/Search.svg"),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  )),
-              const SizedBox(
-                width: 10,
-              ),
               userType == 2
                   ? Container(
-                      width: MediaQuery.of(context).size.width * 0.1,
+                      width: MediaQuery.of(context).size.width * 0.15,
                       height: MediaQuery.of(context).size.height * 0.08,
                       decoration: BoxDecoration(
                         color: secondaryColor,
@@ -620,6 +545,56 @@ class _MembersState extends State<MembersView> {
                   : const SizedBox(),
               SizedBox(
                 width: mediaQuery.width * 0.01,
+              ),
+              // Expanded(child: SearchField()),
+            ],
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.17,
+                  height: MediaQuery.of(context).size.height * 0.08,
+                  child: TextField(
+                    style: TextStyle(
+                      fontSize: MediaQuery.of(context).size.width * 0.008,
+                    ),
+                    controller: searchController,
+                    decoration: InputDecoration(
+                      hintText: "Search",
+                      fillColor: secondaryColor,
+                      filled: true,
+                      border: const OutlineInputBorder(
+                        borderSide: BorderSide.none,
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                      ),
+                      suffixIcon: InkWell(
+                        onTap: () {
+                          setDataOnBranchChange();
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                              right: 8.0, top: 3, bottom: 3),
+                          child: Container(
+                            decoration: const BoxDecoration(
+                              color: primaryColor,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10)),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: SvgPicture.asset("assets/Search.svg"),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  )),
+              const SizedBox(
+                width: 10,
               ),
               Container(
                 width: MediaQuery.of(context).size.width * 0.11,
@@ -895,6 +870,13 @@ class _MembersState extends State<MembersView> {
 
                 email.clear();
                 address.clear();
+                totalAmmountController.clear();
+
+                paidAmmountController.clear();
+                toDateController.clear();
+
+                email.clear();
+                address.clear();
 
                 showDialog(
                     context: context,
@@ -922,7 +904,7 @@ class _MembersState extends State<MembersView> {
                                         children: [
                                           const Flexible(
                                             child: SelectableText(
-                                              'First Name',
+                                              'First Name *',
                                               style: TextStyle(
                                                   fontWeight: FontWeight.bold),
                                             ),
@@ -938,7 +920,8 @@ class _MembersState extends State<MembersView> {
                                             child: TextFormField(
                                               inputFormatters: [
                                                 FilteringTextInputFormatter
-                                                    .allow(RegExp(r'[a-zA-Z]')),
+                                                    .allow(RegExp(
+                                                        r'[a-zA-Z ]{0,20}$')),
                                               ],
                                               decoration: const InputDecoration(
                                                   border: OutlineInputBorder(
@@ -953,8 +936,6 @@ class _MembersState extends State<MembersView> {
                                                             primaryDarkGreenColor),
                                                   )),
                                               controller: firstNameController,
-                                              keyboardType:
-                                                  TextInputType.emailAddress,
                                               enableSuggestions: true,
                                               onChanged: (e) {},
                                               autofocus: true,
@@ -984,7 +965,7 @@ class _MembersState extends State<MembersView> {
                                         children: [
                                           const Flexible(
                                             child: SelectableText(
-                                              'Last Name',
+                                              'Last Name *',
                                               style: TextStyle(
                                                   fontWeight: FontWeight.bold),
                                             ),
@@ -1000,7 +981,8 @@ class _MembersState extends State<MembersView> {
                                             child: TextFormField(
                                               inputFormatters: [
                                                 FilteringTextInputFormatter
-                                                    .allow(RegExp(r'[a-zA-Z]')),
+                                                    .allow(RegExp(
+                                                        r'[a-zA-Z ]{0,20}$')),
                                               ],
                                               decoration: const InputDecoration(
                                                   border: OutlineInputBorder(
@@ -1015,8 +997,6 @@ class _MembersState extends State<MembersView> {
                                                             primaryDarkGreenColor),
                                                   )),
                                               controller: lastNameController,
-                                              keyboardType:
-                                                  TextInputType.emailAddress,
                                               enableSuggestions: true,
                                               onChanged: (e) {},
                                               autofocus: true,
@@ -1047,7 +1027,7 @@ class _MembersState extends State<MembersView> {
                                         children: [
                                           const Flexible(
                                             child: SelectableText(
-                                              'Primary Mobile No',
+                                              'Primary Mobile No *',
                                               style: TextStyle(
                                                   fontWeight: FontWeight.bold),
                                             ),
@@ -1063,7 +1043,8 @@ class _MembersState extends State<MembersView> {
                                             child: TextFormField(
                                               inputFormatters: [
                                                 FilteringTextInputFormatter
-                                                    .allow(RegExp(r'[0-9]')),
+                                                    .allow(RegExp(
+                                                        r'[0-9]{0,10}$')),
                                               ],
                                               decoration: const InputDecoration(
                                                   border: OutlineInputBorder(
@@ -1078,8 +1059,6 @@ class _MembersState extends State<MembersView> {
                                                             primaryDarkGreenColor),
                                                   )),
                                               controller: primaryMobileNo,
-                                              keyboardType:
-                                                  TextInputType.emailAddress,
                                               enableSuggestions: true,
                                               onChanged: (e) {},
                                               autofocus: true,
@@ -1125,7 +1104,8 @@ class _MembersState extends State<MembersView> {
                                             child: TextFormField(
                                               inputFormatters: [
                                                 FilteringTextInputFormatter
-                                                    .allow(RegExp(r'[a-zA-Z]')),
+                                                    .allow(RegExp(
+                                                        r'[a-zA-Z ]{0,20}$')),
                                               ],
                                               decoration: const InputDecoration(
                                                   border: OutlineInputBorder(
@@ -1140,8 +1120,6 @@ class _MembersState extends State<MembersView> {
                                                             primaryDarkGreenColor),
                                                   )),
                                               controller: referenceController,
-                                              keyboardType:
-                                                  TextInputType.emailAddress,
                                               enableSuggestions: true,
                                               onChanged: (e) {},
                                               autofocus: true,
@@ -1257,8 +1235,6 @@ class _MembersState extends State<MembersView> {
                                                             primaryDarkGreenColor),
                                                   )),
                                               controller: address,
-                                              keyboardType:
-                                                  TextInputType.emailAddress,
                                               enableSuggestions: true,
                                               onChanged: (e) {},
                                               autofocus: true,
@@ -1267,7 +1243,7 @@ class _MembersState extends State<MembersView> {
                                                       MediaQuery.of(context)
                                                               .size
                                                               .height *
-                                                          0.02),
+                                                          0.015),
                                               textAlignVertical:
                                                   TextAlignVertical.center,
                                             ),
@@ -1290,7 +1266,7 @@ class _MembersState extends State<MembersView> {
                                               CrossAxisAlignment.start,
                                           children: [
                                             const SelectableText(
-                                              "From Date ",
+                                              "From Date *",
                                               style: TextStyle(
                                                 fontWeight: FontWeight.bold,
                                               ),
@@ -1351,7 +1327,7 @@ class _MembersState extends State<MembersView> {
                                               CrossAxisAlignment.start,
                                           children: [
                                             const SelectableText(
-                                              "To Date ",
+                                              "To Date *",
                                               style: TextStyle(
                                                 fontWeight: FontWeight.bold,
                                               ),
@@ -1412,7 +1388,7 @@ class _MembersState extends State<MembersView> {
                                         children: [
                                           const Flexible(
                                             child: SelectableText(
-                                              'Total Ammount',
+                                              'Total Ammount *',
                                               style: TextStyle(
                                                   fontWeight: FontWeight.bold),
                                             ),
@@ -1474,7 +1450,7 @@ class _MembersState extends State<MembersView> {
                                         children: [
                                           const Flexible(
                                             child: SelectableText(
-                                              'Paid Ammount',
+                                              'Paid Ammount *',
                                               style: TextStyle(
                                                   fontWeight: FontWeight.bold),
                                             ),
@@ -1505,8 +1481,6 @@ class _MembersState extends State<MembersView> {
                                                             primaryDarkGreenColor),
                                                   )),
                                               controller: paidAmmountController,
-                                              keyboardType:
-                                                  TextInputType.emailAddress,
                                               enableSuggestions: true,
                                               autofocus: true,
                                               style: TextStyle(
@@ -1532,116 +1506,253 @@ class _MembersState extends State<MembersView> {
                           Get.back();
                         },
                         onPrimaryButtonPressed: () {
-                          showDialog(
-                              barrierDismissible: false,
-                              context: context,
-                              builder: (context) {
-                                return FutureBuilder(
-                                  future: memmberController.addMember({
-                                    'branch_id':
-                                        branchId ?? selectedBranch['id'],
-                                    'first_name': firstNameController.text == ''
-                                        ? null
-                                        : firstNameController.text,
-                                    'last_name': lastNameController.text == ''
-                                        ? null
-                                        : lastNameController.text,
-                                    'primary_mobile_no':
-                                        primaryMobileNo.text == ''
-                                            ? null
-                                            : primaryMobileNo.text,
-                                    'email':
-                                        email.text == '' ? null : email.text,
-                                    'addr': address.text == ''
-                                        ? null
-                                        : address.text,
-                                    'reference': referenceController.text == ''
-                                        ? null
-                                        : referenceController.text,
-                                    'start_date': fromDateController.text == ''
-                                        ? null
-                                        : fromDateController.text,
-                                    'end_date': toDateController.text == ''
-                                        ? null
-                                        : toDateController.text,
-                                    'price': totalAmmountController.text,
-                                    'paid_amount': paidAmmountController.text,
-                                    'status': 0
-                                  }),
-                                  builder: (context, snapshot) {
-                                    return snapshot.connectionState ==
-                                            ConnectionState.waiting
-                                        ? GenericDialogBox(
-                                            enableSecondaryButton: false,
-                                            isLoader: true,
-                                            content: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              child: SizedBox(
-                                                width: MediaQuery.of(context)
-                                                        .size
-                                                        .width *
-                                                    0.04,
-                                                height: MediaQuery.of(context)
-                                                        .size
-                                                        .width *
-                                                    0.06,
-                                                child: const Center(
-                                                  child: Column(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      CircularProgressIndicator(
-                                                        color:
-                                                            primaryDarkBlueColor,
+                          if (firstNameController.text.isEmpty ||
+                              lastNameController.text.isEmpty ||
+                              primaryMobileNo.text.isEmpty ||
+                              fromDateController.text.isEmpty ||
+                              toDateController.text.isEmpty ||
+                              totalAmmountController.text.isEmpty ||
+                              paidAmmountController.text.isEmpty) {
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return GenericDialogBox(
+                                    enableSecondaryButton: false,
+                                    primaryButtonText: 'Ok',
+                                    isLoader: false,
+                                    content: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.04,
+                                        height:
+                                            MediaQuery.of(context).size.width *
+                                                0.06,
+                                        child: const Center(
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Text(
+                                                  'Please Enter All Mandatory Field')
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    onPrimaryButtonPressed: () {
+                                      Get.back();
+                                    },
+                                  );
+                                });
+                          } else {
+                            if (double.parse(totalAmmountController.text) <
+                                double.parse(paidAmmountController.text)) {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return GenericDialogBox(
+                                      enableSecondaryButton: false,
+                                      primaryButtonText: 'Ok',
+                                      isLoader: false,
+                                      content: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: SizedBox(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.04,
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.06,
+                                          child: const Center(
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Text(
+                                                    'Please Check Total Amount and Paid Amount')
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      onPrimaryButtonPressed: () {
+                                        Get.back();
+                                      },
+                                    );
+                                  });
+                            } else {
+                              if (isStartDateAfterEndDate(
+                                      fromDateController.text,
+                                      toDateController.text) ==
+                                  true) {
+                                showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return GenericDialogBox(
+                                        enableSecondaryButton: false,
+                                        primaryButtonText: 'Ok',
+                                        isLoader: false,
+                                        content: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: SizedBox(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.04,
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.06,
+                                            child: const Center(
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Text(
+                                                      'Please Check From Date and To Date')
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        onPrimaryButtonPressed: () {
+                                          Get.back();
+                                        },
+                                      );
+                                    });
+                              } else {
+                                showDialog(
+                                    barrierDismissible: false,
+                                    context: context,
+                                    builder: (context) {
+                                      return FutureBuilder(
+                                        future: memmberController.addMember({
+                                          'branch_id':
+                                              branchId ?? selectedBranch['id'],
+                                          'first_name':
+                                              firstNameController.text == ''
+                                                  ? null
+                                                  : firstNameController.text,
+                                          'last_name':
+                                              lastNameController.text == ''
+                                                  ? null
+                                                  : lastNameController.text,
+                                          'primary_mobile_no':
+                                              primaryMobileNo.text == ''
+                                                  ? null
+                                                  : primaryMobileNo.text,
+                                          'email': email.text == ''
+                                              ? null
+                                              : email.text,
+                                          'addr': address.text == ''
+                                              ? null
+                                              : address.text,
+                                          'reference':
+                                              referenceController.text == ''
+                                                  ? null
+                                                  : referenceController.text,
+                                          'start_date':
+                                              fromDateController.text == ''
+                                                  ? null
+                                                  : fromDateController.text,
+                                          'end_date':
+                                              toDateController.text == ''
+                                                  ? null
+                                                  : toDateController.text,
+                                          'price': totalAmmountController.text,
+                                          'paid_amount':
+                                              paidAmmountController.text,
+                                          'status': 0
+                                        }),
+                                        builder: (context, snapshot) {
+                                          return snapshot.connectionState ==
+                                                  ConnectionState.waiting
+                                              ? GenericDialogBox(
+                                                  enableSecondaryButton: false,
+                                                  isLoader: true,
+                                                  content: Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    child: SizedBox(
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width *
+                                                              0.04,
+                                                      height:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width *
+                                                              0.06,
+                                                      child: const Center(
+                                                        child: Column(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                          children: [
+                                                            CircularProgressIndicator(
+                                                              color:
+                                                                  primaryDarkBlueColor,
+                                                            ),
+                                                          ],
+                                                        ),
                                                       ),
-                                                    ],
+                                                    ),
                                                   ),
-                                                ),
-                                              ),
-                                            ),
-                                          )
-                                        : GenericDialogBox(
-                                            closeButtonEnabled: false,
-                                            enablePrimaryButton: true,
-                                            enableSecondaryButton: false,
-                                            isLoader: false,
-                                            content: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              child: SizedBox(
-                                                width: MediaQuery.of(context)
-                                                        .size
-                                                        .width *
-                                                    0.04,
-                                                height: MediaQuery.of(context)
-                                                        .size
-                                                        .width *
-                                                    0.06,
-                                                child: Center(
-                                                  child: Column(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      Text(snapshot
-                                                          .data!['message'])
-                                                    ],
+                                                )
+                                              : GenericDialogBox(
+                                                  closeButtonEnabled: false,
+                                                  enablePrimaryButton: true,
+                                                  enableSecondaryButton: false,
+                                                  isLoader: false,
+                                                  content: Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    child: SizedBox(
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width *
+                                                              0.04,
+                                                      height:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width *
+                                                              0.06,
+                                                      child: Center(
+                                                        child: Column(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                          children: [
+                                                            Text(snapshot.data![
+                                                                'message'])
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ),
                                                   ),
-                                                ),
-                                              ),
-                                            ),
-                                            primaryButtonText: 'Ok',
-                                            onPrimaryButtonPressed: () async {
-                                              Get.offAllNamed(
-                                                MembersView.membersRouteName,
-                                              );
-                                            },
-                                          );
-                                  },
-                                );
-                              });
+                                                  primaryButtonText: 'Ok',
+                                                  onPrimaryButtonPressed:
+                                                      () async {
+                                                    Get.offAllNamed(
+                                                      MembersView
+                                                          .membersRouteName,
+                                                    );
+                                                  },
+                                                );
+                                        },
+                                      );
+                                    });
+                              }
+                            }
+                          }
                         },
                       );
                     });

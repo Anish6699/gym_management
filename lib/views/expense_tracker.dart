@@ -307,8 +307,8 @@ class _DashboardState extends State<ExpenseTrackerView>
                             return GenericDialogBox(
                               enableSecondaryButton: true,
                               isLoader: false,
-                              title: "Add Expense",
-                              primaryButtonText: 'Add',
+                              title: "Edit Expense",
+                              primaryButtonText: 'Update',
                               secondaryButtonText: 'Cancel',
                               content: SizedBox(
                                 width: MediaQuery.of(context).size.width * 0.3,
@@ -381,6 +381,10 @@ class _DashboardState extends State<ExpenseTrackerView>
                                           MediaQuery.of(context).size.height *
                                               0.07,
                                       child: TextFormField(
+                                        inputFormatters: [
+                                          FilteringTextInputFormatter.allow(
+                                              RegExp(r'[a-zA-Z ]{0,20}$')),
+                                        ],
                                         decoration: const InputDecoration(
                                             border: OutlineInputBorder(
                                               borderSide: BorderSide(
@@ -427,7 +431,7 @@ class _DashboardState extends State<ExpenseTrackerView>
                                       child: TextFormField(
                                         inputFormatters: [
                                           FilteringTextInputFormatter.allow(
-                                              RegExp(r'[0-9]')),
+                                              RegExp(r'[0-9]{0,10}$')),
                                         ],
                                         decoration: const InputDecoration(
                                             border: OutlineInputBorder(
@@ -721,7 +725,78 @@ class _DashboardState extends State<ExpenseTrackerView>
                 Spacer(
                   flex: 2,
                 ),
-
+                userType == 2
+                    ? Container(
+                        width: MediaQuery.of(context).size.width * 0.13,
+                        height: MediaQuery.of(context).size.height * 0.08,
+                        decoration: BoxDecoration(
+                          color: secondaryColor,
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(5)),
+                          border: Border.all(color: Colors.transparent),
+                        ),
+                        child: DropdownButtonFormField(
+                          isExpanded: true,
+                          elevation: 1,
+                          value: selectedBranch,
+                          items: adminBranchList.map(
+                            (item) {
+                              return DropdownMenuItem(
+                                value: item,
+                                child: Text(
+                                  item['branch_name'],
+                                  style: TextStyle(
+                                      fontSize:
+                                          MediaQuery.of(context).size.width *
+                                              0.01,
+                                      color: Colors.white),
+                                ),
+                              );
+                            },
+                          ).toList(),
+                          onChanged: (value) {
+                            selectedBranch = value;
+                            setState(() {});
+                            setDataOnBranchChange();
+                          },
+                          borderRadius: BorderRadius.circular(4),
+                          style: TextStyle(
+                              fontSize:
+                                  MediaQuery.of(context).size.width * 0.08,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold),
+                          icon: Icon(
+                            Icons.keyboard_arrow_down_rounded,
+                            color: Colors.white,
+                            size: MediaQuery.of(context).size.width * 0.015,
+                          ),
+                          decoration: InputDecoration(
+                            hintText: "Select Branch",
+                            hintStyle: TextStyle(
+                                fontSize:
+                                    MediaQuery.of(context).size.width * 0.01,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                            contentPadding:
+                                const EdgeInsets.symmetric(horizontal: 10),
+                            fillColor: Colors.white,
+                            border: const OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.transparent,
+                              ),
+                            ),
+                            focusedBorder: const OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.transparent,
+                              ),
+                            ),
+                          ),
+                        ),
+                      )
+                    : const SizedBox(),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.01,
+                ),
                 Container(
                   width: MediaQuery.of(context).size.width * 0.2,
                   height: MediaQuery.of(context).size.height * 0.08,
@@ -857,74 +932,6 @@ class _DashboardState extends State<ExpenseTrackerView>
                 )),
             const SizedBox(
               width: 10,
-            ),
-            userType == 2
-                ? Container(
-                    width: MediaQuery.of(context).size.width * 0.13,
-                    height: MediaQuery.of(context).size.height * 0.08,
-                    decoration: BoxDecoration(
-                      color: secondaryColor,
-                      borderRadius: const BorderRadius.all(Radius.circular(5)),
-                      border: Border.all(color: Colors.transparent),
-                    ),
-                    child: DropdownButtonFormField(
-                      isExpanded: true,
-                      elevation: 1,
-                      value: selectedBranch,
-                      items: adminBranchList.map(
-                        (item) {
-                          return DropdownMenuItem(
-                            value: item,
-                            child: Text(
-                              item['branch_name'],
-                              style: TextStyle(
-                                  fontSize:
-                                      MediaQuery.of(context).size.width * 0.01,
-                                  color: Colors.white),
-                            ),
-                          );
-                        },
-                      ).toList(),
-                      onChanged: (value) {
-                        selectedBranch = value;
-                        setState(() {});
-                        setDataOnBranchChange();
-                      },
-                      borderRadius: BorderRadius.circular(4),
-                      style: TextStyle(
-                          fontSize: MediaQuery.of(context).size.width * 0.08,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold),
-                      icon: Icon(
-                        Icons.keyboard_arrow_down_rounded,
-                        color: Colors.white,
-                        size: MediaQuery.of(context).size.width * 0.015,
-                      ),
-                      decoration: InputDecoration(
-                        hintText: "Select Branch",
-                        hintStyle: TextStyle(
-                            fontSize: MediaQuery.of(context).size.width * 0.01,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold),
-                        contentPadding:
-                            const EdgeInsets.symmetric(horizontal: 10),
-                        fillColor: Colors.white,
-                        border: const OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Colors.transparent,
-                          ),
-                        ),
-                        focusedBorder: const OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Colors.transparent,
-                          ),
-                        ),
-                      ),
-                    ),
-                  )
-                : const SizedBox(),
-            SizedBox(
-              width: mediaQuery.width * 0.01,
             ),
             SizedBox(
                 width: MediaQuery.of(context).size.width * 0.12,
@@ -1184,6 +1191,10 @@ class _DashboardState extends State<ExpenseTrackerView>
                                 height:
                                     MediaQuery.of(context).size.height * 0.07,
                                 child: TextFormField(
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.allow(
+                                        RegExp(r'[a-zA-Z ]{0,20}$')),
+                                  ],
                                   decoration: const InputDecoration(
                                       border: OutlineInputBorder(
                                         borderSide: BorderSide(
@@ -1222,7 +1233,7 @@ class _DashboardState extends State<ExpenseTrackerView>
                                 child: TextFormField(
                                   inputFormatters: [
                                     FilteringTextInputFormatter.allow(
-                                        RegExp(r'[0-9]')),
+                                        RegExp(r'[0-9]{0,10}$')),
                                   ],
                                   decoration: const InputDecoration(
                                       border: OutlineInputBorder(

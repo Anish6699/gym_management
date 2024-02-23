@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:gmstest/configs/colors.dart';
+import 'package:gmstest/configs/global_functions.dart';
 import 'package:gmstest/configs/server_configs.dart';
 import 'package:gmstest/controllers/member_controllers.dart';
 import 'package:gmstest/navigation_pane/navigation_pane_closed.dart';
@@ -142,7 +143,7 @@ class _MemberProfileState extends State<MemberProfile>
                                 child: TextFormField(
                                   inputFormatters: [
                                     FilteringTextInputFormatter.allow(
-                                        RegExp(r'[a-zA-Z]')),
+                                        RegExp(r'[a-zA-Z ]{0,20}$')),
                                   ],
                                   decoration: const InputDecoration(
                                       border: OutlineInputBorder(
@@ -192,7 +193,7 @@ class _MemberProfileState extends State<MemberProfile>
                                 child: TextFormField(
                                   inputFormatters: [
                                     FilteringTextInputFormatter.allow(
-                                        RegExp(r'[a-zA-Z]')),
+                                        RegExp(r'[a-zA-Z ]{0,20}$')),
                                   ],
                                   decoration: const InputDecoration(
                                       border: OutlineInputBorder(
@@ -243,7 +244,7 @@ class _MemberProfileState extends State<MemberProfile>
                                 child: TextFormField(
                                   inputFormatters: [
                                     FilteringTextInputFormatter.allow(
-                                        RegExp(r'[0-9]')),
+                                        RegExp(r'[0-9]{0,10}$')),
                                   ],
                                   decoration: const InputDecoration(
                                       border: OutlineInputBorder(
@@ -293,7 +294,7 @@ class _MemberProfileState extends State<MemberProfile>
                                 child: TextFormField(
                                   inputFormatters: [
                                     FilteringTextInputFormatter.allow(
-                                        RegExp(r'[a-zA-Z]')),
+                                        RegExp(r'[a-zA-Z ]{0,20}$')),
                                   ],
                                   decoration: const InputDecoration(
                                       border: OutlineInputBorder(
@@ -338,29 +339,77 @@ class _MemberProfileState extends State<MemberProfile>
                               const SizedBox(
                                 height: 8,
                               ),
-                              SizedBox(
+                              Container(
                                 height:
                                     MediaQuery.of(context).size.height * 0.07,
-                                child: TextFormField(
-                                  decoration: const InputDecoration(
-                                      border: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color: secondaryBorderGreyColor),
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color: primaryDarkGreenColor),
-                                      )),
-                                  controller: trainerController,
-                                  keyboardType: TextInputType.emailAddress,
-                                  enableSuggestions: true,
-                                  onChanged: (e) {},
-                                  autofocus: true,
+                                decoration: BoxDecoration(
+                                  color: secondaryColor,
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(5)),
+                                  border: Border.all(
+                                      color: const Color.fromARGB(
+                                          255, 177, 174, 174)),
+                                ),
+                                child: DropdownButtonFormField(
+                                  // value: selectedStatus,
+                                  isExpanded: true,
+                                  elevation: 1,
+                                  items: ['Trainer 1', 'Trainer 2', 'Trainer 3']
+                                      .map(
+                                    (item) {
+                                      return DropdownMenuItem(
+                                        value: item,
+                                        child: Text(
+                                          item,
+                                          style: TextStyle(
+                                              fontSize: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.008,
+                                              color: Colors.white),
+                                        ),
+                                      );
+                                    },
+                                  ).toList(),
+                                  onChanged: (value) {
+                                    // selectedStatus = value;
+                                    // setDataOnBranchChange();
+                                  },
+                                  borderRadius: BorderRadius.circular(4),
                                   style: TextStyle(
                                       fontSize:
-                                          MediaQuery.of(context).size.height *
-                                              0.02),
-                                  textAlignVertical: TextAlignVertical.center,
+                                          MediaQuery.of(context).size.width *
+                                              0.08,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold),
+                                  icon: Icon(
+                                    Icons.keyboard_arrow_down_rounded,
+                                    color: Colors.white,
+                                    size: MediaQuery.of(context).size.width *
+                                        0.015,
+                                  ),
+                                  decoration: InputDecoration(
+                                    hintText: "Select Trainer",
+                                    hintStyle: TextStyle(
+                                        fontSize:
+                                            MediaQuery.of(context).size.width *
+                                                0.008,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold),
+                                    contentPadding: const EdgeInsets.symmetric(
+                                        horizontal: 10),
+                                    fillColor: Colors.white,
+                                    border: const OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Colors.transparent,
+                                      ),
+                                    ),
+                                    focusedBorder: const OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Colors.transparent,
+                                      ),
+                                    ),
+                                  ),
                                 ),
                               ),
                             ],
@@ -388,6 +437,10 @@ class _MemberProfileState extends State<MemberProfile>
                                 height:
                                     MediaQuery.of(context).size.height * 0.07,
                                 child: TextFormField(
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.allow(
+                                        RegExp(r'[0-9]{0,10}$')),
+                                  ],
                                   decoration: const InputDecoration(
                                       border: OutlineInputBorder(
                                         borderSide: BorderSide(
@@ -435,6 +488,10 @@ class _MemberProfileState extends State<MemberProfile>
                                 height:
                                     MediaQuery.of(context).size.height * 0.07,
                                 child: TextFormField(
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.allow(
+                                        RegExp(r'[0-9]{0,10}$')),
+                                  ],
                                   decoration: const InputDecoration(
                                       border: OutlineInputBorder(
                                         borderSide: BorderSide(
@@ -481,6 +538,10 @@ class _MemberProfileState extends State<MemberProfile>
                                 height:
                                     MediaQuery.of(context).size.height * 0.07,
                                 child: TextFormField(
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.allow(
+                                        RegExp(r'[0-9]{0,10}$')),
+                                  ],
                                   decoration: const InputDecoration(
                                       border: OutlineInputBorder(
                                         borderSide: BorderSide(
@@ -528,6 +589,10 @@ class _MemberProfileState extends State<MemberProfile>
                                 height:
                                     MediaQuery.of(context).size.height * 0.07,
                                 child: TextFormField(
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.allow(
+                                        RegExp(r'[0-9]{0,2}$')),
+                                  ],
                                   decoration: const InputDecoration(
                                       border: OutlineInputBorder(
                                         borderSide: BorderSide(
@@ -574,6 +639,10 @@ class _MemberProfileState extends State<MemberProfile>
                                 height:
                                     MediaQuery.of(context).size.height * 0.07,
                                 child: TextFormField(
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.allow(
+                                        RegExp(r'[a-zA-Z ]{0,20}$')),
+                                  ],
                                   decoration: const InputDecoration(
                                       border: OutlineInputBorder(
                                         borderSide: BorderSide(
@@ -621,6 +690,10 @@ class _MemberProfileState extends State<MemberProfile>
                                 height:
                                     MediaQuery.of(context).size.height * 0.07,
                                 child: TextFormField(
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.allow(
+                                        RegExp(r'[0-9]{0,3}$')),
+                                  ],
                                   decoration: const InputDecoration(
                                       border: OutlineInputBorder(
                                         borderSide: BorderSide(
@@ -729,6 +802,7 @@ class _MemberProfileState extends State<MemberProfile>
                             : ageController.text,
                         'height': heightController.text,
                         'secondary_mobile_no': secondaryMobileNoController.text,
+                        'weight': weightController.text,
                         'blood_group': bloodGroupController.text
                       }, membersData['id']),
                       builder: (context, snapshot) {
@@ -783,9 +857,8 @@ class _MemberProfileState extends State<MemberProfile>
                                 ),
                                 primaryButtonText: 'Ok',
                                 onPrimaryButtonPressed: () async {
-                                  Get.offAllNamed(
-                                    MembersView.membersRouteName,
-                                  );
+                                  Get.offAllNamed(MemberProfile.routeName,
+                                      arguments: membersData['id']);
                                 },
                               );
                       },
@@ -1023,6 +1096,10 @@ class _MemberProfileState extends State<MemberProfile>
                                                   const Spacer(flex: 10),
                                                   PrimaryButton(
                                                       onPressed: () {
+                                                        paidAmmot.clear();
+                                                        totalAmtPaid.clear();
+                                                        fromDate.clear();
+                                                        toDate.clear();
                                                         showDialog(
                                                             context: context,
                                                             builder: (context) {
@@ -1031,7 +1108,7 @@ class _MemberProfileState extends State<MemberProfile>
                                                                     true,
                                                                 isLoader: false,
                                                                 title:
-                                                                    "Add Branch Plan",
+                                                                    "Add Plan",
                                                                 primaryButtonText:
                                                                     'Add',
                                                                 secondaryButtonText:
@@ -1232,77 +1309,149 @@ class _MemberProfileState extends State<MemberProfile>
                                                                 ),
                                                                 onPrimaryButtonPressed:
                                                                     () {
-                                                                  showDialog(
-                                                                      barrierDismissible:
-                                                                          false,
-                                                                      context:
-                                                                          context,
-                                                                      builder:
-                                                                          (context) {
-                                                                        return FutureBuilder(
-                                                                          future:
-                                                                              memmberController.addMemberPlan({
-                                                                            'start_date':
-                                                                                fromDate.text,
-                                                                            'end_date':
-                                                                                toDate.text,
-                                                                            'price':
-                                                                                totalAmtPaid.text,
-                                                                            'paid_amount':
-                                                                                paidAmmot.text
-                                                                          }, membersData['id']),
+                                                                  if (isStartDateAfterEndDate(
+                                                                          fromDate
+                                                                              .text,
+                                                                          toDate
+                                                                              .text) ==
+                                                                      true) {
+                                                                    showDialog(
+                                                                        context:
+                                                                            context,
+                                                                        builder:
+                                                                            (context) {
+                                                                          return GenericDialogBox(
+                                                                            enableSecondaryButton:
+                                                                                false,
+                                                                            primaryButtonText:
+                                                                                'Ok',
+                                                                            isLoader:
+                                                                                false,
+                                                                            content:
+                                                                                Padding(
+                                                                              padding: const EdgeInsets.all(8.0),
+                                                                              child: SizedBox(
+                                                                                width: MediaQuery.of(context).size.width * 0.04,
+                                                                                height: MediaQuery.of(context).size.width * 0.06,
+                                                                                child: const Center(
+                                                                                  child: Column(
+                                                                                    mainAxisAlignment: MainAxisAlignment.center,
+                                                                                    children: [
+                                                                                      Text('Please Check From Date and To Date')
+                                                                                    ],
+                                                                                  ),
+                                                                                ),
+                                                                              ),
+                                                                            ),
+                                                                            onPrimaryButtonPressed:
+                                                                                () {
+                                                                              Get.back();
+                                                                            },
+                                                                          );
+                                                                        });
+                                                                  } else {
+                                                                    if ((double.parse(totalAmtPaid.text) +
+                                                                            double.parse(planList.first[
+                                                                                'unpaid_amount'])) <
+                                                                        double.parse(
+                                                                            paidAmmot.text)) {
+                                                                      showDialog(
+                                                                          context:
+                                                                              context,
                                                                           builder:
-                                                                              (context, snapshot) {
-                                                                            return snapshot.connectionState == ConnectionState.waiting
-                                                                                ? GenericDialogBox(
-                                                                                    enableSecondaryButton: false,
-                                                                                    isLoader: true,
-                                                                                    content: Padding(
-                                                                                      padding: const EdgeInsets.all(8.0),
-                                                                                      child: SizedBox(
-                                                                                        width: MediaQuery.of(context).size.width * 0.04,
-                                                                                        height: MediaQuery.of(context).size.width * 0.06,
-                                                                                        child: const Center(
-                                                                                          child: Column(
-                                                                                            mainAxisAlignment: MainAxisAlignment.center,
-                                                                                            children: [
-                                                                                              CircularProgressIndicator(
-                                                                                                color: primaryDarkBlueColor,
+                                                                              (context) {
+                                                                            return GenericDialogBox(
+                                                                              enableSecondaryButton: false,
+                                                                              primaryButtonText: 'Ok',
+                                                                              isLoader: false,
+                                                                              content: Padding(
+                                                                                padding: const EdgeInsets.all(8.0),
+                                                                                child: SizedBox(
+                                                                                  width: MediaQuery.of(context).size.width * 0.04,
+                                                                                  height: MediaQuery.of(context).size.width * 0.06,
+                                                                                  child: const Center(
+                                                                                    child: Column(
+                                                                                      mainAxisAlignment: MainAxisAlignment.center,
+                                                                                      children: [
+                                                                                        Text('Please Check Total Amount and Paid Amount')
+                                                                                      ],
+                                                                                    ),
+                                                                                  ),
+                                                                                ),
+                                                                              ),
+                                                                              onPrimaryButtonPressed: () {
+                                                                                Get.back();
+                                                                              },
+                                                                            );
+                                                                          });
+                                                                    } else {
+                                                                      showDialog(
+                                                                          barrierDismissible:
+                                                                              false,
+                                                                          context:
+                                                                              context,
+                                                                          builder:
+                                                                              (context) {
+                                                                            return FutureBuilder(
+                                                                              future: memmberController.addMemberPlan({
+                                                                                'start_date': fromDate.text,
+                                                                                'end_date': toDate.text,
+                                                                                'price': totalAmtPaid.text,
+                                                                                'paid_amount': paidAmmot.text
+                                                                              }, membersData['id']),
+                                                                              builder: (context, snapshot) {
+                                                                                return snapshot.connectionState == ConnectionState.waiting
+                                                                                    ? GenericDialogBox(
+                                                                                        enableSecondaryButton: false,
+                                                                                        isLoader: true,
+                                                                                        content: Padding(
+                                                                                          padding: const EdgeInsets.all(8.0),
+                                                                                          child: SizedBox(
+                                                                                            width: MediaQuery.of(context).size.width * 0.04,
+                                                                                            height: MediaQuery.of(context).size.width * 0.06,
+                                                                                            child: const Center(
+                                                                                              child: Column(
+                                                                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                                                                children: [
+                                                                                                  CircularProgressIndicator(
+                                                                                                    color: primaryDarkBlueColor,
+                                                                                                  ),
+                                                                                                ],
                                                                                               ),
-                                                                                            ],
+                                                                                            ),
                                                                                           ),
                                                                                         ),
-                                                                                      ),
-                                                                                    ),
-                                                                                  )
-                                                                                : GenericDialogBox(
-                                                                                    closeButtonEnabled: false,
-                                                                                    enablePrimaryButton: true,
-                                                                                    enableSecondaryButton: false,
-                                                                                    isLoader: false,
-                                                                                    content: Padding(
-                                                                                      padding: const EdgeInsets.all(8.0),
-                                                                                      child: SizedBox(
-                                                                                        width: MediaQuery.of(context).size.width * 0.04,
-                                                                                        height: MediaQuery.of(context).size.width * 0.06,
-                                                                                        child: Center(
-                                                                                          child: Column(
-                                                                                            mainAxisAlignment: MainAxisAlignment.center,
-                                                                                            children: [
-                                                                                              Text(snapshot.data!['message'])
-                                                                                            ],
+                                                                                      )
+                                                                                    : GenericDialogBox(
+                                                                                        closeButtonEnabled: false,
+                                                                                        enablePrimaryButton: true,
+                                                                                        enableSecondaryButton: false,
+                                                                                        isLoader: false,
+                                                                                        content: Padding(
+                                                                                          padding: const EdgeInsets.all(8.0),
+                                                                                          child: SizedBox(
+                                                                                            width: MediaQuery.of(context).size.width * 0.04,
+                                                                                            height: MediaQuery.of(context).size.width * 0.06,
+                                                                                            child: Center(
+                                                                                              child: Column(
+                                                                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                                                                children: [
+                                                                                                  Text(snapshot.data!['message'])
+                                                                                                ],
+                                                                                              ),
+                                                                                            ),
                                                                                           ),
                                                                                         ),
-                                                                                      ),
-                                                                                    ),
-                                                                                    primaryButtonText: 'Ok',
-                                                                                    onPrimaryButtonPressed: () async {
-                                                                                      Get.offAllNamed(MemberProfile.routeName, arguments: membersData['id']);
-                                                                                    },
-                                                                                  );
-                                                                          },
-                                                                        );
-                                                                      });
+                                                                                        primaryButtonText: 'Ok',
+                                                                                        onPrimaryButtonPressed: () async {
+                                                                                          Get.offAllNamed(MemberProfile.routeName, arguments: membersData['id']);
+                                                                                        },
+                                                                                      );
+                                                                              },
+                                                                            );
+                                                                          });
+                                                                    }
+                                                                  }
                                                                 },
                                                               );
                                                             });
@@ -1389,71 +1538,115 @@ class _MemberProfileState extends State<MemberProfile>
                                                                 },
                                                                 onPrimaryButtonPressed:
                                                                     () {
-                                                                  showDialog(
-                                                                      barrierDismissible:
-                                                                          false,
-                                                                      context:
-                                                                          context,
-                                                                      builder:
-                                                                          (context) {
-                                                                        return FutureBuilder(
-                                                                          future:
-                                                                              memmberController.payPending({
-                                                                            'price':
-                                                                                paidAmmot.text
-                                                                          }, membersData['id']),
-                                                                          builder:
-                                                                              (context, snapshot) {
-                                                                            return snapshot.connectionState == ConnectionState.waiting
-                                                                                ? GenericDialogBox(
-                                                                                    enableSecondaryButton: false,
-                                                                                    isLoader: true,
-                                                                                    content: Padding(
-                                                                                      padding: const EdgeInsets.all(8.0),
-                                                                                      child: SizedBox(
-                                                                                        width: MediaQuery.of(context).size.width * 0.04,
-                                                                                        height: MediaQuery.of(context).size.width * 0.06,
-                                                                                        child: const Center(
-                                                                                          child: Column(
-                                                                                            mainAxisAlignment: MainAxisAlignment.center,
-                                                                                            children: [
-                                                                                              CircularProgressIndicator(
-                                                                                                color: primaryDarkBlueColor,
-                                                                                              ),
-                                                                                            ],
+                                                                  if (double.parse(
+                                                                          paidAmmot
+                                                                              .text) >
+                                                                      double.parse(
+                                                                          planList
+                                                                              .first['unpaid_amount'])) {
+                                                                    showDialog(
+                                                                        context:
+                                                                            context,
+                                                                        builder:
+                                                                            (context) {
+                                                                          return GenericDialogBox(
+                                                                            enableSecondaryButton:
+                                                                                false,
+                                                                            primaryButtonText:
+                                                                                'Ok',
+                                                                            isLoader:
+                                                                                false,
+                                                                            content:
+                                                                                Padding(
+                                                                              padding: const EdgeInsets.all(8.0),
+                                                                              child: SizedBox(
+                                                                                width: MediaQuery.of(context).size.width * 0.04,
+                                                                                height: MediaQuery.of(context).size.width * 0.06,
+                                                                                child: const Center(
+                                                                                  child: Column(
+                                                                                    mainAxisAlignment: MainAxisAlignment.center,
+                                                                                    children: [
+                                                                                      Text(
+                                                                                        'Please Check Amount you are Paynig !!',
+                                                                                        style: TextStyle(color: Colors.red),
+                                                                                      )
+                                                                                    ],
+                                                                                  ),
+                                                                                ),
+                                                                              ),
+                                                                            ),
+                                                                            onPrimaryButtonPressed:
+                                                                                () {
+                                                                              Get.back();
+                                                                            },
+                                                                          );
+                                                                        });
+                                                                  } else {
+                                                                    showDialog(
+                                                                        barrierDismissible:
+                                                                            false,
+                                                                        context:
+                                                                            context,
+                                                                        builder:
+                                                                            (context) {
+                                                                          return FutureBuilder(
+                                                                            future:
+                                                                                memmberController.payPending({
+                                                                              'price': paidAmmot.text
+                                                                            }, membersData['id']),
+                                                                            builder:
+                                                                                (context, snapshot) {
+                                                                              return snapshot.connectionState == ConnectionState.waiting
+                                                                                  ? GenericDialogBox(
+                                                                                      enableSecondaryButton: false,
+                                                                                      isLoader: true,
+                                                                                      content: Padding(
+                                                                                        padding: const EdgeInsets.all(8.0),
+                                                                                        child: SizedBox(
+                                                                                          width: MediaQuery.of(context).size.width * 0.04,
+                                                                                          height: MediaQuery.of(context).size.width * 0.06,
+                                                                                          child: const Center(
+                                                                                            child: Column(
+                                                                                              mainAxisAlignment: MainAxisAlignment.center,
+                                                                                              children: [
+                                                                                                CircularProgressIndicator(
+                                                                                                  color: primaryDarkBlueColor,
+                                                                                                ),
+                                                                                              ],
+                                                                                            ),
                                                                                           ),
                                                                                         ),
                                                                                       ),
-                                                                                    ),
-                                                                                  )
-                                                                                : GenericDialogBox(
-                                                                                    closeButtonEnabled: false,
-                                                                                    enablePrimaryButton: true,
-                                                                                    enableSecondaryButton: false,
-                                                                                    isLoader: false,
-                                                                                    content: Padding(
-                                                                                      padding: const EdgeInsets.all(8.0),
-                                                                                      child: SizedBox(
-                                                                                        width: MediaQuery.of(context).size.width * 0.04,
-                                                                                        height: MediaQuery.of(context).size.width * 0.06,
-                                                                                        child: Center(
-                                                                                          child: Column(
-                                                                                            mainAxisAlignment: MainAxisAlignment.center,
-                                                                                            children: [
-                                                                                              Text(snapshot.data!['message'])
-                                                                                            ],
+                                                                                    )
+                                                                                  : GenericDialogBox(
+                                                                                      closeButtonEnabled: false,
+                                                                                      enablePrimaryButton: true,
+                                                                                      enableSecondaryButton: false,
+                                                                                      isLoader: false,
+                                                                                      content: Padding(
+                                                                                        padding: const EdgeInsets.all(8.0),
+                                                                                        child: SizedBox(
+                                                                                          width: MediaQuery.of(context).size.width * 0.04,
+                                                                                          height: MediaQuery.of(context).size.width * 0.06,
+                                                                                          child: Center(
+                                                                                            child: Column(
+                                                                                              mainAxisAlignment: MainAxisAlignment.center,
+                                                                                              children: [
+                                                                                                Text(snapshot.data!['message'])
+                                                                                              ],
+                                                                                            ),
                                                                                           ),
                                                                                         ),
                                                                                       ),
-                                                                                    ),
-                                                                                    primaryButtonText: 'Ok',
-                                                                                    onPrimaryButtonPressed: () async {
-                                                                                      Get.offAllNamed(MemberProfile.routeName, arguments: membersData['id']);
-                                                                                    },
-                                                                                  );
-                                                                          },
-                                                                        );
-                                                                      });
+                                                                                      primaryButtonText: 'Ok',
+                                                                                      onPrimaryButtonPressed: () async {
+                                                                                        Get.offAllNamed(MemberProfile.routeName, arguments: membersData['id']);
+                                                                                      },
+                                                                                    );
+                                                                            },
+                                                                          );
+                                                                        });
+                                                                  }
                                                                 },
                                                               );
                                                             });

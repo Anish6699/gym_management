@@ -50,10 +50,6 @@ class _VisitorsState extends State<VisitorsView> {
   TextEditingController email = TextEditingController();
   TextEditingController address = TextEditingController();
   TextEditingController ageController = TextEditingController();
-  TextEditingController totalAmmountController = TextEditingController();
-  TextEditingController paidAmmountController = TextEditingController();
-  TextEditingController fromDateController = TextEditingController();
-  TextEditingController toDateController = TextEditingController();
 
   List<Map<String, dynamic>> visitorsList = [];
   AdminController adminController = AdminController();
@@ -253,6 +249,33 @@ class _VisitorsState extends State<VisitorsView> {
         cellOverflow: TextOverflow.visible,
       ),
       DaviColumn(
+        width: MediaQuery.of(context).size.width * 0.15,
+
+        headerPadding: EdgeInsets.zero,
+
+        cellPadding: EdgeInsets.zero,
+
+        headerTextStyle: const TextStyle(
+            fontWeight: FontWeight.bold, color: primaryLightColor),
+
+        name: 'Visited Date',
+
+        // pinStatus: PinStatus.left,
+
+        sortable: true,
+
+        stringValue: (row) =>
+            DateFormat('d MMM yyyy').format(DateTime.parse(row['created_at'])),
+
+        cellAlignment: Alignment.center,
+
+        headerAlignment: Alignment.center,
+
+        resizable: false,
+
+        cellOverflow: TextOverflow.visible,
+      ),
+      DaviColumn(
         width: MediaQuery.of(context).size.width * 0.09,
 
         headerPadding: EdgeInsets.zero,
@@ -347,33 +370,6 @@ class _VisitorsState extends State<VisitorsView> {
         sortable: true,
 
         stringValue: (row) => row['email'],
-
-        cellAlignment: Alignment.center,
-
-        headerAlignment: Alignment.center,
-
-        resizable: false,
-
-        cellOverflow: TextOverflow.visible,
-      ),
-      DaviColumn(
-        width: MediaQuery.of(context).size.width * 0.15,
-
-        headerPadding: EdgeInsets.zero,
-
-        cellPadding: EdgeInsets.zero,
-
-        headerTextStyle: const TextStyle(
-            fontWeight: FontWeight.bold, color: primaryLightColor),
-
-        name: 'Visited Date',
-
-        // pinStatus: PinStatus.left,
-
-        sortable: true,
-
-        stringValue: (row) =>
-            DateFormat('d MMM yyyy').format(DateTime.parse(row['created_at'])),
 
         cellAlignment: Alignment.center,
 
@@ -480,7 +476,8 @@ class _VisitorsState extends State<VisitorsView> {
                                             child: TextFormField(
                                               inputFormatters: [
                                                 FilteringTextInputFormatter
-                                                    .allow(RegExp(r'[a-zA-Z]')),
+                                                    .allow(RegExp(
+                                                        r'[a-zA-Z ]{0,20}$')),
                                               ],
                                               decoration: const InputDecoration(
                                                   border: OutlineInputBorder(
@@ -544,7 +541,8 @@ class _VisitorsState extends State<VisitorsView> {
                                             child: TextFormField(
                                               inputFormatters: [
                                                 FilteringTextInputFormatter
-                                                    .allow(RegExp(r'[a-zA-Z]')),
+                                                    .allow(RegExp(
+                                                        r'[a-zA-Z ]{0,20}$')),
                                               ],
                                               decoration: const InputDecoration(
                                                   border: OutlineInputBorder(
@@ -609,7 +607,8 @@ class _VisitorsState extends State<VisitorsView> {
                                             child: TextFormField(
                                               inputFormatters: [
                                                 FilteringTextInputFormatter
-                                                    .allow(RegExp(r'[0-9]')),
+                                                    .allow(RegExp(
+                                                        r'[0-9]{0,10}$')),
                                               ],
                                               decoration: const InputDecoration(
                                                   border: OutlineInputBorder(
@@ -673,7 +672,8 @@ class _VisitorsState extends State<VisitorsView> {
                                             child: TextFormField(
                                               inputFormatters: [
                                                 FilteringTextInputFormatter
-                                                    .allow(RegExp(r'[0-9]')),
+                                                    .allow(
+                                                        RegExp(r'[0-9]{0,2}$')),
                                               ],
                                               decoration: const InputDecoration(
                                                   border: OutlineInputBorder(
@@ -934,9 +934,9 @@ class _VisitorsState extends State<VisitorsView> {
                                             ),
                                             primaryButtonText: 'Ok',
                                             onPrimaryButtonPressed: () async {
-                                              Get.offAllNamed(
-                                                VisitorsView.visitorsRouteName,
-                                              );
+                                              setDataOnBranchChange();
+                                              Get.back();
+                                              Get.back();
                                             },
                                           );
                                   },
@@ -1356,7 +1356,8 @@ class _VisitorsState extends State<VisitorsView> {
                                             child: TextFormField(
                                               inputFormatters: [
                                                 FilteringTextInputFormatter
-                                                    .allow(RegExp(r'[a-zA-Z]')),
+                                                    .allow(RegExp(
+                                                        r'[a-zA-Z ]{0,20}$')),
                                               ],
                                               decoration: const InputDecoration(
                                                   border: OutlineInputBorder(
@@ -1420,7 +1421,8 @@ class _VisitorsState extends State<VisitorsView> {
                                             child: TextFormField(
                                               inputFormatters: [
                                                 FilteringTextInputFormatter
-                                                    .allow(RegExp(r'[a-zA-Z]')),
+                                                    .allow(RegExp(
+                                                        r'[a-zA-Z ]{0,20}$')),
                                               ],
                                               decoration: const InputDecoration(
                                                   border: OutlineInputBorder(
@@ -1485,7 +1487,8 @@ class _VisitorsState extends State<VisitorsView> {
                                             child: TextFormField(
                                               inputFormatters: [
                                                 FilteringTextInputFormatter
-                                                    .allow(RegExp(r'[0-9]')),
+                                                    .allow(RegExp(
+                                                        r'[0-9]{0,10}$')),
                                               ],
                                               decoration: const InputDecoration(
                                                   border: OutlineInputBorder(
@@ -1549,7 +1552,8 @@ class _VisitorsState extends State<VisitorsView> {
                                             child: TextFormField(
                                               inputFormatters: [
                                                 FilteringTextInputFormatter
-                                                    .allow(RegExp(r'[0-9]')),
+                                                    .allow(
+                                                        RegExp(r'[0-9]{0,2}$')),
                                               ],
                                               decoration: const InputDecoration(
                                                   border: OutlineInputBorder(
@@ -1807,9 +1811,9 @@ class _VisitorsState extends State<VisitorsView> {
                                             ),
                                             primaryButtonText: 'Ok',
                                             onPrimaryButtonPressed: () async {
-                                              Get.offAllNamed(
-                                                VisitorsView.visitorsRouteName,
-                                              );
+                                              setDataOnBranchChange();
+                                              Get.back();
+                                              Get.back();
                                             },
                                           );
                                   },

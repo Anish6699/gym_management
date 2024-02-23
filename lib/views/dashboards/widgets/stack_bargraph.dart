@@ -168,7 +168,7 @@ class _OrdinalComboBarLineChartState extends State<StackBarGraphWidget> {
             child: charts.BarChart(
               _createSeries(),
               animate: true,
-              barGroupingType: charts.BarGroupingType.stacked,
+              // barGroupingType: charts.BarGroupingType.stacked,
               // barRendererDecorator: charts.BarLabelDecorator<String>(),
               domainAxis: const charts.OrdinalAxisSpec(
                 renderSpec: charts.SmallTickRendererSpec(

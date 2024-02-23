@@ -424,7 +424,8 @@ class _MembersState extends State<TrainerView> {
                                             child: TextFormField(
                                               inputFormatters: [
                                                 FilteringTextInputFormatter
-                                                    .allow(RegExp(r'[a-zA-Z]')),
+                                                    .allow(RegExp(
+                                                        r'[a-zA-Z ]{0,20}$')),
                                               ],
                                               decoration: const InputDecoration(
                                                   border: OutlineInputBorder(
@@ -488,7 +489,8 @@ class _MembersState extends State<TrainerView> {
                                             child: TextFormField(
                                               inputFormatters: [
                                                 FilteringTextInputFormatter
-                                                    .allow(RegExp(r'[a-zA-Z]')),
+                                                    .allow(RegExp(
+                                                        r'[a-zA-Z ]{0,20}$')),
                                               ],
                                               decoration: const InputDecoration(
                                                   border: OutlineInputBorder(
@@ -553,7 +555,8 @@ class _MembersState extends State<TrainerView> {
                                             child: TextFormField(
                                               inputFormatters: [
                                                 FilteringTextInputFormatter
-                                                    .allow(RegExp(r'[0-9]')),
+                                                    .allow(RegExp(
+                                                        r'[0-9]{0,10}$')),
                                               ],
                                               decoration: const InputDecoration(
                                                   border: OutlineInputBorder(
@@ -798,7 +801,8 @@ class _MembersState extends State<TrainerView> {
                                             child: TextFormField(
                                               inputFormatters: [
                                                 FilteringTextInputFormatter
-                                                    .allow(RegExp(r'[0-9]')),
+                                                    .allow(RegExp(
+                                                        r'[0-9]{0,10}$')),
                                               ],
                                               decoration: const InputDecoration(
                                                   border: OutlineInputBorder(
@@ -1227,7 +1231,7 @@ class _MembersState extends State<TrainerView> {
                                                   inputFormatters: [
                                                     FilteringTextInputFormatter
                                                         .allow(RegExp(
-                                                            r'[a-zA-Z]')),
+                                                            r'[a-zA-Z ]{0,20}$')),
                                                   ],
                                                   decoration:
                                                       const InputDecoration(
@@ -1296,7 +1300,7 @@ class _MembersState extends State<TrainerView> {
                                                   inputFormatters: [
                                                     FilteringTextInputFormatter
                                                         .allow(RegExp(
-                                                            r'[a-zA-Z]')),
+                                                            r'[a-zA-Z ]{0,20}$')),
                                                   ],
                                                   decoration:
                                                       const InputDecoration(
@@ -1365,8 +1369,8 @@ class _MembersState extends State<TrainerView> {
                                                 child: TextFormField(
                                                   inputFormatters: [
                                                     FilteringTextInputFormatter
-                                                        .allow(
-                                                            RegExp(r'[0-9]')),
+                                                        .allow(RegExp(
+                                                            r'[0-9]{0,10}$')),
                                                   ],
                                                   decoration:
                                                       const InputDecoration(
@@ -1624,8 +1628,8 @@ class _MembersState extends State<TrainerView> {
                                                 child: TextFormField(
                                                   inputFormatters: [
                                                     FilteringTextInputFormatter
-                                                        .allow(
-                                                            RegExp(r'[0-9]')),
+                                                        .allow(RegExp(
+                                                            r'[0-9]{0,10}$')),
                                                   ],
                                                   decoration:
                                                       const InputDecoration(
