@@ -10,99 +10,6 @@ import 'package:charts_flutter/src/text_style.dart' as style;
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as mat;
 
-class CustomCircleSymbolRenderer extends CircleSymbolRenderer {
-  CustomCircleSymbolRenderer(this.value);
-
-  final String value;
-  @override
-  void paint(ChartCanvas canvas, Rectangle<num> bounds,
-      {List<int>? dashPattern,
-      Color? fillColor,
-      FillPatternType? fillPattern,
-      Color? strokeColor,
-      double? strokeWidthPx}) {
-    super.paint(canvas, bounds,
-        dashPattern: dashPattern,
-        fillColor: fillColor,
-        strokeColor: strokeColor,
-        strokeWidthPx: strokeWidthPx);
-    canvas.drawRect(
-        Rectangle(bounds.left - 5, bounds.top - 30, bounds.width + 10,
-            bounds.height + 10),
-        fill: Color.white);
-    var textStyle = style.TextStyle();
-    textStyle.color = Color.black;
-    textStyle.fontSize = 15;
-    canvas.drawText(ts.TextElement("$value", style: textStyle),
-        (bounds.left).round(), (bounds.top - 28).round());
-  }
-}
-
-typedef GetText = String Function();
-int pointIndex = -1;
-
-class TextSymbolRenderer extends CircleSymbolRenderer {
-  TextSymbolRenderer(this.getText,
-      {this.marginBottom = 8, this.padding = const EdgeInsets.all(8)});
-
-  final GetText getText;
-  final double marginBottom;
-  final EdgeInsets padding;
-
-  @override
-  void paint(ChartCanvas canvas, Rectangle<num> bounds,
-      {List<int>? dashPattern,
-      Color? fillColor,
-      FillPatternType? fillPattern,
-      Color? strokeColor,
-      double? strokeWidthPx}) {
-    pointIndex = pointIndex + 1;
-
-    List<dynamic> list = json.decode(getText.call());
-    super.paint(canvas, bounds,
-        dashPattern: dashPattern,
-        fillColor: fillColor,
-        fillPattern: fillPattern,
-        strokeColor: strokeColor,
-        strokeWidthPx: strokeWidthPx);
-
-    style.TextStyle textStyle = style.TextStyle();
-    textStyle.color = Color.black;
-    textStyle.fontSize = 15;
-
-    element.TextElement textElement =
-        element.TextElement(list[pointIndex].toString(), style: textStyle);
-    double width = textElement.measurement.horizontalSliceWidth;
-    double height = textElement.measurement.verticalSliceWidth;
-
-    double centerX = bounds.left + bounds.width / 2;
-    double centerY = bounds.top +
-        bounds.height / 2 -
-        marginBottom -
-        (padding.top + padding.bottom);
-
-    canvas.drawRRect(
-      Rectangle(
-        centerX - (width / 2) - padding.left,
-        centerY - (height / 2) - padding.top,
-        width + (padding.left + padding.right),
-        height + (padding.top + padding.bottom),
-      ),
-      fill: Color.white,
-      radius: 16,
-      roundTopLeft: true,
-      roundTopRight: true,
-      roundBottomRight: true,
-      roundBottomLeft: true,
-    );
-    canvas.drawText(
-      textElement,
-      (centerX - (width / 2)).round(),
-      (centerY - (height / 2)).round(),
-    );
-  }
-}
-
 class StackBarGraphWidget extends StatefulWidget {
   List graphData = [];
 
@@ -121,6 +28,8 @@ class _OrdinalComboBarLineChartState extends State<StackBarGraphWidget> {
   ];
   @override
   void initState() {
+    print('graphhhhh datatattatat');
+    print(widget.graphData);
     aaaa();
     super.initState();
   }
@@ -140,8 +49,8 @@ class _OrdinalComboBarLineChartState extends State<StackBarGraphWidget> {
   createOg() {
     modifiedList = temp.map((innerList) {
       return innerList.map((originalMap) {
-        OrdinalSales modifiedMap = OrdinalSales(originalMap['date'].toString(),
-            double.parse(originalMap['inventory_days'].toStringAsFixed(0)));
+        OrdinalSales modifiedMap = OrdinalSales(originalMap['month'].toString(),
+            double.parse(originalMap['count'].toStringAsFixed(0)));
         return modifiedMap;
       }).toList();
     }).toList();

@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:gmstest/configs/colors.dart';
+import 'package:gmstest/configs/global_functions.dart';
 import 'package:gmstest/configs/server_configs.dart';
 import 'package:gmstest/controllers/admin_controllers.dart';
 import 'package:gmstest/controllers/expense_tracker_controller.dart';
@@ -52,9 +53,11 @@ class _DashboardState extends State<ExpenseTrackerView>
   AdminController adminController = AdminController();
   ExpenseController expenseController = ExpenseController();
   List adminBranchList = [];
+  Map expenseGraphData = {};
   DateTime selectedDateTime = DateTime.now();
 
   var selectedBranch;
+  var selectedYear;
   @override
   void initState() {
     setInitialData();
@@ -82,7 +85,6 @@ class _DashboardState extends State<ExpenseTrackerView>
   }
 
   setInitialData() async {
-    print('set initial data');
     final prefs = await SharedPreferences.getInstance();
 
     userType = prefs.getInt('user_type');
@@ -93,13 +95,29 @@ class _DashboardState extends State<ExpenseTrackerView>
       print('Admin login');
       adminBranchList =
           await adminController.getAdminAllBranches(adminId: adminId);
-      selectedBranch = adminBranchList.first;
+      if (globalSelectedBranch != null) {
+        for (int i = 0; i < adminBranchList.length; i++) {
+          if (globalSelectedBranch['id'] == adminBranchList[i]['id']) {
+            selectedBranch = adminBranchList[i];
+          }
+        }
+      } else {
+        selectedBranch = adminBranchList.first;
+      }
+
       setDataOnBranchChange();
     }
     if (userType == 3) {
-      print('branch login');
       setDataOnBranchLogin();
     }
+  }
+
+  getGraphData() async {
+    expenseGraphData = await expenseController.getExpenseGraph(
+        {'year': selectedYear}, branchId ?? selectedBranch['id']);
+    print('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
+
+    print(expenseGraphData);
   }
 
   setDataOnBranchLogin() async {
@@ -111,6 +129,7 @@ class _DashboardState extends State<ExpenseTrackerView>
         searchKeyword: searchController.text,
         startDate: fromDateController.text,
         endDate: toDateController.text);
+    await getGraphData();
 
     List<Map<String, dynamic>> expenseList = a.map((dynamic item) {
       if (item is Map<String, dynamic>) {
@@ -119,7 +138,7 @@ class _DashboardState extends State<ExpenseTrackerView>
         return {'data': item};
       }
     }).toList();
-    print(' trainerrrr ${expenseList}');
+
     _headerModel = DaviModel(
       rows: expenseList,
       columns: _getColumns(context),
@@ -160,6 +179,7 @@ class _DashboardState extends State<ExpenseTrackerView>
         searchKeyword: searchController.text,
         startDate: fromDateController.text,
         endDate: toDateController.text);
+    await getGraphData();
 
     List<Map<String, dynamic>> expenseList = a.map((dynamic item) {
       if (item is Map<String, dynamic>) {
@@ -168,8 +188,6 @@ class _DashboardState extends State<ExpenseTrackerView>
         return {'data': item};
       }
     }).toList();
-
-    print(' trainerrrr ${expenseList}');
 
     _headerModel = DaviModel(
       rows: expenseList,
@@ -598,8 +616,6 @@ class _DashboardState extends State<ExpenseTrackerView>
                                         future: expenseController
                                             .deleteExpence(row.data['id']),
                                         builder: (context, snapshot) {
-                                          print('snapshotttt datatatatat');
-                                          print(snapshot.data);
                                           return snapshot.connectionState ==
                                                   ConnectionState.waiting
                                               ? GenericDialogBox(
@@ -755,6 +771,7 @@ class _DashboardState extends State<ExpenseTrackerView>
                             },
                           ).toList(),
                           onChanged: (value) {
+                            globalSelectedBranch = value;
                             selectedBranch = value;
                             setState(() {});
                             setDataOnBranchChange();
@@ -797,6 +814,9 @@ class _DashboardState extends State<ExpenseTrackerView>
                 SizedBox(
                   width: MediaQuery.of(context).size.width * 0.01,
                 ),
+                const SizedBox(
+                  width: 20,
+                ),
                 Container(
                   width: MediaQuery.of(context).size.width * 0.2,
                   height: MediaQuery.of(context).size.height * 0.08,
@@ -806,9 +826,10 @@ class _DashboardState extends State<ExpenseTrackerView>
                     border: Border.all(color: Colors.transparent),
                   ),
                   child: DropdownButtonFormField(
+                    value: selectedYear,
                     isExpanded: true,
                     elevation: 1,
-                    items: ['2023', '2024', '2025', '2026'].map(
+                    items: ['2021', '2022', '2023', '2024', '2025', '2026'].map(
                       (item) {
                         return DropdownMenuItem(
                           value: item,
@@ -822,7 +843,10 @@ class _DashboardState extends State<ExpenseTrackerView>
                         );
                       },
                     ).toList(),
-                    onChanged: (value) {},
+                    onChanged: (value) {
+                      selectedYear = value!;
+                      setDataOnBranchChange();
+                    },
                     borderRadius: BorderRadius.circular(4),
                     style: TextStyle(
                         fontSize: MediaQuery.of(context).size.width * 0.08,
@@ -839,7 +863,8 @@ class _DashboardState extends State<ExpenseTrackerView>
                           fontSize: MediaQuery.of(context).size.width * 0.01,
                           color: Colors.white,
                           fontWeight: FontWeight.bold),
-                      contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                      contentPadding:
+                          const EdgeInsets.symmetric(horizontal: 10),
                       fillColor: Colors.white,
                       border: const OutlineInputBorder(
                         borderSide: BorderSide(
@@ -861,20 +886,32 @@ class _DashboardState extends State<ExpenseTrackerView>
             SizedBox(
               height: 10,
             ),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: [
-                  Container(
-                      width: MediaQuery.of(context).size.width * 0.75,
-                      height: MediaQuery.of(context).size.height * 0.55,
-                      child: ExpenseTrackerGraph()
-                      //  InventoryForecastGraphWidget(
-                      //     inventoryForecastList, ''),
+            isLoading == true
+                ? SizedBox()
+                : expenseGraphData.isEmpty
+                    ? SizedBox(
+                        child: Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      )
+                    : SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: [
+                            Container(
+                                width: MediaQuery.of(context).size.width * 0.75,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.55,
+                                child: ExpenseTrackerGraph(
+                                  graphData:
+                                      expenseGraphData['expenses_by_month'],
+                                )
+                                //  InventoryForecastGraphWidget(
+                                //     inventoryForecastList, ''),
+                                ),
+                          ],
+                        ),
                       ),
-                ],
-              ),
-            ),
             Container(
               padding: EdgeInsets.all(16),
               decoration: BoxDecoration(

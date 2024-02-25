@@ -76,6 +76,14 @@ class MemberController extends GetxController {
     return body;
   }
 
+  Future<Map<String, dynamic>> deleteMember(memberId) async {
+    var response = await _httpClient.get(path: 'delete-member/$memberId');
+
+    var body = json.decode(response['body']) as Map<String, dynamic>;
+
+    return body;
+  }
+
   //////////////////////////////////////Visitors////////////////////////////////////////
   ///
   ///
@@ -113,6 +121,14 @@ class MemberController extends GetxController {
       Map<String, dynamic> data, visitorId) async {
     var response =
         await _httpClient.post(path: 'edit-visitor/$visitorId', body: data);
+
+    var body = json.decode(response['body']) as Map<String, dynamic>;
+
+    return body;
+  }
+
+  Future<Map<String, dynamic>> deleteVisitor(visitorId) async {
+    var response = await _httpClient.get(path: 'delete-member/$visitorId');
 
     var body = json.decode(response['body']) as Map<String, dynamic>;
 

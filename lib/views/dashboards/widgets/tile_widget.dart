@@ -48,7 +48,7 @@ class FileInfoCard extends StatelessWidget {
               Column(
                 children: [
                   Text(
-                    "${value} Files",
+                    "${value} ",
                     style: Theme.of(context)
                         .textTheme
                         .bodyMedium!

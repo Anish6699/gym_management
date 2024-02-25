@@ -14,13 +14,11 @@ import 'package:gmstest/navigation_pane/navigation_pane_closed.dart';
 import 'package:gmstest/navigation_pane/navigation_pane_expanded.dart';
 import 'package:gmstest/views/members/member_profile.dart';
 import 'package:gmstest/widgets/buttons.dart';
-import 'package:gmstest/widgets/generic_appbar.dart';
 import 'package:davi/davi.dart';
 import 'package:gmstest/widgets/popup.dart';
-import 'package:gmstest/widgets/searchfield.dart';
+import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
-// import 'package:easy_table/easy_table.dart';F
 
 class MembersView extends StatefulWidget {
   const MembersView({Key? key}) : super(key: key);
@@ -66,10 +64,11 @@ class _MembersState extends State<MembersView> {
   List<Map<String, dynamic>> membersList = [];
   AdminController adminController = AdminController();
   MemberController memmberController = MemberController();
-  List adminBranchList = [];
   DateTime selectedDateTime = DateTime.now();
   TextEditingController filterFromDateController = TextEditingController();
   TextEditingController filterToDateController = TextEditingController();
+  var selectedBranch;
+  List adminBranchList = [];
 
   List<Map<String, dynamic>> filterList = [
     {'id': -1, 'name': 'All'},
@@ -79,7 +78,6 @@ class _MembersState extends State<MembersView> {
   ];
   var selectedStatus;
 
-  var selectedBranch;
   @override
   void initState() {
     setInitialData();
@@ -118,7 +116,15 @@ class _MembersState extends State<MembersView> {
       print('Admin login');
       adminBranchList =
           await adminController.getAdminAllBranches(adminId: adminId);
-      selectedBranch = adminBranchList.first;
+      if (globalSelectedBranch != null) {
+        for (int i = 0; i < adminBranchList.length; i++) {
+          if (globalSelectedBranch['id'] == adminBranchList[i]['id']) {
+            selectedBranch = adminBranchList[i];
+          }
+        }
+      } else {
+        selectedBranch = adminBranchList.first;
+      }
       setDataOnBranchChange();
     }
     if (userType == 3) {
@@ -180,7 +186,7 @@ class _MembersState extends State<MembersView> {
   setDataOnBranchChange() async {
     isLoading = true;
     setState(() {});
-    print('selected branch ${selectedBranch}');
+
     var a = await memmberController.getAllMembers(
         branchId: branchId ?? selectedBranch['id'],
         searchKeyword: searchController.text,
@@ -195,6 +201,8 @@ class _MembersState extends State<MembersView> {
         return {'data': item};
       }
     }).toList();
+
+    print(membersList);
 
     _headerModel = DaviModel(
       rows: membersList,
@@ -219,39 +227,6 @@ class _MembersState extends State<MembersView> {
     setState(() {});
   }
 
-  String formatVesselList(List vessels) {
-    String formattedString = '';
-
-    for (var vessel in vessels) {
-      String vesselName = vessel;
-      formattedString += '\n $vesselName \n';
-    }
-
-    return formattedString.trim();
-  }
-
-  String formatGcvList(List gcvs) {
-    String formattedString = '';
-
-    for (var gcv in gcvs) {
-      String gcvName = gcv.toString();
-      formattedString += '\n ${gcvName.toString()} \n';
-    }
-
-    return formattedString.trim();
-  }
-
-  String formatVesselList2(List vessels) {
-    String formattedString = '';
-
-    for (var vessel in vessels) {
-      String vesselName = vessel['vessel_gcv'];
-      formattedString += '\n $vesselName \n';
-    }
-
-    return formattedString.trim();
-  }
-
   List<DaviColumn<Map<String, dynamic>>> _getColumns(BuildContext context) {
     return [
       DaviColumn(
@@ -261,8 +236,7 @@ class _MembersState extends State<MembersView> {
 
         cellPadding: EdgeInsets.zero,
 
-        headerTextStyle: const TextStyle(
-            fontWeight: FontWeight.bold, color: primaryLightColor),
+        headerTextStyle: const TextStyle(color: primaryLightColor),
 
         name: 'Name',
 
@@ -279,7 +253,10 @@ class _MembersState extends State<MembersView> {
               },
               child: Text(
                 '${row.data['first_name']} ${row.data['last_name']}',
-                style: TextStyle(color: primaryColor),
+                style: TextStyle(
+                  color: primaryColor,
+                  fontSize: MediaQuery.of(context).size.width * 0.009,
+                ),
               ),
             ),
           );
@@ -302,14 +279,16 @@ class _MembersState extends State<MembersView> {
 
         cellPadding: EdgeInsets.zero,
 
-        headerTextStyle: const TextStyle(
-            fontWeight: FontWeight.bold, color: primaryLightColor),
+        headerTextStyle: const TextStyle(color: primaryLightColor),
 
         name: 'Mobile No',
 
         // pinStatus: PinStatus.left,
 
         sortable: true,
+        cellTextStyle: TextStyle(
+          fontSize: MediaQuery.of(context).size.width * 0.009,
+        ),
 
         stringValue: (row) => row['primary_mobile_no'].toString(),
 
@@ -328,8 +307,10 @@ class _MembersState extends State<MembersView> {
 
         cellPadding: EdgeInsets.zero,
 
-        headerTextStyle: const TextStyle(
-            fontWeight: FontWeight.bold, color: primaryLightColor),
+        headerTextStyle: const TextStyle(color: primaryLightColor),
+        cellTextStyle: TextStyle(
+          fontSize: MediaQuery.of(context).size.width * 0.009,
+        ),
 
         name: 'Email',
 
@@ -354,10 +335,12 @@ class _MembersState extends State<MembersView> {
 
         cellPadding: EdgeInsets.zero,
 
-        headerTextStyle: const TextStyle(
-            fontWeight: FontWeight.bold, color: primaryLightColor),
+        headerTextStyle: const TextStyle(color: primaryLightColor),
 
         name: 'Status',
+        cellTextStyle: TextStyle(
+          fontSize: MediaQuery.of(context).size.width * 0.009,
+        ),
 
         // pinStatus: PinStatus.left,
 
@@ -398,10 +381,12 @@ class _MembersState extends State<MembersView> {
 
         cellPadding: EdgeInsets.zero,
 
-        headerTextStyle: const TextStyle(
-            fontWeight: FontWeight.bold, color: primaryLightColor),
+        headerTextStyle: const TextStyle(color: primaryLightColor),
 
         name: 'Pending Amount',
+        cellTextStyle: TextStyle(
+          fontSize: MediaQuery.of(context).size.width * 0.009,
+        ),
 
         // pinStatus: PinStatus.left,
 
@@ -431,17 +416,157 @@ class _MembersState extends State<MembersView> {
 
         cellPadding: EdgeInsets.zero,
 
-        headerTextStyle: const TextStyle(
-            fontWeight: FontWeight.bold, color: primaryLightColor),
+        headerTextStyle: const TextStyle(color: primaryLightColor),
 
         name: 'Trainer',
 
         // pinStatus: PinStatus.left,
 
         sortable: true,
+        cellTextStyle: TextStyle(
+          fontSize: MediaQuery.of(context).size.width * 0.009,
+        ),
+        stringValue: (row) =>
+            '${row['tfirst_name']?.toString() ?? ''} ${row['tlast_name']?.toString() ?? ''}',
 
-        stringValue: (row) => row['Trainer'],
+        cellAlignment: Alignment.center,
 
+        headerAlignment: Alignment.center,
+
+        resizable: false,
+
+        cellOverflow: TextOverflow.visible,
+      ),
+      DaviColumn(
+        width: MediaQuery.of(context).size.width * 0.12,
+
+        headerPadding: EdgeInsets.zero,
+
+        cellPadding: EdgeInsets.zero,
+
+        headerTextStyle: const TextStyle(color: primaryLightColor),
+
+        name: 'Action',
+
+        // pinStatus: PinStatus.left,
+
+        sortable: true,
+
+        cellBuilder: (context, row) {
+          return IconButton(
+              onPressed: () {
+                showDialog(
+                    barrierDismissible: false,
+                    context: context,
+                    builder: (context) {
+                      return GenericDialogBox(
+                        closeButtonEnabled: false,
+                        enableSecondaryButton: true,
+                        isLoader: false,
+                        message: "Are you Sure want to Delete Member",
+                        primaryButtonText: "Confirm",
+                        secondaryButtonText: "Cancel",
+                        onSecondaryButtonPressed: () {
+                          Get.back();
+                        },
+                        onPrimaryButtonPressed: () {
+                          showDialog(
+                              barrierDismissible: false,
+                              context: context,
+                              builder: (context) {
+                                return FutureBuilder(
+                                  future: memmberController
+                                      .deleteMember(row.data['id']),
+                                  builder: (context, snapshot) {
+                                    print('snapshotttt datatatatat');
+                                    print(snapshot.data);
+                                    return snapshot.connectionState ==
+                                            ConnectionState.waiting
+                                        ? GenericDialogBox(
+                                            enableSecondaryButton: false,
+                                            isLoader: true,
+                                            content: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: SizedBox(
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.04,
+                                                height: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.06,
+                                                child: const Center(
+                                                  child: Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      CircularProgressIndicator(
+                                                        color:
+                                                            primaryDarkBlueColor,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          )
+                                        : GenericDialogBox(
+                                            closeButtonEnabled: false,
+                                            enablePrimaryButton: true,
+                                            enableSecondaryButton: false,
+                                            isLoader: false,
+                                            content: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: SizedBox(
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.04,
+                                                height: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.06,
+                                                child: Center(
+                                                  child: Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Text(
+                                                        snapshot
+                                                            .data!['message'],
+                                                        style: TextStyle(
+                                                            color:
+                                                                Colors.white),
+                                                      )
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            primaryButtonText: 'Ok',
+                                            onPrimaryButtonPressed: () async {
+                                              setDataOnBranchChange();
+                                              Get.back();
+                                              Get.back();
+                                            },
+                                          );
+                                  },
+                                );
+                              });
+                        },
+                      );
+                    });
+              },
+              icon: Icon(
+                Icons.delete,
+                color: Colors.red,
+              ));
+        },
         cellAlignment: Alignment.center,
 
         headerAlignment: Alignment.center,
@@ -475,6 +600,7 @@ class _MembersState extends State<MembersView> {
               const Spacer(
                 flex: 2,
               ),
+
               userType == 2
                   ? Container(
                       width: MediaQuery.of(context).size.width * 0.15,
@@ -505,6 +631,7 @@ class _MembersState extends State<MembersView> {
                           },
                         ).toList(),
                         onChanged: (value) {
+                          globalSelectedBranch = value;
                           selectedBranch = value;
                           setState(() {});
                           setDataOnBranchChange();
@@ -861,7 +988,8 @@ class _MembersState extends State<MembersView> {
             // ),
             body: _body(mediaQuery),
             floatingActionButton: FloatingActionButton(
-              backgroundColor: primaryColor,
+              backgroundColor: Colors.white.withOpacity(0.7),
+              elevation: 0,
               onPressed: () {
                 firstNameController.clear();
 
@@ -1757,8 +1885,10 @@ class _MembersState extends State<MembersView> {
                       );
                     });
               },
-              child:
-                  Tooltip(message: "Add Member", child: const Icon(Icons.add)),
+              child: Tooltip(
+                  message: "Add Member",
+                  child: Lottie.asset(
+                      'assets/animations/add_member_animation.json')),
             ),
             floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
           ),

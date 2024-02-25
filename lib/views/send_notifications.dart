@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gmstest/configs/colors.dart';
+import 'package:gmstest/configs/global_functions.dart';
 import 'package:gmstest/configs/mail_template.dart';
 import 'package:gmstest/configs/server_configs.dart';
 import 'package:gmstest/controllers/admin_controllers.dart';
@@ -60,7 +61,15 @@ class _SendNotificationState extends State<SendNotificationView>
       print('Admin login');
       adminBranchList =
           await adminController.getAdminAllBranches(adminId: adminId);
-      selectedBranch = adminBranchList.first;
+      if (globalSelectedBranch != null) {
+        for (int i = 0; i < adminBranchList.length; i++) {
+          if (globalSelectedBranch['id'] == adminBranchList[i]['id']) {
+            selectedBranch = adminBranchList[i];
+          }
+        }
+      } else {
+        selectedBranch = adminBranchList.first;
+      }
       // setDataOnBranchChange();
       setState(() {});
     }
@@ -298,6 +307,8 @@ class _SendNotificationState extends State<SendNotificationView>
                                                     },
                                                   ).toList(),
                                                   onChanged: (value) {
+                                                    globalSelectedBranch =
+                                                        value;
                                                     selectedBranch = value;
                                                     setState(() {});
                                                   },

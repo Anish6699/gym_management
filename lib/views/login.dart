@@ -9,6 +9,7 @@ import 'package:gmstest/views/dashboards/branch/branch_dashboard.dart';
 import 'package:gmstest/views/dashboards/dashboard.dart';
 import 'package:gmstest/widgets/buttons.dart';
 import 'package:gmstest/widgets/popup.dart';
+import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
@@ -42,6 +43,7 @@ class _LoginPageState extends State<LoginPage> {
 
   bool isLoading = false;
   bool isLoggedIn = false;
+  bool viewPassword = true;
 
   LoginController loginController = LoginController();
   @override
@@ -62,25 +64,10 @@ class _LoginPageState extends State<LoginPage> {
       children: [
         Expanded(
             flex: 2,
-            child: CarouselSlider(
-              items: [
-                SvgPicture.asset('svgs/manGym2.svg'),
-                SvgPicture.asset('svgs/gym_women.svg'),
-                // SvgPicture.asset('svgs/gym_man3.svg'),
-                SvgPicture.asset('svgs/group_gyming3.svg'),
-                SvgPicture.asset('svgs/gym_women2.svg'),
-                SvgPicture.asset('svgs/streching_men.svg'),
-                SvgPicture.asset('svgs/manGym2.svg'),
-                SvgPicture.asset('svgs/streching_women.svg')
-              ],
-              options: CarouselOptions(autoPlay: true),
-            )
-            //  SvgPicture.asset('assets/manGym2.svg')
-            // Image.asset(
-            //   'assets/gym_icon.png',
-            //   height: MediaQuery.of(context).size.height,
-            //   fit: BoxFit.fill,
-            //   filterQuality: FilterQuality.high,
+            child: Padding(
+                padding: const EdgeInsets.all(50.0),
+                child: Lottie.asset('assets/animations/member_animation.json'))
+
             // ),
             ),
         Expanded(
@@ -98,15 +85,11 @@ class _LoginPageState extends State<LoginPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(3.0),
-                            color: Colors.white,
-                          ),
-
                           // width: MediaQuery.of(context).size.height * 0.2,
                           height: MediaQuery.of(context).size.height * 0.08,
-                          child: Image.asset(
-                            'assets/logopng2.png',
+                          child: Text(
+                            "Fittraa",
+                            style: TextStyle(color: primaryColor, fontSize: 30),
                           ),
                         ),
                         SizedBox(
@@ -169,10 +152,29 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                               SizedBox(
                                 child: TextFormField(
-                                  obscureText: true,
+                                  obscureText: viewPassword,
                                   enableSuggestions: false,
                                   autocorrect: false,
-                                  decoration: const InputDecoration(
+                                  decoration: InputDecoration(
+                                      suffixIcon: GestureDetector(
+                                        onTap: () {
+                                          setState(() {
+                                            viewPassword = !viewPassword;
+                                          });
+                                        },
+                                        child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: viewPassword == true
+                                                ? const Icon(
+                                                    Icons.remove_red_eye,
+                                                    color: Colors.white,
+                                                  )
+                                                : const Icon(
+                                                    Icons
+                                                        .remove_red_eye_outlined,
+                                                    color: Colors.white,
+                                                  )),
+                                      ),
                                       border: OutlineInputBorder(
                                         borderSide:
                                             BorderSide(color: Colors.black),

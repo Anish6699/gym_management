@@ -2,11 +2,44 @@ import 'package:fl_chart/fl_chart.dart';
 // import 'package:fl_line_chart_example/widget/line_titles.dart';
 import 'package:flutter/material.dart';
 
-class ExpenseTrackerGraph extends StatelessWidget {
+class ExpenseTrackerGraph extends StatefulWidget {
+  List graphData;
+  ExpenseTrackerGraph({super.key, required this.graphData});
+
+  @override
+  State<ExpenseTrackerGraph> createState() => _ExpenseTrackerGraphState();
+}
+
+class _ExpenseTrackerGraphState extends State<ExpenseTrackerGraph> {
   final List<Color> gradientColors = [
     const Color(0xff23b6e6),
     const Color(0xff02d39a),
   ];
+
+  List<FlSpot> convertToListOfFlSpots(List data) {
+    List<FlSpot> flSpots = [];
+
+    for (int i = 0; i < data.length; i++) {
+      String month = data[i]['month'];
+      double value = data[i]['value'].toDouble();
+      flSpots.add(FlSpot(i.toDouble(), value));
+    }
+
+    return flSpots;
+  }
+
+  List<FlSpot> graphFlList = [];
+
+  @override
+  void initState() {
+    setData();
+    super.initState();
+  }
+
+  setData() {
+    graphFlList = convertToListOfFlSpots(widget.graphData);
+    print(graphFlList);
+  }
 
   @override
   Widget build(BuildContext context) => LineChart(
@@ -86,24 +119,13 @@ class ExpenseTrackerGraph extends StatelessWidget {
           ),
           lineBarsData: [
             LineChartBarData(
-              spots: [
-                FlSpot(0, 1000),
-                FlSpot(1, 200),
-                FlSpot(2, 3000),
-                FlSpot(3, 250),
-                FlSpot(4, 400),
-                FlSpot(5, 300),
-                FlSpot(6, 400),
-                FlSpot(7, 1000),
-                FlSpot(8, 200),
-                FlSpot(9, 300),
-                FlSpot(10, 2500),
-                FlSpot(11, 400),
-              ],
+              spots: graphFlList,
               isCurved: true,
-
+              isStrokeJoinRound: false,
+              isStrokeCapRound: false,
+              curveSmoothness: 0.1,
               color: Color(0xff23b6e6),
-              barWidth: 5,
+              barWidth: 3,
               // dotData: FlDotData(show: false),
               belowBarData: BarAreaData(
                   show: true, color: Color(0xff02d39a).withOpacity(0.3)),

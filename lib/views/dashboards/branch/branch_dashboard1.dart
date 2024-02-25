@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:gmstest/configs/colors.dart';
+import 'package:gmstest/configs/global_functions.dart';
 import 'package:gmstest/configs/server_configs.dart';
 import 'package:gmstest/controllers/admin_controllers.dart';
+import 'package:gmstest/controllers/dashboard_controllers/branch_dashboard_controller.dart';
 import 'package:gmstest/views/dashboards/branch/testdata.dart';
 import 'package:gmstest/views/dashboards/widgets/stack_bargraph.dart';
 import 'package:gmstest/views/dashboards/widgets/tile_widget.dart';
@@ -17,7 +19,10 @@ class Dashboard1View extends StatefulWidget {
 class _Dashboard1ViewState extends State<Dashboard1View> {
   List adminBranchList = [];
   AdminController adminController = AdminController();
+  Map branchData = {};
   var selectedBranch;
+  var selectedYear;
+  bool isLoading = false;
   @override
   void initState() {
     setInitialData();
@@ -25,7 +30,9 @@ class _Dashboard1ViewState extends State<Dashboard1View> {
   }
 
   setInitialData() async {
-    print('set initial data');
+    setState(() {
+      isLoading = true;
+    });
     final prefs = await SharedPreferences.getInstance();
 
     userType = prefs.getInt('user_type');
@@ -36,15 +43,52 @@ class _Dashboard1ViewState extends State<Dashboard1View> {
       print('Admin login');
       adminBranchList =
           await adminController.getAdminAllBranches(adminId: adminId);
-      selectedBranch = adminBranchList.first;
-      // setDataOnBranchChange();
+      if (globalSelectedBranch != null) {
+        for (int i = 0; i < adminBranchList.length; i++) {
+          if (globalSelectedBranch['id'] == adminBranchList[i]['id']) {
+            selectedBranch = adminBranchList[i];
+          }
+        }
+      } else {
+        selectedBranch = adminBranchList.first;
+      }
+      setDataOnBranchChange();
       setState(() {});
     }
     if (userType == 3) {
       print('branch login');
-      // setDataOnBranchLogin();
+      setDataOnBranchLogin();
     }
   }
+
+  setDataOnBranchLogin() async {
+    branchData = await branchDashboardController.getBranchDashboardData(
+      {'year': selectedYear},
+      branchId ?? selectedBranch['id'],
+    );
+    print(branchData);
+    setState(() {
+      isLoading = false;
+    });
+  }
+
+  setDataOnBranchChange() async {
+    setState(() {
+      isLoading = true;
+    });
+    print('setDataOnBranchChange');
+    branchData = await branchDashboardController.getBranchDashboardData(
+      {'year': selectedYear},
+      branchId ?? selectedBranch['id'],
+    );
+    print(branchData);
+    setState(() {
+      isLoading = false;
+    });
+  }
+
+  BranchDashboardController branchDashboardController =
+      BranchDashboardController();
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +104,7 @@ class _Dashboard1ViewState extends State<Dashboard1View> {
                   "Dashboard",
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
-                Spacer(
+                const Spacer(
                   flex: 2,
                 ),
                 userType == 2
@@ -93,9 +137,10 @@ class _Dashboard1ViewState extends State<Dashboard1View> {
                             },
                           ).toList(),
                           onChanged: (value) {
+                            globalSelectedBranch = value;
                             selectedBranch = value;
-                            setState(() {});
-                            // setDataOnBranchChange();
+                            // setState(() {});
+                            setDataOnBranchChange();
                           },
                           borderRadius: BorderRadius.circular(4),
                           style: TextStyle(
@@ -116,7 +161,7 @@ class _Dashboard1ViewState extends State<Dashboard1View> {
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold),
                             contentPadding:
-                                EdgeInsets.symmetric(horizontal: 10),
+                                const EdgeInsets.symmetric(horizontal: 10),
                             fillColor: Colors.white,
                             border: const OutlineInputBorder(
                               borderSide: BorderSide(
@@ -131,8 +176,8 @@ class _Dashboard1ViewState extends State<Dashboard1View> {
                           ),
                         ),
                       )
-                    : SizedBox(),
-                SizedBox(
+                    : const SizedBox(),
+                const SizedBox(
                   width: 20,
                 ),
                 Container(
@@ -144,9 +189,10 @@ class _Dashboard1ViewState extends State<Dashboard1View> {
                     border: Border.all(color: Colors.transparent),
                   ),
                   child: DropdownButtonFormField(
+                    value: selectedYear,
                     isExpanded: true,
                     elevation: 1,
-                    items: ['2023', '2024', '2025', '2026'].map(
+                    items: ['2021', '2022', '2023', '2024', '2025', '2026'].map(
                       (item) {
                         return DropdownMenuItem(
                           value: item,
@@ -160,7 +206,10 @@ class _Dashboard1ViewState extends State<Dashboard1View> {
                         );
                       },
                     ).toList(),
-                    onChanged: (value) {},
+                    onChanged: (value) {
+                      selectedYear = value!;
+                      setDataOnBranchChange();
+                    },
                     borderRadius: BorderRadius.circular(4),
                     style: TextStyle(
                         fontSize: MediaQuery.of(context).size.width * 0.08,
@@ -177,7 +226,8 @@ class _Dashboard1ViewState extends State<Dashboard1View> {
                           fontSize: MediaQuery.of(context).size.width * 0.01,
                           color: Colors.white,
                           fontWeight: FontWeight.bold),
-                      contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                      contentPadding:
+                          const EdgeInsets.symmetric(horizontal: 10),
                       fillColor: Colors.white,
                       border: const OutlineInputBorder(
                         borderSide: BorderSide(
@@ -196,7 +246,7 @@ class _Dashboard1ViewState extends State<Dashboard1View> {
                 // Expanded(child: SearchField()),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             Row(
@@ -206,7 +256,7 @@ class _Dashboard1ViewState extends State<Dashboard1View> {
                   width: MediaQuery.of(context).size.width * 0.16,
                   child: FileInfoCard(
                     fieldName: "Active Member's",
-                    value: '1000',
+                    value: branchData['yearly_active']?.toString() ?? '-',
                     svgSrc: 'assets/icon/people.png',
                   ),
                 ),
@@ -214,7 +264,7 @@ class _Dashboard1ViewState extends State<Dashboard1View> {
                   width: MediaQuery.of(context).size.width * 0.16,
                   child: FileInfoCard(
                     fieldName: "In-Active Member's",
-                    value: '1000',
+                    value: branchData['yearly_inactive']?.toString() ?? '-',
                     svgSrc: 'assets/icon/people.png',
                   ),
                 ),
@@ -222,7 +272,7 @@ class _Dashboard1ViewState extends State<Dashboard1View> {
                   width: MediaQuery.of(context).size.width * 0.16,
                   child: FileInfoCard(
                     fieldName: "Payment Received",
-                    value: '1000',
+                    value: branchData['yearly_paid']?.toString() ?? '-',
                     svgSrc: 'assets/icon/people.png',
                   ),
                 ),
@@ -230,20 +280,20 @@ class _Dashboard1ViewState extends State<Dashboard1View> {
                   width: MediaQuery.of(context).size.width * 0.16,
                   child: FileInfoCard(
                     fieldName: "Payment Pending",
-                    value: '1000',
+                    value: branchData['yearly_unpaid']?.toString() ?? '-',
                     svgSrc: 'assets/icon/people.png',
                   ),
                 ),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             Row(mainAxisAlignment: MainAxisAlignment.end, children: [
               Container(
                 width: 20,
                 height: 20,
-                color: Color.fromRGBO(35, 182, 230, 1),
+                color: const Color.fromRGBO(35, 182, 230, 1),
               ),
               Text(
                 "  - Active Member's    ",
@@ -254,7 +304,7 @@ class _Dashboard1ViewState extends State<Dashboard1View> {
               Container(
                 width: 20,
                 height: 20,
-                color: Color.fromRGBO(2, 211, 154, 1),
+                color: const Color.fromRGBO(2, 211, 154, 1),
               ),
               Text(
                 "  - In-Active Member's    ",
@@ -263,60 +313,68 @@ class _Dashboard1ViewState extends State<Dashboard1View> {
                     fontWeight: FontWeight.w800),
               )
             ]),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: [
-                  Container(
-                      height: MediaQuery.of(context).size.height * 0.55,
-                      child: StackBarGraphWidget(stackBarList)
-                      //  InventoryForecastGraphWidget(
-                      //     inventoryForecastList, ''),
+            isLoading == true
+                ? SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.55,
+                    child: Center(child: CircularProgressIndicator()))
+                : branchData.isEmpty
+                    ? SizedBox()
+                    : SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: [
+                            Container(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.55,
+                                child: StackBarGraphWidget(
+                                    branchData['member_graph'])),
+                          ],
+                        ),
                       ),
-                ],
-              ),
-            ),
             Container(
-              padding: EdgeInsets.all(16),
-              decoration: BoxDecoration(
+              padding: const EdgeInsets.all(16),
+              decoration: const BoxDecoration(
                 color: secondaryColor,
-                borderRadius: const BorderRadius.all(Radius.circular(10)),
+                borderRadius: BorderRadius.all(Radius.circular(10)),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Recent Files",
+                    "Branch Data",
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
-                  SizedBox(
-                    width: double.infinity,
-                    child: DataTable(
-                      columnSpacing: 16,
-                      // minWidth: 600,
-                      columns: [
-                        DataColumn(
-                          label: Text("Month"),
+                  isLoading == true
+                      ? SizedBox()
+                      : SizedBox(
+                          width: double.infinity,
+                          child: DataTable(
+                            columnSpacing: 16,
+                            // minWidth: 600,
+                            columns: const [
+                              DataColumn(
+                                label: Text("Month"),
+                              ),
+                              DataColumn(
+                                label: Text("Active Member's"),
+                              ),
+                              DataColumn(
+                                label: Text("In-Active Member's"),
+                              ),
+                              DataColumn(
+                                label: Text("Payment Received"),
+                              ),
+                              DataColumn(
+                                label: Text("Pending Payment"),
+                              ),
+                            ],
+                            rows: List.generate(
+                              branchData['member_list'].length,
+                              (index) => recentFileDataRow(
+                                  branchData['member_list'][index]),
+                            ),
+                          ),
                         ),
-                        DataColumn(
-                          label: Text("Active Member's"),
-                        ),
-                        DataColumn(
-                          label: Text("In-Active Member's"),
-                        ),
-                        DataColumn(
-                          label: Text("Payment Received"),
-                        ),
-                        DataColumn(
-                          label: Text("Pending Payment"),
-                        ),
-                      ],
-                      rows: List.generate(
-                        testTableData.length,
-                        (index) => recentFileDataRow(testTableData[index]),
-                      ),
-                    ),
-                  ),
                 ],
               ),
             )
@@ -329,11 +387,11 @@ class _Dashboard1ViewState extends State<Dashboard1View> {
   DataRow recentFileDataRow(data) {
     return DataRow(
       cells: [
-        DataCell(Text(data['month'])),
-        DataCell(Text(data['ac'])),
-        DataCell(Text(data['inc'])),
-        DataCell(Text(data['pr'])),
-        DataCell(Text(data['pp'])),
+        DataCell(Text(data['month']?.toString() ?? '')),
+        DataCell(Text(data['active']?.toString() ?? '')),
+        DataCell(Text(data['inactive']?.toString() ?? '')),
+        DataCell(Text(data['paid']?.toString() ?? '')),
+        DataCell(Text(data['unpaid']?.toString() ?? '')),
       ],
     );
   }

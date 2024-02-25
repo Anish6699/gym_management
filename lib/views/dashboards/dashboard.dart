@@ -195,7 +195,7 @@ class _DashboardState extends State<Dashboard>
                 children: [
                   Container(
                       height: MediaQuery.of(context).size.height * 0.55,
-                      child: StackBarGraphWidget(stackBarList)
+                      child: StackBarGraphWidget([])
                       //  InventoryForecastGraphWidget(
                       //     inventoryForecastList, ''),
                       ),

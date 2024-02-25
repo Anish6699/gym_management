@@ -37,4 +37,14 @@ class TrainerController extends GetxController {
 
     return body;
   }
+
+    Future<Map<String, dynamic>> deleteTrainer(
+     trainerId) async {
+    var response =
+        await _httpClient.get(path: 'delete-trainer/$trainerId');
+
+    var body = json.decode(response['body']) as Map<String, dynamic>;
+
+    return body;
+  }
 }

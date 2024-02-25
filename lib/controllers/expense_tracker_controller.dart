@@ -44,10 +44,16 @@ class ExpenseController extends GetxController {
     return body;
   }
 
-  Future<Map<String, dynamic>> deleteExpence(
-     expenseId) async {
-    var response =
-        await _httpClient.get(path: 'delete-expense/$expenseId');
+  Future<Map<String, dynamic>> deleteExpence(expenseId) async {
+    var response = await _httpClient.get(path: 'delete-expense/$expenseId');
+
+    var body = json.decode(response['body']) as Map<String, dynamic>;
+
+    return body;
+  }
+
+   Future<Map<String, dynamic>> getExpenseGraph(Map<String, dynamic> data, branchId) async {
+    var response = await _httpClient.post(path: 'expense-graph/$branchId', body: data);
 
     var body = json.decode(response['body']) as Map<String, dynamic>;
 

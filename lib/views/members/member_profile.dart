@@ -7,6 +7,7 @@ import 'package:gmstest/configs/colors.dart';
 import 'package:gmstest/configs/global_functions.dart';
 import 'package:gmstest/configs/server_configs.dart';
 import 'package:gmstest/controllers/member_controllers.dart';
+import 'package:gmstest/controllers/trainers_controller.dart';
 import 'package:gmstest/navigation_pane/navigation_pane_closed.dart';
 import 'package:gmstest/navigation_pane/navigation_pane_expanded.dart';
 import 'package:gmstest/views/members/members.dart';
@@ -18,6 +19,7 @@ import 'package:gmstest/widgets/buttons.dart';
 import 'package:gmstest/widgets/generic_appbar.dart';
 import 'package:gmstest/widgets/popup.dart';
 import 'package:intl/intl.dart';
+import 'package:lottie/lottie.dart';
 
 class MemberProfile extends StatefulWidget {
   const MemberProfile({super.key});
@@ -58,12 +60,13 @@ class _MemberProfileState extends State<MemberProfile>
   TextEditingController heightController = TextEditingController();
   TextEditingController weightController = TextEditingController();
   TextEditingController bloodGroupController = TextEditingController();
-  TextEditingController trainerController = TextEditingController();
+  var selectedTrainer;
   TextEditingController secondaryMobileNoController = TextEditingController();
+
+  List<Map<String, dynamic>> trainerList = [];
 
   @override
   void initState() {
-    print('argumentsssssssssssssssssssss ${Get.arguments}');
     initializeData();
     super.initState();
   }
@@ -85,14 +88,13 @@ class _MemberProfileState extends State<MemberProfile>
     } else {
       membersData = a['data'];
       planList = a['plan_details'];
-      print('dataaaaaaaaaaaaaaaaaaaaaa');
-      print(membersData);
+
       firstNameController.text = membersData['first_name'] ?? '';
       lastNameController.text = membersData['last_name'] ?? '';
       primaryMobileNo.text = membersData['primary_mobile_no'] ?? '';
       secondaryMobileNoController.text =
           membersData['secondary_mobile_no'] ?? '';
-      trainerController.text = membersData['trainer_id'] ?? '';
+
       address.text = membersData['addr'] ?? '';
       email.text = membersData['email'] ?? '';
       referenceController.text = membersData['reference'] ?? '';
@@ -100,6 +102,27 @@ class _MemberProfileState extends State<MemberProfile>
       heightController.text = membersData['height'] ?? '';
       weightController.text = membersData['weight'] ?? '';
       bloodGroupController.text = membersData['blood_group'] ?? '';
+      var b = await TrainerController()
+          .getAllTrainer(branchId: membersData['branch_id'], searchKeyword: '');
+
+      trainerList = b.map((dynamic item) {
+        if (item is Map<String, dynamic>) {
+          return item;
+        } else {
+          return {'data': item};
+        }
+      }).toList();
+
+      membersData['trainer_id'] != null
+          ? trainerList.firstWhere((element) {
+              if (membersData['trainer_id'] == element['id']) {
+                selectedTrainer = element;
+                return true;
+              }
+              return false;
+            })
+          : null;
+
       setState(() {});
     }
   }
@@ -351,16 +374,15 @@ class _MemberProfileState extends State<MemberProfile>
                                           255, 177, 174, 174)),
                                 ),
                                 child: DropdownButtonFormField(
-                                  // value: selectedStatus,
+                                  value: selectedTrainer,
                                   isExpanded: true,
                                   elevation: 1,
-                                  items: ['Trainer 1', 'Trainer 2', 'Trainer 3']
-                                      .map(
+                                  items: trainerList.map(
                                     (item) {
                                       return DropdownMenuItem(
                                         value: item,
                                         child: Text(
-                                          item,
+                                          '${item['first_name'] ?? ''}${item['last_name'] ?? ''}',
                                           style: TextStyle(
                                               fontSize: MediaQuery.of(context)
                                                       .size
@@ -372,6 +394,8 @@ class _MemberProfileState extends State<MemberProfile>
                                     },
                                   ).toList(),
                                   onChanged: (value) {
+                                    selectedTrainer = value;
+                                    setState(() {});
                                     // selectedStatus = value;
                                     // setDataOnBranchChange();
                                   },
@@ -488,10 +512,6 @@ class _MemberProfileState extends State<MemberProfile>
                                 height:
                                     MediaQuery.of(context).size.height * 0.07,
                                 child: TextFormField(
-                                  inputFormatters: [
-                                    FilteringTextInputFormatter.allow(
-                                        RegExp(r'[0-9]{0,10}$')),
-                                  ],
                                   decoration: const InputDecoration(
                                       border: OutlineInputBorder(
                                         borderSide: BorderSide(
@@ -641,7 +661,7 @@ class _MemberProfileState extends State<MemberProfile>
                                 child: TextFormField(
                                   inputFormatters: [
                                     FilteringTextInputFormatter.allow(
-                                        RegExp(r'[a-zA-Z ]{0,20}$')),
+                                        RegExp(r'[a-zA-Z 0-9.]{0,20}$')),
                                   ],
                                   decoration: const InputDecoration(
                                       border: OutlineInputBorder(
@@ -789,14 +809,14 @@ class _MemberProfileState extends State<MemberProfile>
                         'primary_mobile_no': primaryMobileNo.text == ''
                             ? null
                             : primaryMobileNo.text,
-                        'email_id': email.text == '' ? null : email.text,
+                        'email': email.text == '' ? null : email.text,
                         'addr': address.text == '' ? null : address.text,
                         'reference': referenceController.text == ''
                             ? null
                             : referenceController.text,
-                        'trainer_id': trainerController.text == ''
-                            ? null
-                            : trainerController.text,
+                        'trainer_id': selectedTrainer != null
+                            ? selectedTrainer['id']
+                            : null,
                         'age': ageController.text == ''
                             ? null
                             : ageController.text,
@@ -1029,7 +1049,7 @@ class _MemberProfileState extends State<MemberProfile>
                                                   color: Colors.grey[400]),
                                               const SizedBox(width: 5),
                                               NormalGreyText(
-                                                  'Personal Trainer - ${membersData['personal_trainer']?.toString() ?? ''}')
+                                                  'Personal Trainer - ${membersData['trainer_fname']?.toString() ?? ''} ${membersData['trainer_lname']?.toString() ?? ''}')
                                             ]),
                                         const SizedBox(height: 10),
                                         Row(
@@ -1733,10 +1753,14 @@ class _MemberProfileState extends State<MemberProfile>
                                 Expanded(
                                     child: Container(
                                         alignment: Alignment.center,
-                                        child: const CircleAvatar(
-                                            radius: 70,
-                                            backgroundImage: AssetImage(
-                                                'assets/images/person.png'))))
+                                        child: SizedBox(
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.3,
+                                          child: Lottie.asset(
+                                              'assets/animations/member_profile_animation.json'),
+                                        )))
                               ])),
                         ]),
                   )

@@ -14,3 +14,5 @@ DateTime parseDate(String dateStr) {
   int year = int.parse(parts[2]);
   return DateTime(year, month, day);
 }
+
+var globalSelectedBranch;
