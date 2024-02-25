@@ -273,7 +273,7 @@ class _Dashboard1ViewState extends State<Dashboard1View> {
                   child: FileInfoCard(
                     fieldName: "Payment Received",
                     value: branchData['yearly_paid']?.toString() ?? '-',
-                    svgSrc: 'assets/icon/people.png',
+                    svgSrc: 'assets/icon/budget.png',
                   ),
                 ),
                 SizedBox(
@@ -281,7 +281,7 @@ class _Dashboard1ViewState extends State<Dashboard1View> {
                   child: FileInfoCard(
                     fieldName: "Payment Pending",
                     value: branchData['yearly_unpaid']?.toString() ?? '-',
-                    svgSrc: 'assets/icon/people.png',
+                    svgSrc: 'assets/icon/budget.png',
                   ),
                 ),
               ],

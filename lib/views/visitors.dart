@@ -882,120 +882,162 @@ class _VisitorsState extends State<VisitorsView> {
                               Get.back();
                             },
                             onPrimaryButtonPressed: () {
-                              showDialog(
-                                  barrierDismissible: false,
-                                  context: context,
-                                  builder: (context) {
-                                    return FutureBuilder(
-                                      future: visitorController.editVisitor({
-                                        'first_name':
-                                            firstNameController.text == ''
-                                                ? null
-                                                : firstNameController.text,
-                                        'last_name':
-                                            lastNameController.text == ''
-                                                ? null
-                                                : lastNameController.text,
-                                        'primary_mobile_no':
-                                            primaryMobileNo.text == ''
-                                                ? null
-                                                : primaryMobileNo.text,
-                                        'email': email.text == ''
-                                            ? null
-                                            : email.text,
-                                        'addr': address.text == ''
-                                            ? null
-                                            : address.text,
-                                        'age': ageController.text == ''
-                                            ? null
-                                            : ageController.text,
-                                      }, row.data['id']),
-                                      builder: (context, snapshot) {
-                                        return snapshot.connectionState ==
-                                                ConnectionState.waiting
-                                            ? GenericDialogBox(
-                                                enableSecondaryButton: false,
-                                                isLoader: true,
-                                                content: Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: SizedBox(
-                                                    width:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .width *
-                                                            0.04,
-                                                    height:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .width *
-                                                            0.06,
-                                                    child: const Center(
-                                                      child: Column(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .center,
-                                                        children: [
-                                                          CircularProgressIndicator(
-                                                            color:
-                                                                primaryDarkBlueColor,
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              )
-                                            : GenericDialogBox(
-                                                closeButtonEnabled: false,
-                                                enablePrimaryButton: true,
-                                                enableSecondaryButton: false,
-                                                isLoader: false,
-                                                content: Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: SizedBox(
-                                                    width:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .width *
-                                                            0.04,
-                                                    height:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .width *
-                                                            0.06,
-                                                    child: Center(
-                                                      child: Column(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .center,
-                                                        children: [
-                                                          Text(
-                                                            snapshot.data![
-                                                                'message'],
-                                                            style:
-                                                                const TextStyle(
+                              if (firstNameController.text.isEmpty ||
+                                  lastNameController.text.isEmpty ||
+                                  primaryMobileNo.text.isEmpty) {
+                                showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return GenericDialogBox(
+                                        enableSecondaryButton: false,
+                                        primaryButtonText: 'Ok',
+                                        isLoader: false,
+                                        content: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: SizedBox(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.04,
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.06,
+                                            child: const Center(
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Text(
+                                                      'Please Enter All Mandatory Field')
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        onPrimaryButtonPressed: () {
+                                          Get.back();
+                                        },
+                                      );
+                                    });
+                              } else {
+                                showDialog(
+                                    barrierDismissible: false,
+                                    context: context,
+                                    builder: (context) {
+                                      return FutureBuilder(
+                                        future: visitorController.editVisitor({
+                                          'first_name':
+                                              firstNameController.text == ''
+                                                  ? null
+                                                  : firstNameController.text,
+                                          'last_name':
+                                              lastNameController.text == ''
+                                                  ? null
+                                                  : lastNameController.text,
+                                          'primary_mobile_no':
+                                              primaryMobileNo.text == ''
+                                                  ? null
+                                                  : primaryMobileNo.text,
+                                          'email': email.text == ''
+                                              ? null
+                                              : email.text,
+                                          'addr': address.text == ''
+                                              ? null
+                                              : address.text,
+                                          'age': ageController.text == ''
+                                              ? null
+                                              : ageController.text,
+                                        }, row.data['id']),
+                                        builder: (context, snapshot) {
+                                          return snapshot.connectionState ==
+                                                  ConnectionState.waiting
+                                              ? GenericDialogBox(
+                                                  enableSecondaryButton: false,
+                                                  isLoader: true,
+                                                  content: Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    child: SizedBox(
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width *
+                                                              0.04,
+                                                      height:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width *
+                                                              0.06,
+                                                      child: const Center(
+                                                        child: Column(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                          children: [
+                                                            CircularProgressIndicator(
                                                               color:
-                                                                  Colors.white,
+                                                                  primaryDarkBlueColor,
                                                             ),
-                                                          )
-                                                        ],
+                                                          ],
+                                                        ),
                                                       ),
                                                     ),
                                                   ),
-                                                ),
-                                                primaryButtonText: 'Ok',
-                                                onPrimaryButtonPressed:
-                                                    () async {
-                                                  setDataOnBranchChange();
-                                                  Get.back();
-                                                  Get.back();
-                                                },
-                                              );
-                                      },
-                                    );
-                                  });
+                                                )
+                                              : GenericDialogBox(
+                                                  closeButtonEnabled: false,
+                                                  enablePrimaryButton: true,
+                                                  enableSecondaryButton: false,
+                                                  isLoader: false,
+                                                  content: Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    child: SizedBox(
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width *
+                                                              0.04,
+                                                      height:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width *
+                                                              0.06,
+                                                      child: Center(
+                                                        child: Column(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                          children: [
+                                                            Text(
+                                                              snapshot.data![
+                                                                  'message'],
+                                                              style:
+                                                                  const TextStyle(
+                                                                color: Colors
+                                                                    .white,
+                                                              ),
+                                                            )
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  primaryButtonText: 'Ok',
+                                                  onPrimaryButtonPressed:
+                                                      () async {
+                                                    setDataOnBranchChange();
+                                                    Get.back();
+                                                    Get.back();
+                                                  },
+                                                );
+                                        },
+                                      );
+                                    });
+                              }
                             },
                           );
                         });
@@ -1514,7 +1556,7 @@ class _VisitorsState extends State<VisitorsView> {
                                         children: [
                                           const Flexible(
                                             child: SelectableText(
-                                              'First Name',
+                                              'First Name *',
                                               style: TextStyle(
                                                   color: Colors.white,
                                                   fontWeight: FontWeight.bold),
@@ -1579,7 +1621,7 @@ class _VisitorsState extends State<VisitorsView> {
                                         children: [
                                           const Flexible(
                                             child: SelectableText(
-                                              'Last Name',
+                                              'Last Name *',
                                               style: TextStyle(
                                                   color: Colors.white,
                                                   fontWeight: FontWeight.bold),
@@ -1645,7 +1687,7 @@ class _VisitorsState extends State<VisitorsView> {
                                         children: [
                                           const Flexible(
                                             child: SelectableText(
-                                              'Primary Mobile No',
+                                              'Primary Mobile No *',
                                               style: TextStyle(
                                                   color: Colors.white,
                                                   fontWeight: FontWeight.bold),
@@ -1893,107 +1935,146 @@ class _VisitorsState extends State<VisitorsView> {
                           Get.back();
                         },
                         onPrimaryButtonPressed: () {
-                          showDialog(
-                              barrierDismissible: false,
-                              context: context,
-                              builder: (context) {
-                                return FutureBuilder(
-                                  future: visitorController.addVisitor({
-                                    'branch_id':
-                                        branchId ?? selectedBranch['id'],
-                                    'first_name': firstNameController.text == ''
-                                        ? null
-                                        : firstNameController.text,
-                                    'last_name': lastNameController.text == ''
-                                        ? null
-                                        : lastNameController.text,
-                                    'primary_mobile_no':
-                                        primaryMobileNo.text == ''
-                                            ? null
-                                            : primaryMobileNo.text,
-                                    'email':
-                                        email.text == '' ? null : email.text,
-                                    'addr': address.text == ''
-                                        ? null
-                                        : address.text,
-                                    'age': ageController.text == ''
-                                        ? null
-                                        : ageController.text,
-                                  }),
-                                  builder: (context, snapshot) {
-                                    return snapshot.connectionState ==
-                                            ConnectionState.waiting
-                                        ? GenericDialogBox(
-                                            enableSecondaryButton: false,
-                                            isLoader: true,
-                                            content: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              child: SizedBox(
-                                                width: MediaQuery.of(context)
-                                                        .size
-                                                        .width *
-                                                    0.04,
-                                                height: MediaQuery.of(context)
-                                                        .size
-                                                        .width *
-                                                    0.06,
-                                                child: const Center(
-                                                  child: Column(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      CircularProgressIndicator(
-                                                        color:
-                                                            primaryDarkBlueColor,
-                                                      ),
-                                                    ],
+                          if (firstNameController.text.isEmpty ||
+                              lastNameController.text.isEmpty ||
+                              primaryMobileNo.text.isEmpty) {
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return GenericDialogBox(
+                                    enableSecondaryButton: false,
+                                    primaryButtonText: 'Ok',
+                                    isLoader: false,
+                                    content: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.04,
+                                        height:
+                                            MediaQuery.of(context).size.width *
+                                                0.06,
+                                        child: const Center(
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Text(
+                                                  'Please Enter All Mandatory Field')
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    onPrimaryButtonPressed: () {
+                                      Get.back();
+                                    },
+                                  );
+                                });
+                          } else {
+                            showDialog(
+                                barrierDismissible: false,
+                                context: context,
+                                builder: (context) {
+                                  return FutureBuilder(
+                                    future: visitorController.addVisitor({
+                                      'branch_id':
+                                          branchId ?? selectedBranch['id'],
+                                      'first_name':
+                                          firstNameController.text == ''
+                                              ? null
+                                              : firstNameController.text,
+                                      'last_name': lastNameController.text == ''
+                                          ? null
+                                          : lastNameController.text,
+                                      'primary_mobile_no':
+                                          primaryMobileNo.text == ''
+                                              ? null
+                                              : primaryMobileNo.text,
+                                      'email':
+                                          email.text == '' ? null : email.text,
+                                      'addr': address.text == ''
+                                          ? null
+                                          : address.text,
+                                      'age': ageController.text == ''
+                                          ? null
+                                          : ageController.text,
+                                    }),
+                                    builder: (context, snapshot) {
+                                      return snapshot.connectionState ==
+                                              ConnectionState.waiting
+                                          ? GenericDialogBox(
+                                              enableSecondaryButton: false,
+                                              isLoader: true,
+                                              content: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: SizedBox(
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.04,
+                                                  height: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.06,
+                                                  child: const Center(
+                                                    child: Column(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        CircularProgressIndicator(
+                                                          color:
+                                                              primaryDarkBlueColor,
+                                                        ),
+                                                      ],
+                                                    ),
                                                   ),
                                                 ),
                                               ),
-                                            ),
-                                          )
-                                        : GenericDialogBox(
-                                            closeButtonEnabled: false,
-                                            enablePrimaryButton: true,
-                                            enableSecondaryButton: false,
-                                            isLoader: false,
-                                            content: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              child: SizedBox(
-                                                width: MediaQuery.of(context)
-                                                        .size
-                                                        .width *
-                                                    0.04,
-                                                height: MediaQuery.of(context)
-                                                        .size
-                                                        .width *
-                                                    0.06,
-                                                child: Center(
-                                                  child: Column(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      Text(snapshot
-                                                          .data!['message'])
-                                                    ],
+                                            )
+                                          : GenericDialogBox(
+                                              closeButtonEnabled: false,
+                                              enablePrimaryButton: true,
+                                              enableSecondaryButton: false,
+                                              isLoader: false,
+                                              content: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: SizedBox(
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.04,
+                                                  height: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.06,
+                                                  child: Center(
+                                                    child: Column(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        Text(snapshot
+                                                            .data!['message'])
+                                                      ],
+                                                    ),
                                                   ),
                                                 ),
                                               ),
-                                            ),
-                                            primaryButtonText: 'Ok',
-                                            onPrimaryButtonPressed: () async {
-                                              setDataOnBranchChange();
-                                              Get.back();
-                                              Get.back();
-                                            },
-                                          );
-                                  },
-                                );
-                              });
+                                              primaryButtonText: 'Ok',
+                                              onPrimaryButtonPressed: () async {
+                                                setDataOnBranchChange();
+                                                Get.back();
+                                                Get.back();
+                                              },
+                                            );
+                                    },
+                                  );
+                                });
+                          }
                         },
                       );
                     });

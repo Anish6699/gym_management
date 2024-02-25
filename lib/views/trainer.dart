@@ -872,128 +872,172 @@ class _MembersState extends State<TrainerView> {
                               Get.back();
                             },
                             onPrimaryButtonPressed: () {
-                              showDialog(
-                                  barrierDismissible: false,
-                                  context: context,
-                                  builder: (context) {
-                                    return FutureBuilder(
-                                      future: trainerController.editTrainer({
-                                        'first_name':
-                                            firstNameController.text == ''
-                                                ? null
-                                                : firstNameController.text,
-                                        'last_name':
-                                            lastNameController.text == ''
-                                                ? null
-                                                : lastNameController.text,
-                                        'primary_mobile_no':
-                                            primaryMobileNo.text == ''
-                                                ? null
-                                                : primaryMobileNo.text,
-                                        'email': email.text == ''
-                                            ? null
-                                            : email.text,
-                                        'addr': address.text == ''
-                                            ? null
-                                            : address.text,
-                                        'reference':
-                                            referenceController.text == ''
-                                                ? null
-                                                : referenceController.text,
-                                        'experience':
-                                            experienceController.text == ''
-                                                ? null
-                                                : experienceController.text,
-                                        'secondary_mobile_no':
-                                            secondaryMobileNo.text == ''
-                                                ? null
-                                                : secondaryMobileNo.text,
-                                      }, row.data['id']),
-                                      builder: (context, snapshot) {
-                                        return snapshot.connectionState ==
-                                                ConnectionState.waiting
-                                            ? GenericDialogBox(
-                                                enableSecondaryButton: false,
-                                                isLoader: true,
-                                                content: Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: SizedBox(
-                                                    width:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .width *
-                                                            0.04,
-                                                    height:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .width *
-                                                            0.06,
-                                                    child: const Center(
-                                                      child: Column(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .center,
-                                                        children: [
-                                                          CircularProgressIndicator(
-                                                            color:
-                                                                primaryDarkBlueColor,
-                                                          ),
-                                                        ],
+                              if (firstNameController.text.isEmpty ||
+                                  lastNameController.text.isEmpty ||
+                                  primaryMobileNo.text.isEmpty ||
+                                  experienceController.text.isEmpty ||
+                                  address.text.isEmpty) {
+                                showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return GenericDialogBox(
+                                        enableSecondaryButton: false,
+                                        primaryButtonText: 'Ok',
+                                        isLoader: false,
+                                        content: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: SizedBox(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.04,
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.06,
+                                            child: const Center(
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Text(
+                                                      'Please Enter All Mandatory Field')
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        onPrimaryButtonPressed: () {
+                                          Get.back();
+                                        },
+                                      );
+                                    });
+                              } else {
+                                showDialog(
+                                    barrierDismissible: false,
+                                    context: context,
+                                    builder: (context) {
+                                      return FutureBuilder(
+                                        future: trainerController.editTrainer({
+                                          'first_name':
+                                              firstNameController.text == ''
+                                                  ? null
+                                                  : firstNameController.text,
+                                          'last_name':
+                                              lastNameController.text == ''
+                                                  ? null
+                                                  : lastNameController.text,
+                                          'primary_mobile_no':
+                                              primaryMobileNo.text == ''
+                                                  ? null
+                                                  : primaryMobileNo.text,
+                                          'email': email.text == ''
+                                              ? null
+                                              : email.text,
+                                          'addr': address.text == ''
+                                              ? null
+                                              : address.text,
+                                          'reference':
+                                              referenceController.text == ''
+                                                  ? null
+                                                  : referenceController.text,
+                                          'experience':
+                                              experienceController.text == ''
+                                                  ? null
+                                                  : experienceController.text,
+                                          'secondary_mobile_no':
+                                              secondaryMobileNo.text == ''
+                                                  ? null
+                                                  : secondaryMobileNo.text,
+                                        }, row.data['id']),
+                                        builder: (context, snapshot) {
+                                          return snapshot.connectionState ==
+                                                  ConnectionState.waiting
+                                              ? GenericDialogBox(
+                                                  enableSecondaryButton: false,
+                                                  isLoader: true,
+                                                  content: Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    child: SizedBox(
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width *
+                                                              0.04,
+                                                      height:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width *
+                                                              0.06,
+                                                      child: const Center(
+                                                        child: Column(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                          children: [
+                                                            CircularProgressIndicator(
+                                                              color:
+                                                                  primaryDarkBlueColor,
+                                                            ),
+                                                          ],
+                                                        ),
                                                       ),
                                                     ),
                                                   ),
-                                                ),
-                                              )
-                                            : GenericDialogBox(
-                                                closeButtonEnabled: false,
-                                                enablePrimaryButton: true,
-                                                enableSecondaryButton: false,
-                                                isLoader: false,
-                                                content: Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: SizedBox(
-                                                    width:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .width *
-                                                            0.04,
-                                                    height:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .width *
-                                                            0.06,
-                                                    child: Center(
-                                                      child: Column(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .center,
-                                                        children: [
-                                                          Text(snapshot
-                                                              .data!['message'])
-                                                        ],
+                                                )
+                                              : GenericDialogBox(
+                                                  closeButtonEnabled: false,
+                                                  enablePrimaryButton: true,
+                                                  enableSecondaryButton: false,
+                                                  isLoader: false,
+                                                  content: Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    child: SizedBox(
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width *
+                                                              0.04,
+                                                      height:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width *
+                                                              0.06,
+                                                      child: Center(
+                                                        child: Column(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                          children: [
+                                                            Text(snapshot.data![
+                                                                'message'])
+                                                          ],
+                                                        ),
                                                       ),
                                                     ),
                                                   ),
-                                                ),
-                                                primaryButtonText: 'Ok',
-                                                onPrimaryButtonPressed:
-                                                    () async {
-                                                  Get.offAllNamed(
-                                                    TrainerView
-                                                        .trainerRouteName,
-                                                  );
-                                                },
-                                              );
-                                      },
-                                    );
-                                  });
+                                                  primaryButtonText: 'Ok',
+                                                  onPrimaryButtonPressed:
+                                                      () async {
+                                                    Get.offAllNamed(
+                                                      TrainerView
+                                                          .trainerRouteName,
+                                                    );
+                                                  },
+                                                );
+                                        },
+                                      );
+                                    });
+                              }
                             },
                           );
                         });
                   },
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.edit,
                     color: primaryColor,
                   )),
@@ -1087,9 +1131,10 @@ class _MembersState extends State<TrainerView> {
                                                           Text(
                                                             snapshot.data![
                                                                 'message'],
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .white),
+                                                            style:
+                                                                const TextStyle(
+                                                                    color: Colors
+                                                                        .white),
                                                           )
                                                         ],
                                                       ),
@@ -1111,7 +1156,7 @@ class _MembersState extends State<TrainerView> {
                           );
                         });
                   },
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.delete,
                     color: Colors.red,
                   ))
@@ -1268,66 +1313,6 @@ class _MembersState extends State<TrainerView> {
               SizedBox(
                 width: mediaQuery.width * 0.01,
               ),
-              Container(
-                width: MediaQuery.of(context).size.width * 0.2,
-                height: MediaQuery.of(context).size.height * 0.08,
-                decoration: BoxDecoration(
-                  color: secondaryColor,
-                  borderRadius: const BorderRadius.all(Radius.circular(5)),
-                  border: Border.all(color: Colors.transparent),
-                ),
-                child: DropdownButtonFormField(
-                  isExpanded: true,
-                  elevation: 1,
-                  items: ['All', 'Active', 'In Active', 'Payment Pending'].map(
-                    (item) {
-                      return DropdownMenuItem(
-                        value: item,
-                        child: Text(
-                          item,
-                          style: TextStyle(
-                              fontSize:
-                                  MediaQuery.of(context).size.width * 0.01,
-                              color: Colors.white),
-                        ),
-                      );
-                    },
-                  ).toList(),
-                  onChanged: (value) {},
-                  borderRadius: BorderRadius.circular(4),
-                  style: TextStyle(
-                      fontSize: MediaQuery.of(context).size.width * 0.08,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold),
-                  icon: Icon(
-                    Icons.keyboard_arrow_down_rounded,
-                    color: Colors.white,
-                    size: MediaQuery.of(context).size.width * 0.015,
-                  ),
-                  decoration: InputDecoration(
-                    hintText: "Select Filter",
-                    hintStyle: TextStyle(
-                        fontSize: MediaQuery.of(context).size.width * 0.01,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold),
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 10),
-                    fillColor: Colors.white,
-                    border: const OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Colors.transparent,
-                      ),
-                    ),
-                    focusedBorder: const OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Colors.transparent,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                width: mediaQuery.width * 0.01,
-              ),
             ],
           ),
           SizedBox(
@@ -1476,7 +1461,7 @@ class _MembersState extends State<TrainerView> {
                                         children: [
                                           const Flexible(
                                             child: SelectableText(
-                                              'First Name',
+                                              'First Name *',
                                               style: TextStyle(
                                                   fontWeight: FontWeight.bold),
                                             ),
@@ -1539,7 +1524,7 @@ class _MembersState extends State<TrainerView> {
                                         children: [
                                           const Flexible(
                                             child: SelectableText(
-                                              'Last Name',
+                                              'Last Name *',
                                               style: TextStyle(
                                                   fontWeight: FontWeight.bold),
                                             ),
@@ -1603,7 +1588,7 @@ class _MembersState extends State<TrainerView> {
                                         children: [
                                           const Flexible(
                                             child: SelectableText(
-                                              'Primary Mobile No',
+                                              'Primary Mobile No *',
                                               style: TextStyle(
                                                   fontWeight: FontWeight.bold),
                                             ),
@@ -1666,7 +1651,7 @@ class _MembersState extends State<TrainerView> {
                                         children: [
                                           const Flexible(
                                             child: SelectableText(
-                                              'Experience',
+                                              'Experience *',
                                               style: TextStyle(
                                                   fontWeight: FontWeight.bold),
                                             ),
@@ -1782,7 +1767,7 @@ class _MembersState extends State<TrainerView> {
                                         children: [
                                           const Flexible(
                                             child: SelectableText(
-                                              'Address',
+                                              'Address *',
                                               style: TextStyle(
                                                   fontWeight: FontWeight.bold),
                                             ),
@@ -1900,115 +1885,157 @@ class _MembersState extends State<TrainerView> {
                           Get.back();
                         },
                         onPrimaryButtonPressed: () {
-                          showDialog(
-                              barrierDismissible: false,
-                              context: context,
-                              builder: (context) {
-                                return FutureBuilder(
-                                  future: trainerController.addTrainer({
-                                    'branch_id':
-                                        branchId ?? selectedBranch['id'],
-                                    'first_name': firstNameController.text == ''
-                                        ? null
-                                        : firstNameController.text,
-                                    'last_name': lastNameController.text == ''
-                                        ? null
-                                        : lastNameController.text,
-                                    'primary_mobile_no':
-                                        primaryMobileNo.text == ''
-                                            ? null
-                                            : primaryMobileNo.text,
-                                    'email':
-                                        email.text == '' ? null : email.text,
-                                    'addr': address.text == ''
-                                        ? null
-                                        : address.text,
-                                    'reference': referenceController.text == ''
-                                        ? null
-                                        : referenceController.text,
-                                    'experience':
-                                        experienceController.text == ''
-                                            ? null
-                                            : experienceController.text,
-                                    'secondary_mobile_no':
-                                        secondaryMobileNo.text == ''
-                                            ? null
-                                            : secondaryMobileNo.text,
-                                  }),
-                                  builder: (context, snapshot) {
-                                    return snapshot.connectionState ==
-                                            ConnectionState.waiting
-                                        ? GenericDialogBox(
-                                            enableSecondaryButton: false,
-                                            isLoader: true,
-                                            content: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              child: SizedBox(
-                                                width: MediaQuery.of(context)
-                                                        .size
-                                                        .width *
-                                                    0.04,
-                                                height: MediaQuery.of(context)
-                                                        .size
-                                                        .width *
-                                                    0.06,
-                                                child: const Center(
-                                                  child: Column(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      CircularProgressIndicator(
-                                                        color:
-                                                            primaryDarkBlueColor,
-                                                      ),
-                                                    ],
+                          if (firstNameController.text.isEmpty ||
+                              lastNameController.text.isEmpty ||
+                              primaryMobileNo.text.isEmpty ||
+                              experienceController.text.isEmpty ||
+                              address.text.isEmpty) {
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return GenericDialogBox(
+                                    enableSecondaryButton: false,
+                                    primaryButtonText: 'Ok',
+                                    isLoader: false,
+                                    content: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.04,
+                                        height:
+                                            MediaQuery.of(context).size.width *
+                                                0.06,
+                                        child: const Center(
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Text(
+                                                  'Please Enter All Mandatory Field')
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    onPrimaryButtonPressed: () {
+                                      Get.back();
+                                    },
+                                  );
+                                });
+                          } else {
+                            showDialog(
+                                barrierDismissible: false,
+                                context: context,
+                                builder: (context) {
+                                  return FutureBuilder(
+                                    future: trainerController.addTrainer({
+                                      'branch_id':
+                                          branchId ?? selectedBranch['id'],
+                                      'first_name':
+                                          firstNameController.text == ''
+                                              ? null
+                                              : firstNameController.text,
+                                      'last_name': lastNameController.text == ''
+                                          ? null
+                                          : lastNameController.text,
+                                      'primary_mobile_no':
+                                          primaryMobileNo.text == ''
+                                              ? null
+                                              : primaryMobileNo.text,
+                                      'email':
+                                          email.text == '' ? null : email.text,
+                                      'addr': address.text == ''
+                                          ? null
+                                          : address.text,
+                                      'reference':
+                                          referenceController.text == ''
+                                              ? null
+                                              : referenceController.text,
+                                      'experience':
+                                          experienceController.text == ''
+                                              ? null
+                                              : experienceController.text,
+                                      'secondary_mobile_no':
+                                          secondaryMobileNo.text == ''
+                                              ? null
+                                              : secondaryMobileNo.text,
+                                    }),
+                                    builder: (context, snapshot) {
+                                      return snapshot.connectionState ==
+                                              ConnectionState.waiting
+                                          ? GenericDialogBox(
+                                              enableSecondaryButton: false,
+                                              isLoader: true,
+                                              content: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: SizedBox(
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.04,
+                                                  height: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.06,
+                                                  child: const Center(
+                                                    child: Column(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        CircularProgressIndicator(
+                                                          color:
+                                                              primaryDarkBlueColor,
+                                                        ),
+                                                      ],
+                                                    ),
                                                   ),
                                                 ),
                                               ),
-                                            ),
-                                          )
-                                        : GenericDialogBox(
-                                            closeButtonEnabled: false,
-                                            enablePrimaryButton: true,
-                                            enableSecondaryButton: false,
-                                            isLoader: false,
-                                            content: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              child: SizedBox(
-                                                width: MediaQuery.of(context)
-                                                        .size
-                                                        .width *
-                                                    0.04,
-                                                height: MediaQuery.of(context)
-                                                        .size
-                                                        .width *
-                                                    0.06,
-                                                child: Center(
-                                                  child: Column(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      Text(snapshot
-                                                          .data!['message'])
-                                                    ],
+                                            )
+                                          : GenericDialogBox(
+                                              closeButtonEnabled: false,
+                                              enablePrimaryButton: true,
+                                              enableSecondaryButton: false,
+                                              isLoader: false,
+                                              content: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: SizedBox(
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.04,
+                                                  height: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.06,
+                                                  child: Center(
+                                                    child: Column(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        Text(snapshot
+                                                            .data!['message'])
+                                                      ],
+                                                    ),
                                                   ),
                                                 ),
                                               ),
-                                            ),
-                                            primaryButtonText: 'Ok',
-                                            onPrimaryButtonPressed: () async {
-                                              Get.offAllNamed(
-                                                TrainerView.trainerRouteName,
-                                              );
-                                            },
-                                          );
-                                  },
-                                );
-                              });
+                                              primaryButtonText: 'Ok',
+                                              onPrimaryButtonPressed: () async {
+                                                Get.offAllNamed(
+                                                  TrainerView.trainerRouteName,
+                                                );
+                                              },
+                                            );
+                                    },
+                                  );
+                                });
+                          }
                         },
                       );
                     });

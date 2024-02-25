@@ -93,10 +93,10 @@ class _OrdinalComboBarLineChartState extends State<StackBarGraphWidget> {
                 ),
               ),
 
-              // defaultRenderer: charts.BarRendererConfig(
-              //   groupingType: charts.BarGroupingType.stacked,
-              //   strokeWidthPx: 2.0,
-              // ),
+              defaultRenderer: charts.BarRendererConfig(
+                groupingType: charts.BarGroupingType.stacked,
+                strokeWidthPx: 2.0,
+              ),
             ),
           ),
         ],
