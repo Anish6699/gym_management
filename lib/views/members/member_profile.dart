@@ -1750,17 +1750,15 @@ class _MemberProfileState extends State<MemberProfile>
                                             ))
                                       ])),
                                 ),
-                                Expanded(
-                                    child: Container(
-                                        alignment: Alignment.center,
-                                        child: SizedBox(
-                                          height: MediaQuery.of(context)
-                                                  .size
-                                                  .height *
+                                Container(
+                                    alignment: Alignment.center,
+                                    child: SizedBox(
+                                      height:
+                                          MediaQuery.of(context).size.height *
                                               0.3,
-                                          child: Lottie.asset(
-                                              'assets/animations/member_profile_animation.json'),
-                                        )))
+                                      child: Lottie.asset(
+                                          'assets/animations/member_profile_animation.json'),
+                                    ))
                               ])),
                         ]),
                   )

@@ -571,17 +571,16 @@ class _SendNotificationState extends State<SendNotificationView>
                                     )
                                   ],
                                 )),
-                            Expanded(
-                                child: Container(
-                                    alignment: Alignment.topRight,
-                                    child: CircleAvatar(
-                                      backgroundColor: Colors.transparent,
-                                      radius: 70,
-                                      child: Image.asset(
-                                          'assets/icon/notification.png'),
-                                      // backgroundImage: AssetImage(
-                                      //     'assets/images/person.png')
-                                    )))
+                            Container(
+                                alignment: Alignment.topRight,
+                                child: CircleAvatar(
+                                  backgroundColor: Colors.transparent,
+                                  radius: 70,
+                                  child: Image.asset(
+                                      'assets/icon/notification.png'),
+                                  // backgroundImage: AssetImage(
+                                  //     'assets/images/person.png')
+                                ))
                           ])),
                     ]),
               ),
