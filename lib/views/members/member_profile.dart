@@ -82,6 +82,9 @@ class _MemberProfileState extends State<MemberProfile>
   }
 
   initializeData() async {
+    // if (Get.arguments == null) {
+    //   Get.toNamed(MembersView.membersRouteName);
+    // } else {}
     var a = await memmberController.getSingleMember(Get.arguments);
     if (a.toString() == 'null' || a.toString() == 'Null') {
       Get.offAllNamed(MembersView.membersRouteName);
@@ -244,6 +247,9 @@ class _MemberProfileState extends State<MemberProfile>
                         ),
                       ],
                     ),
+                    const SizedBox(
+                      height: 20,
+                    ),
                     Row(
                       children: [
                         SizedBox(
@@ -344,6 +350,9 @@ class _MemberProfileState extends State<MemberProfile>
                           ),
                         ),
                       ],
+                    ),
+                    const SizedBox(
+                      height: 20,
                     ),
                     Row(
                       children: [
@@ -491,6 +500,9 @@ class _MemberProfileState extends State<MemberProfile>
                         ),
                       ],
                     ),
+                    const SizedBox(
+                      height: 20,
+                    ),
                     Row(
                       children: [
                         SizedBox(
@@ -587,6 +599,9 @@ class _MemberProfileState extends State<MemberProfile>
                           ),
                         ),
                       ],
+                    ),
+                    const SizedBox(
+                      height: 20,
                     ),
                     Row(
                       children: [
@@ -689,6 +704,9 @@ class _MemberProfileState extends State<MemberProfile>
                         ),
                       ],
                     ),
+                    const SizedBox(
+                      height: 20,
+                    ),
                     Row(
                       children: [
                         SizedBox(
@@ -785,6 +803,9 @@ class _MemberProfileState extends State<MemberProfile>
                           ),
                         ),
                       ],
+                    ),
+                    const SizedBox(
+                      height: 20,
                     ),
                   ],
                 ),

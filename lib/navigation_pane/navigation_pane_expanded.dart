@@ -52,32 +52,6 @@ class _InventoryNavigationPaneExpandedState
     setState(() {});
   }
 
-  String getAssetPath() {
-    switch (widget.selected) {
-      case "dashboard":
-        return 'assets/icon/business-report.png';
-      case "admin-dashboard":
-        return 'assets/icon/business-report.png';
-      case "branch-dashboard":
-        return 'assets/icon/business-report.png';
-      case "members":
-        return 'assets/icon/people.png';
-      case "invite-members":
-        return 'assets/icon/notification.png';
-      case "visitors":
-        return 'assets/icon/visitors.png';
-      case "trainer":
-        return 'assets/icon/coach.png';
-      case "allAdmin":
-        return 'assets/icon/coach.png';
-      case "expense-tracker":
-        return 'assets/icon/budget.png';
-      default:
-        // Return a default asset path in case the selected value does not match any case
-        return 'assets/icon/default.png';
-    }
-  }
-
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -105,9 +79,7 @@ class _InventoryNavigationPaneExpandedState
                         child: Padding(
                             padding: const EdgeInsets.all(24.0),
                             child: Lottie.asset(
-                                'assets/animations/member_animation.json')
-                            // Image.asset(getAssetPath()),
-                            )
+                                'assets/animations/football_animation.json'))
 
                         //  Image.asset("assets/manGym.png"),
                         ),

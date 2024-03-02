@@ -602,6 +602,9 @@ class _VisitorsState extends State<VisitorsView> {
                                         ),
                                       ],
                                     ),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
                                     Row(
                                       children: [
                                         SizedBox(
@@ -743,6 +746,9 @@ class _VisitorsState extends State<VisitorsView> {
                                         ),
                                       ],
                                     ),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
                                     Row(
                                       children: [
                                         SizedBox(
@@ -873,6 +879,9 @@ class _VisitorsState extends State<VisitorsView> {
                                           ),
                                         ),
                                       ],
+                                    ),
+                                    const SizedBox(
+                                      height: 20,
                                     ),
                                   ],
                                 ),
@@ -1675,6 +1684,9 @@ class _VisitorsState extends State<VisitorsView> {
                                     ),
                                   ],
                                 ),
+                                const SizedBox(
+                                  height: 20,
+                                ),
                                 Row(
                                   children: [
                                     SizedBox(
@@ -1805,6 +1817,9 @@ class _VisitorsState extends State<VisitorsView> {
                                       ),
                                     ),
                                   ],
+                                ),
+                                const SizedBox(
+                                  height: 20,
                                 ),
                                 Row(
                                   children: [

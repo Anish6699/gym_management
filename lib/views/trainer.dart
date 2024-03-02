@@ -527,6 +527,9 @@ class _MembersState extends State<TrainerView> {
                                         ),
                                       ],
                                     ),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
                                     Row(
                                       children: [
                                         SizedBox(
@@ -663,6 +666,9 @@ class _MembersState extends State<TrainerView> {
                                         ),
                                       ],
                                     ),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
                                     Row(
                                       children: [
                                         SizedBox(
@@ -794,6 +800,9 @@ class _MembersState extends State<TrainerView> {
                                         ),
                                       ],
                                     ),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
                                     Row(
                                       children: [
                                         SizedBox(
@@ -863,6 +872,9 @@ class _MembersState extends State<TrainerView> {
                                           ),
                                         ),
                                       ],
+                                    ),
+                                    const SizedBox(
+                                      height: 20,
                                     ),
                                   ],
                                 ),
@@ -1576,6 +1588,9 @@ class _MembersState extends State<TrainerView> {
                                     ),
                                   ],
                                 ),
+                                const SizedBox(
+                                  height: 20,
+                                ),
                                 Row(
                                   children: [
                                     SizedBox(
@@ -1697,6 +1712,9 @@ class _MembersState extends State<TrainerView> {
                                     ),
                                   ],
                                 ),
+                                const SizedBox(
+                                  height: 20,
+                                ),
                                 Row(
                                   children: [
                                     SizedBox(
@@ -1814,6 +1832,9 @@ class _MembersState extends State<TrainerView> {
                                     ),
                                   ],
                                 ),
+                                const SizedBox(
+                                  height: 20,
+                                ),
                                 Row(
                                   children: [
                                     SizedBox(
@@ -1876,6 +1897,9 @@ class _MembersState extends State<TrainerView> {
                                       ),
                                     ),
                                   ],
+                                ),
+                                const SizedBox(
+                                  height: 20,
                                 ),
                               ],
                             ),

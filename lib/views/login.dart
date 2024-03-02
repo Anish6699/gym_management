@@ -66,7 +66,7 @@ class _LoginPageState extends State<LoginPage> {
             flex: 2,
             child: Padding(
                 padding: const EdgeInsets.all(50.0),
-                child: Lottie.asset('assets/animations/member_animation.json'))
+                child: Lottie.asset('assets/animations/login_animation_2.json'))
 
             // ),
             ),

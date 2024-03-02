@@ -109,8 +109,12 @@ class _MembersState extends State<MembersView> {
     final prefs = await SharedPreferences.getInstance();
 
     userType = prefs.getInt('user_type');
+    print('pppppp');
+    print('$userType');
     adminId = prefs.getInt('adminId');
+    print('pppppp');
     branchId = prefs.getInt('branchId');
+    print('pppppp');
 
     if (userType == 2) {
       print('Admin login');
@@ -539,7 +543,7 @@ class _MembersState extends State<MembersView> {
                                                       Text(
                                                         snapshot
                                                             .data!['message'],
-                                                        style: TextStyle(
+                                                        style: const TextStyle(
                                                             color:
                                                                 Colors.white),
                                                       )
@@ -562,7 +566,7 @@ class _MembersState extends State<MembersView> {
                       );
                     });
               },
-              icon: Icon(
+              icon: const Icon(
                 Icons.delete,
                 color: Colors.red,
               ));
@@ -1143,6 +1147,9 @@ class _MembersState extends State<MembersView> {
                                     ),
                                   ],
                                 ),
+                                const SizedBox(
+                                  height: 20,
+                                ),
                                 Row(
                                   children: [
                                     SizedBox(
@@ -1266,6 +1273,9 @@ class _MembersState extends State<MembersView> {
                                     ),
                                   ],
                                 ),
+                                const SizedBox(
+                                  height: 20,
+                                ),
                                 Row(
                                   children: [
                                     SizedBox(
@@ -1380,6 +1390,9 @@ class _MembersState extends State<MembersView> {
                                       ),
                                     ),
                                   ],
+                                ),
+                                const SizedBox(
+                                  height: 20,
                                 ),
                                 Row(
                                   children: [
@@ -1504,6 +1517,9 @@ class _MembersState extends State<MembersView> {
                                         )),
                                   ],
                                 ),
+                                const SizedBox(
+                                  height: 20,
+                                ),
                                 Row(
                                   children: [
                                     SizedBox(
@@ -1625,6 +1641,9 @@ class _MembersState extends State<MembersView> {
                                       ),
                                     ),
                                   ],
+                                ),
+                                const SizedBox(
+                                  height: 20,
                                 ),
                               ],
                             ),
