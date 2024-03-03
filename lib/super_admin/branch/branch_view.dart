@@ -46,7 +46,6 @@ class _BranchProfileState extends State<BranchProfile>
 
   @override
   void initState() {
-    print('argumentsssssssssssssssssssss ${Get.arguments}');
     initializeData();
     super.initState();
   }
@@ -85,14 +84,12 @@ class _BranchProfileState extends State<BranchProfile>
     var a = await adminController.getSingleMember(Get.arguments);
     branchData = a['branch_data'];
     planList = a['plan_details'];
-    print('dataaaaaaaaaaaaaaaaaaaaaa');
-    print(branchData);
     setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
-    double _width = MediaQuery.of(context).size.width;
+    double width = MediaQuery.of(context).size.width;
     return Row(
       children: [
         isNavOpen
@@ -116,21 +113,12 @@ class _BranchProfileState extends State<BranchProfile>
         Expanded(
           flex: 9,
           child: Scaffold(
-              appBar: GenericAppBar(
-                onNavbarIconPressed: () {
-                  setState(() {
-                    isNavOpen = !isNavOpen;
-                  });
-                },
-                title: "Branch Profile",
-                toolbarHeight: MediaQuery.of(context).size.height * 0.075,
-              ),
               backgroundColor: const Color(0xffdde9e9),
               body: SafeArea(
                   child: Stack(children: [
                 TopBackground(),
                 branchData.isEmpty
-                    ? Center(
+                    ? const Center(
                         child: CircularProgressIndicator(
                         color: Colors.white,
                       ))
@@ -139,10 +127,11 @@ class _BranchProfileState extends State<BranchProfile>
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Container(
-                                  margin: EdgeInsets.fromLTRB(30, 10, 30, 0),
+                                  margin:
+                                      const EdgeInsets.fromLTRB(30, 10, 30, 0),
                                   child: Stack(children: [
                                     Container(
-                                      width: _width,
+                                      width: width,
                                       margin: const EdgeInsets.only(top: 70),
                                       padding: const EdgeInsets.fromLTRB(
                                           10, 20, 10, 10),
@@ -157,13 +146,12 @@ class _BranchProfileState extends State<BranchProfile>
                                                 blurRadius: 5,
                                                 spreadRadius: 2)
                                           ]),
-                                      child: Container(
-                                          child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              children: [
+                                      child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
                                             /// card header
-                                            Container(
+                                            SizedBox(
                                                 width: double.infinity,
                                                 child: Row(
                                                     crossAxisAlignment:
@@ -171,11 +159,11 @@ class _BranchProfileState extends State<BranchProfile>
                                                             .center,
                                                     children: [
                                                       const Spacer(flex: 1),
-                                                      SocialValue(
+                                                      socialValue(
                                                           'Created Date',
                                                           formatDate(branchData[
                                                               'created_at'])),
-                                                      SocialValue(
+                                                      socialValue(
                                                           'last Updated',
                                                           formatDate(branchData[
                                                               'updated_at'])),
@@ -198,18 +186,20 @@ class _BranchProfileState extends State<BranchProfile>
                                                               : branchData[
                                                                           'status'] ==
                                                                       1
-                                                                  ? Color
+                                                                  ? const Color
                                                                       .fromARGB(
-                                                                          255,
-                                                                          223,
-                                                                          164,
-                                                                          28)
+                                                                      255,
+                                                                      223,
+                                                                      164,
+                                                                      28)
                                                                   : Colors.red),
                                                       const Spacer(flex: 1)
                                                     ])),
                                             const SizedBox(height: 50),
                                             LargeBoldTextBlack(
-                                                '${branchData['branch_name']?.toString() ?? '-'}'),
+                                                branchData['branch_name']
+                                                        ?.toString() ??
+                                                    '-'),
                                             const SizedBox(height: 10),
                                             Row(
                                                 mainAxisAlignment:
@@ -242,11 +232,11 @@ class _BranchProfileState extends State<BranchProfile>
                                                 ]),
 
                                             /// description
-                                            Divider(
+                                            const Divider(
                                                 height: 30,
                                                 thickness: 1,
                                                 color: primaryThemeColor),
-                                            Container(
+                                            SizedBox(
                                                 width: double.infinity,
                                                 child: Row(
                                                     crossAxisAlignment:
@@ -254,29 +244,31 @@ class _BranchProfileState extends State<BranchProfile>
                                                             .center,
                                                     children: [
                                                       const Spacer(flex: 1),
-                                                      SocialValue(
+                                                      socialValue(
                                                           'Primary Mobile Number',
-                                                          '${branchData['primary_mobile_no']?.toString() ?? ''}'),
+                                                          branchData['primary_mobile_no']
+                                                                  ?.toString() ??
+                                                              ''),
                                                       const Spacer(flex: 1),
-                                                      SocialValue(
+                                                      socialValue(
                                                           'Secondary Mobile Number',
                                                           branchData['secondary_mobile_no']
                                                                   ?.toString() ??
                                                               ''),
                                                       const Spacer(flex: 1),
-                                                      SocialValue(
+                                                      socialValue(
                                                           'Start Date',
                                                           formatDate(planList
                                                                   .first[
                                                               'start_date'])),
                                                       const Spacer(flex: 1),
-                                                      SocialValue(
+                                                      socialValue(
                                                           'End Date',
                                                           formatDate(
                                                               planList.first[
                                                                   'end_date'])),
                                                       const Spacer(flex: 1),
-                                                      SocialValue(
+                                                      socialValue(
                                                           'Pending Ammount',
                                                           planList.first[
                                                                   'unpaid_amount']
@@ -323,14 +315,14 @@ class _BranchProfileState extends State<BranchProfile>
                                                                                       mainAxisAlignment: MainAxisAlignment.start,
                                                                                       crossAxisAlignment: CrossAxisAlignment.start,
                                                                                       children: [
-                                                                                        SelectableText(
+                                                                                        const SelectableText(
                                                                                           "From Date ",
                                                                                           style: TextStyle(
                                                                                             fontWeight: FontWeight.bold,
                                                                                           ),
                                                                                         ),
-                                                                                        SizedBox(height: 8),
-                                                                                        Container(
+                                                                                        const SizedBox(height: 8),
+                                                                                        SizedBox(
                                                                                           height: MediaQuery.of(context).size.height * 0.07,
                                                                                           child: TextField(
                                                                                             style: TextStyle(
@@ -346,7 +338,7 @@ class _BranchProfileState extends State<BranchProfile>
                                                                                               ),
                                                                                               hintText: 'Select Date ',
                                                                                               suffixIcon: IconButton(
-                                                                                                icon: Icon(Icons.calendar_today),
+                                                                                                icon: const Icon(Icons.calendar_today),
                                                                                                 onPressed: () async {
                                                                                                   fromDate.text = await selectedDatee(context);
 
@@ -358,7 +350,7 @@ class _BranchProfileState extends State<BranchProfile>
                                                                                         ),
                                                                                       ],
                                                                                     )),
-                                                                                SizedBox(
+                                                                                const SizedBox(
                                                                                   width: 30,
                                                                                 ),
                                                                                 SizedBox(
@@ -367,14 +359,14 @@ class _BranchProfileState extends State<BranchProfile>
                                                                                       mainAxisAlignment: MainAxisAlignment.start,
                                                                                       crossAxisAlignment: CrossAxisAlignment.start,
                                                                                       children: [
-                                                                                        SelectableText(
+                                                                                        const SelectableText(
                                                                                           "To Date ",
                                                                                           style: TextStyle(
                                                                                             fontWeight: FontWeight.bold,
                                                                                           ),
                                                                                         ),
-                                                                                        SizedBox(height: 8),
-                                                                                        Container(
+                                                                                        const SizedBox(height: 8),
+                                                                                        SizedBox(
                                                                                           height: MediaQuery.of(context).size.height * 0.07,
                                                                                           child: TextField(
                                                                                             style: TextStyle(
@@ -390,7 +382,7 @@ class _BranchProfileState extends State<BranchProfile>
                                                                                               ),
                                                                                               hintText: 'Select Date ',
                                                                                               suffixIcon: IconButton(
-                                                                                                icon: Icon(Icons.calendar_today),
+                                                                                                icon: const Icon(Icons.calendar_today),
                                                                                                 onPressed: () async {
                                                                                                   toDate.text = await selectedDatee(context);
 
@@ -442,7 +434,7 @@ class _BranchProfileState extends State<BranchProfile>
                                                                                     ],
                                                                                   ),
                                                                                 ),
-                                                                                SizedBox(
+                                                                                const SizedBox(
                                                                                   width: 30,
                                                                                 ),
                                                                                 SizedBox(
@@ -700,7 +692,7 @@ class _BranchProfileState extends State<BranchProfile>
                                                           title: 'Pay Pending')
                                                     ])),
 
-                                            Container(
+                                            SizedBox(
                                                 height: MediaQuery.of(context)
                                                         .size
                                                         .height *
@@ -720,7 +712,8 @@ class _BranchProfileState extends State<BranchProfile>
                                                                 .size
                                                                 .height *
                                                             0.115,
-                                                        color: Color.fromARGB(
+                                                        color: const Color
+                                                            .fromARGB(
                                                             255, 220, 215, 215),
                                                         child: Padding(
                                                           padding:
@@ -728,7 +721,7 @@ class _BranchProfileState extends State<BranchProfile>
                                                                   .all(8.0),
                                                           child: Row(
                                                             children: [
-                                                              SocialValue(
+                                                              socialValue(
                                                                   'Start Date',
                                                                   formatDate(planList[
                                                                           index]
@@ -736,7 +729,7 @@ class _BranchProfileState extends State<BranchProfile>
                                                                       'start_date'])),
                                                               const Spacer(
                                                                   flex: 1),
-                                                              SocialValue(
+                                                              socialValue(
                                                                   'End Date',
                                                                   formatDate(planList[
                                                                           index]
@@ -744,7 +737,7 @@ class _BranchProfileState extends State<BranchProfile>
                                                                       'end_date'])),
                                                               const Spacer(
                                                                   flex: 1),
-                                                              SocialValue(
+                                                              socialValue(
                                                                   'Total Ammount',
                                                                   planList[
                                                                           index]
@@ -752,7 +745,7 @@ class _BranchProfileState extends State<BranchProfile>
                                                                       'price']),
                                                               const Spacer(
                                                                   flex: 1),
-                                                              SocialValue(
+                                                              socialValue(
                                                                   'Paid Ammount',
                                                                   planList[
                                                                           index]
@@ -760,7 +753,7 @@ class _BranchProfileState extends State<BranchProfile>
                                                                       'paid_amount']),
                                                               const Spacer(
                                                                   flex: 1),
-                                                              SocialValue(
+                                                              socialValue(
                                                                   'Pending Ammount',
                                                                   planList[
                                                                           index]
@@ -773,15 +766,14 @@ class _BranchProfileState extends State<BranchProfile>
                                                     );
                                                   },
                                                 ))
-                                          ])),
+                                          ]),
                                     ),
-                                    Expanded(
-                                        child: Container(
-                                            alignment: Alignment.center,
-                                            child: const CircleAvatar(
-                                                radius: 70,
-                                                backgroundImage: AssetImage(
-                                                    'assets/gym_image.png'))))
+                                    Container(
+                                        alignment: Alignment.center,
+                                        child: const CircleAvatar(
+                                            radius: 70,
+                                            backgroundImage: AssetImage(
+                                                'assets/gym_image.png')))
                                   ])),
                             ]),
                       )
@@ -792,14 +784,14 @@ class _BranchProfileState extends State<BranchProfile>
   }
 }
 
-Widget SocialValue(String label, String value) => Container(
+Widget socialValue(String label, String value) => Container(
     padding: const EdgeInsets.all(5),
     height: 50,
     child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text('$value',
+          Text(value,
               style: TextStyle(
                   color: label == 'Pending Ammount'
                       ? Colors.red
@@ -812,11 +804,3 @@ Widget SocialValue(String label, String value) => Container(
                   fontSize: 12,
                   fontWeight: FontWeight.bold))
         ]));
-
-Widget FloatingIconsButtons(String path) => Container(
-    margin: const EdgeInsets.all(5),
-    height: 40,
-    child: FloatingActionButton(
-        backgroundColor: Colors.white,
-        child: ColorLogoButton(path),
-        onPressed: () {}));

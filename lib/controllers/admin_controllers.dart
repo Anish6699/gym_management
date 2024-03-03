@@ -26,6 +26,14 @@ class AdminController extends GetxController {
     return body;
   }
 
+
+ Future<List> getAllCategories() async {
+ var response = await _httpClient.get(path: 'get-category');
+
+    var a = jsonDecode(response['body']);
+    List body = a['data'] as List;
+     return body;
+}
   Future<Map<String, dynamic>> addAdmin(Map<String, dynamic> data) async {
     var response = await _httpClient.post(path: 'add-admin', body: data);
 

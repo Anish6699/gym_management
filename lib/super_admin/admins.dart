@@ -57,6 +57,8 @@ class _MembersState extends State<AllAdmins> {
   TextEditingController password = TextEditingController();
 
   List adminList = [];
+  var selectedCategory;
+  List categoryList = [];
   @override
   void initState() {
     getAdminData();
@@ -66,8 +68,17 @@ class _MembersState extends State<AllAdmins> {
   getAdminData() async {
     adminList =
         await adminController.getAllAdmin(searchKeyword: searchController.text);
+    var b = await adminController.getAllCategories();
+
+    categoryList = b.map((dynamic item) {
+      if (item is Map<String, dynamic>) {
+        return item;
+      } else {
+        return {'data': item};
+      }
+    }).toList();
     print('aaaaaaaaaaaaaaaa');
-    print(adminList);
+    print(categoryList);
     initializeData();
   }
 
@@ -400,6 +411,7 @@ class _MembersState extends State<AllAdmins> {
                                             child: SelectableText(
                                               'First Name',
                                               style: TextStyle(
+                                                  color: Colors.white,
                                                   fontWeight: FontWeight.bold),
                                             ),
                                           ),
@@ -422,7 +434,7 @@ class _MembersState extends State<AllAdmins> {
                                                       OutlineInputBorder(
                                                     borderSide: BorderSide(
                                                         color:
-                                                            primaryThemeColor),
+                                                            secondaryBorderGreyColor),
                                                   )),
                                               controller: firstNameController,
                                               keyboardType:
@@ -431,6 +443,7 @@ class _MembersState extends State<AllAdmins> {
                                               onChanged: (e) {},
                                               autofocus: true,
                                               style: TextStyle(
+                                                  color: Colors.white,
                                                   fontSize:
                                                       MediaQuery.of(context)
                                                               .size
@@ -443,6 +456,7 @@ class _MembersState extends State<AllAdmins> {
                                         ],
                                       ),
                                     ),
+                                    const SizedBox(height: 20),
                                     SizedBox(
                                       width: MediaQuery.of(context).size.width *
                                           0.3,
@@ -455,6 +469,7 @@ class _MembersState extends State<AllAdmins> {
                                             child: SelectableText(
                                               'Last Name',
                                               style: TextStyle(
+                                                  color: Colors.white,
                                                   fontWeight: FontWeight.bold),
                                             ),
                                           ),
@@ -477,7 +492,7 @@ class _MembersState extends State<AllAdmins> {
                                                       OutlineInputBorder(
                                                     borderSide: BorderSide(
                                                         color:
-                                                            primaryThemeColor),
+                                                            secondaryBorderGreyColor),
                                                   )),
                                               controller: lastNameController,
                                               keyboardType:
@@ -486,6 +501,7 @@ class _MembersState extends State<AllAdmins> {
                                               onChanged: (e) {},
                                               autofocus: true,
                                               style: TextStyle(
+                                                  color: Colors.white,
                                                   fontSize:
                                                       MediaQuery.of(context)
                                                               .size
@@ -498,6 +514,7 @@ class _MembersState extends State<AllAdmins> {
                                         ],
                                       ),
                                     ),
+                                    const SizedBox(height: 20),
                                     SizedBox(
                                       width: MediaQuery.of(context).size.width *
                                           0.3,
@@ -510,6 +527,7 @@ class _MembersState extends State<AllAdmins> {
                                             child: SelectableText(
                                               'Primary Mobile No',
                                               style: TextStyle(
+                                                  color: Colors.white,
                                                   fontWeight: FontWeight.bold),
                                             ),
                                           ),
@@ -532,7 +550,7 @@ class _MembersState extends State<AllAdmins> {
                                                       OutlineInputBorder(
                                                     borderSide: BorderSide(
                                                         color:
-                                                            primaryThemeColor),
+                                                            secondaryBorderGreyColor),
                                                   )),
                                               controller: primaryMobileNo,
                                               keyboardType:
@@ -541,6 +559,7 @@ class _MembersState extends State<AllAdmins> {
                                               onChanged: (e) {},
                                               autofocus: true,
                                               style: TextStyle(
+                                                  color: Colors.white,
                                                   fontSize:
                                                       MediaQuery.of(context)
                                                               .size
@@ -553,6 +572,7 @@ class _MembersState extends State<AllAdmins> {
                                         ],
                                       ),
                                     ),
+                                    const SizedBox(height: 20),
                                     SizedBox(
                                       width: MediaQuery.of(context).size.width *
                                           0.3,
@@ -565,6 +585,7 @@ class _MembersState extends State<AllAdmins> {
                                             child: SelectableText(
                                               'Secondary Mobile No',
                                               style: TextStyle(
+                                                  color: Colors.white,
                                                   fontWeight: FontWeight.bold),
                                             ),
                                           ),
@@ -587,7 +608,7 @@ class _MembersState extends State<AllAdmins> {
                                                       OutlineInputBorder(
                                                     borderSide: BorderSide(
                                                         color:
-                                                            primaryThemeColor),
+                                                            secondaryBorderGreyColor),
                                                   )),
                                               controller: secondaryMobileNo,
                                               keyboardType:
@@ -596,6 +617,7 @@ class _MembersState extends State<AllAdmins> {
                                               onChanged: (e) {},
                                               autofocus: true,
                                               style: TextStyle(
+                                                  color: Colors.white,
                                                   fontSize:
                                                       MediaQuery.of(context)
                                                               .size
@@ -608,6 +630,7 @@ class _MembersState extends State<AllAdmins> {
                                         ],
                                       ),
                                     ),
+                                    const SizedBox(height: 20),
                                     SizedBox(
                                       width: MediaQuery.of(context).size.width *
                                           0.3,
@@ -620,6 +643,7 @@ class _MembersState extends State<AllAdmins> {
                                             child: SelectableText(
                                               'Email',
                                               style: TextStyle(
+                                                  color: Colors.white,
                                                   fontWeight: FontWeight.bold),
                                             ),
                                           ),
@@ -642,7 +666,7 @@ class _MembersState extends State<AllAdmins> {
                                                       OutlineInputBorder(
                                                     borderSide: BorderSide(
                                                         color:
-                                                            primaryThemeColor),
+                                                            secondaryBorderGreyColor),
                                                   )),
                                               controller: email,
                                               keyboardType:
@@ -651,6 +675,7 @@ class _MembersState extends State<AllAdmins> {
                                               onChanged: (e) {},
                                               autofocus: true,
                                               style: TextStyle(
+                                                  color: Colors.white,
                                                   fontSize:
                                                       MediaQuery.of(context)
                                                               .size
@@ -663,6 +688,7 @@ class _MembersState extends State<AllAdmins> {
                                         ],
                                       ),
                                     ),
+                                    const SizedBox(height: 20),
                                     SizedBox(
                                       width: MediaQuery.of(context).size.width *
                                           0.3,
@@ -675,6 +701,7 @@ class _MembersState extends State<AllAdmins> {
                                             child: SelectableText(
                                               'Address',
                                               style: TextStyle(
+                                                  color: Colors.white,
                                                   fontWeight: FontWeight.bold),
                                             ),
                                           ),
@@ -697,7 +724,7 @@ class _MembersState extends State<AllAdmins> {
                                                       OutlineInputBorder(
                                                     borderSide: BorderSide(
                                                         color:
-                                                            primaryThemeColor),
+                                                            secondaryBorderGreyColor),
                                                   )),
                                               controller: address,
                                               keyboardType:
@@ -706,6 +733,7 @@ class _MembersState extends State<AllAdmins> {
                                               onChanged: (e) {},
                                               autofocus: true,
                                               style: TextStyle(
+                                                  color: Colors.white,
                                                   fontSize:
                                                       MediaQuery.of(context)
                                                               .size
@@ -718,60 +746,7 @@ class _MembersState extends State<AllAdmins> {
                                         ],
                                       ),
                                     ),
-                                    SizedBox(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.3,
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          const Flexible(
-                                            child: SelectableText(
-                                              'Password',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                          ),
-                                          const SizedBox(
-                                            height: 8,
-                                          ),
-                                          SizedBox(
-                                            height: MediaQuery.of(context)
-                                                    .size
-                                                    .height *
-                                                0.07,
-                                            child: TextFormField(
-                                              decoration: const InputDecoration(
-                                                  border: OutlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                        color:
-                                                            secondaryBorderGreyColor),
-                                                  ),
-                                                  focusedBorder:
-                                                      OutlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                        color:
-                                                            primaryThemeColor),
-                                                  )),
-                                              controller: password,
-                                              keyboardType:
-                                                  TextInputType.emailAddress,
-                                              enableSuggestions: true,
-                                              autofocus: true,
-                                              style: TextStyle(
-                                                  fontSize:
-                                                      MediaQuery.of(context)
-                                                              .size
-                                                              .height *
-                                                          0.02),
-                                              textAlignVertical:
-                                                  TextAlignVertical.center,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
+                                    const SizedBox(height: 20),
                                   ],
                                 ),
                               ),
@@ -954,8 +929,7 @@ class _MembersState extends State<AllAdmins> {
                           filled: true,
                           border: const OutlineInputBorder(
                             borderSide: BorderSide.none,
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(10)),
+                            borderRadius: BorderRadius.all(Radius.circular(10)),
                           ),
                           suffixIcon: InkWell(
                             onTap: () {
@@ -967,8 +941,8 @@ class _MembersState extends State<AllAdmins> {
                               child: Container(
                                 decoration: const BoxDecoration(
                                   color: primaryColor,
-                                  borderRadius: BorderRadius.all(
-                                      Radius.circular(10)),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10)),
                                 ),
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
@@ -1025,7 +999,8 @@ class _MembersState extends State<AllAdmins> {
                             fontSize: MediaQuery.of(context).size.width * 0.01,
                             color: Colors.white,
                             fontWeight: FontWeight.bold),
-                        contentPadding: const EdgeInsets.symmetric(horizontal: 10),
+                        contentPadding:
+                            const EdgeInsets.symmetric(horizontal: 10),
                         fillColor: Colors.white,
                         border: const OutlineInputBorder(
                           borderSide: BorderSide(
@@ -1121,7 +1096,7 @@ class _MembersState extends State<AllAdmins> {
                                                               OutlineInputBorder(
                                                             borderSide: BorderSide(
                                                                 color:
-                                                                    primaryThemeColor),
+                                                                    secondaryBorderGreyColor),
                                                           )),
                                                   controller:
                                                       firstNameController,
@@ -1143,6 +1118,7 @@ class _MembersState extends State<AllAdmins> {
                                             ],
                                           ),
                                         ),
+                                        const SizedBox(height: 20),
                                         SizedBox(
                                           width: MediaQuery.of(context)
                                                   .size
@@ -1182,7 +1158,7 @@ class _MembersState extends State<AllAdmins> {
                                                               OutlineInputBorder(
                                                             borderSide: BorderSide(
                                                                 color:
-                                                                    primaryThemeColor),
+                                                                    secondaryBorderGreyColor),
                                                           )),
                                                   controller:
                                                       lastNameController,
@@ -1204,6 +1180,7 @@ class _MembersState extends State<AllAdmins> {
                                             ],
                                           ),
                                         ),
+                                        const SizedBox(height: 20),
                                         SizedBox(
                                           width: MediaQuery.of(context)
                                                   .size
@@ -1243,7 +1220,7 @@ class _MembersState extends State<AllAdmins> {
                                                               OutlineInputBorder(
                                                             borderSide: BorderSide(
                                                                 color:
-                                                                    primaryThemeColor),
+                                                                    secondaryBorderGreyColor),
                                                           )),
                                                   controller: primaryMobileNo,
                                                   keyboardType: TextInputType
@@ -1264,6 +1241,7 @@ class _MembersState extends State<AllAdmins> {
                                             ],
                                           ),
                                         ),
+                                        const SizedBox(height: 20),
                                         SizedBox(
                                           width: MediaQuery.of(context)
                                                   .size
@@ -1303,7 +1281,7 @@ class _MembersState extends State<AllAdmins> {
                                                               OutlineInputBorder(
                                                             borderSide: BorderSide(
                                                                 color:
-                                                                    primaryThemeColor),
+                                                                    secondaryBorderGreyColor),
                                                           )),
                                                   controller: secondaryMobileNo,
                                                   keyboardType: TextInputType
@@ -1324,6 +1302,131 @@ class _MembersState extends State<AllAdmins> {
                                             ],
                                           ),
                                         ),
+                                        const SizedBox(height: 20),
+                                        SizedBox(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.3,
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              const Flexible(
+                                                child: SelectableText(
+                                                  'Select Category',
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                              ),
+                                              const SizedBox(
+                                                height: 8,
+                                              ),
+                                              Container(
+                                                height: MediaQuery.of(context)
+                                                        .size
+                                                        .height *
+                                                    0.07,
+                                                decoration: BoxDecoration(
+                                                  color: secondaryColor,
+                                                  borderRadius:
+                                                      const BorderRadius.all(
+                                                          Radius.circular(5)),
+                                                  border: Border.all(
+                                                      color:
+                                                          const Color.fromARGB(
+                                                              255,
+                                                              177,
+                                                              174,
+                                                              174)),
+                                                ),
+                                                child: DropdownButtonFormField(
+                                                  value: selectedCategory,
+                                                  isExpanded: true,
+                                                  elevation: 1,
+                                                  items: categoryList.map(
+                                                    (item) {
+                                                      return DropdownMenuItem(
+                                                        value: item,
+                                                        child: Text(
+                                                          item['name'],
+                                                          style: TextStyle(
+                                                              fontSize: MediaQuery.of(
+                                                                          context)
+                                                                      .size
+                                                                      .width *
+                                                                  0.008,
+                                                              color:
+                                                                  Colors.white),
+                                                        ),
+                                                      );
+                                                    },
+                                                  ).toList(),
+                                                  onChanged: (value) {
+                                                    selectedCategory = value;
+                                                    setState(() {});
+                                                    // selectedStatus = value;
+                                                    // setDataOnBranchChange();
+                                                  },
+                                                  borderRadius:
+                                                      BorderRadius.circular(4),
+                                                  style: TextStyle(
+                                                      fontSize:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width *
+                                                              0.08,
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                  icon: Icon(
+                                                    Icons
+                                                        .keyboard_arrow_down_rounded,
+                                                    color: Colors.white,
+                                                    size: MediaQuery.of(context)
+                                                            .size
+                                                            .width *
+                                                        0.015,
+                                                  ),
+                                                  decoration: InputDecoration(
+                                                    hintText: "Select Category",
+                                                    hintStyle: TextStyle(
+                                                        fontSize: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .width *
+                                                            0.008,
+                                                        color: Colors.white,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                    contentPadding:
+                                                        const EdgeInsets
+                                                            .symmetric(
+                                                            horizontal: 10),
+                                                    fillColor: Colors.white,
+                                                    border:
+                                                        const OutlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                        color:
+                                                            Colors.transparent,
+                                                      ),
+                                                    ),
+                                                    focusedBorder:
+                                                        const OutlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                        color:
+                                                            Colors.transparent,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        const SizedBox(height: 20),
                                         SizedBox(
                                           width: MediaQuery.of(context)
                                                   .size
@@ -1363,7 +1466,7 @@ class _MembersState extends State<AllAdmins> {
                                                               OutlineInputBorder(
                                                             borderSide: BorderSide(
                                                                 color:
-                                                                    primaryThemeColor),
+                                                                    secondaryBorderGreyColor),
                                                           )),
                                                   controller: email,
                                                   keyboardType: TextInputType
@@ -1384,6 +1487,7 @@ class _MembersState extends State<AllAdmins> {
                                             ],
                                           ),
                                         ),
+                                        const SizedBox(height: 20),
                                         SizedBox(
                                           width: MediaQuery.of(context)
                                                   .size
@@ -1423,7 +1527,7 @@ class _MembersState extends State<AllAdmins> {
                                                               OutlineInputBorder(
                                                             borderSide: BorderSide(
                                                                 color:
-                                                                    primaryThemeColor),
+                                                                    secondaryBorderGreyColor),
                                                           )),
                                                   controller: address,
                                                   keyboardType: TextInputType
@@ -1444,6 +1548,7 @@ class _MembersState extends State<AllAdmins> {
                                             ],
                                           ),
                                         ),
+                                        const SizedBox(height: 20),
                                         SizedBox(
                                           width: MediaQuery.of(context)
                                                   .size
@@ -1483,7 +1588,7 @@ class _MembersState extends State<AllAdmins> {
                                                               OutlineInputBorder(
                                                             borderSide: BorderSide(
                                                                 color:
-                                                                    primaryThemeColor),
+                                                                    secondaryBorderGreyColor),
                                                           )),
                                                   controller: password,
                                                   keyboardType: TextInputType
@@ -1503,6 +1608,7 @@ class _MembersState extends State<AllAdmins> {
                                             ],
                                           ),
                                         ),
+                                        const SizedBox(height: 20),
                                       ],
                                     ),
                                   ),
@@ -1511,109 +1617,117 @@ class _MembersState extends State<AllAdmins> {
                                   Get.back();
                                 },
                                 onPrimaryButtonPressed: () {
-                                  showDialog(
-                                      barrierDismissible: false,
-                                      context: context,
-                                      builder: (context) {
-                                        return FutureBuilder(
-                                          future: adminController.addAdmin({
-                                            'first_name':
-                                                firstNameController.text,
-                                            'last_name':
-                                                lastNameController.text,
-                                            'primary_mobile_no':
-                                                primaryMobileNo.text,
-                                            'email': email.text,
-                                            'address': address.text,
-                                            'password': password.text,
-                                            'secondary_mobile_no':
-                                                secondaryMobileNo.text,
-                                          }),
-                                          builder: (context, snapshot) {
-                                            return snapshot.connectionState ==
-                                                    ConnectionState.waiting
-                                                ? GenericDialogBox(
-                                                    enableSecondaryButton:
-                                                        false,
-                                                    isLoader: true,
-                                                    content: Padding(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              8.0),
-                                                      child: SizedBox(
-                                                        width: MediaQuery.of(
-                                                                    context)
-                                                                .size
-                                                                .width *
-                                                            0.04,
-                                                        height: MediaQuery.of(
-                                                                    context)
-                                                                .size
-                                                                .width *
-                                                            0.06,
-                                                        child: const Center(
-                                                          child: Column(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .center,
-                                                            children: [
-                                                              CircularProgressIndicator(
-                                                                color:
-                                                                    primaryDarkBlueColor,
-                                                              ),
-                                                            ],
+                                  if (selectedCategory != null &&
+                                      firstNameController.text.isNotEmpty &&
+                                      lastNameController.text.isNotEmpty &&
+                                      primaryMobileNo.text.isNotEmpty &&
+                                      email.text.isNotEmpty &&
+                                      password.text.isNotEmpty) {
+                                    showDialog(
+                                        barrierDismissible: false,
+                                        context: context,
+                                        builder: (context) {
+                                          return FutureBuilder(
+                                            future: adminController.addAdmin({
+                                              'first_name':
+                                                  firstNameController.text,
+                                              'last_name':
+                                                  lastNameController.text,
+                                              'primary_mobile_no':
+                                                  primaryMobileNo.text,
+                                              'email': email.text,
+                                              'address': address.text,
+                                              'password': password.text,
+                                              'secondary_mobile_no':
+                                                  secondaryMobileNo.text,
+                                              'category': selectedCategory['id']
+                                            }),
+                                            builder: (context, snapshot) {
+                                              return snapshot.connectionState ==
+                                                      ConnectionState.waiting
+                                                  ? GenericDialogBox(
+                                                      enableSecondaryButton:
+                                                          false,
+                                                      isLoader: true,
+                                                      content: Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(8.0),
+                                                        child: SizedBox(
+                                                          width: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .width *
+                                                              0.04,
+                                                          height: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .width *
+                                                              0.06,
+                                                          child: const Center(
+                                                            child: Column(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .center,
+                                                              children: [
+                                                                CircularProgressIndicator(
+                                                                  color:
+                                                                      primaryDarkBlueColor,
+                                                                ),
+                                                              ],
+                                                            ),
                                                           ),
                                                         ),
                                                       ),
-                                                    ),
-                                                  )
-                                                : GenericDialogBox(
-                                                    closeButtonEnabled: false,
-                                                    enablePrimaryButton: true,
-                                                    enableSecondaryButton:
-                                                        false,
-                                                    isLoader: false,
-                                                    content: Padding(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              8.0),
-                                                      child: SizedBox(
-                                                        width: MediaQuery.of(
-                                                                    context)
-                                                                .size
-                                                                .width *
-                                                            0.04,
-                                                        height: MediaQuery.of(
-                                                                    context)
-                                                                .size
-                                                                .width *
-                                                            0.06,
-                                                        child: Center(
-                                                          child: Column(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .center,
-                                                            children: [
-                                                              Text(snapshot
-                                                                      .data![
-                                                                  'message'])
-                                                            ],
+                                                    )
+                                                  : GenericDialogBox(
+                                                      closeButtonEnabled: false,
+                                                      enablePrimaryButton: true,
+                                                      enableSecondaryButton:
+                                                          false,
+                                                      isLoader: false,
+                                                      content: Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(8.0),
+                                                        child: SizedBox(
+                                                          width: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .width *
+                                                              0.04,
+                                                          height: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .width *
+                                                              0.06,
+                                                          child: Center(
+                                                            child: Column(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .center,
+                                                              children: [
+                                                                Text(snapshot
+                                                                        .data![
+                                                                    'message'])
+                                                              ],
+                                                            ),
                                                           ),
                                                         ),
                                                       ),
-                                                    ),
-                                                    primaryButtonText: 'Ok',
-                                                    onPrimaryButtonPressed:
-                                                        () async {
-                                                      Get.offAllNamed(
-                                                        AllAdmins
-                                                            .allAdminRouteName,
-                                                      );
-                                                    },
-                                                  );
-                                          },
-                                        );
-                                      });
+                                                      primaryButtonText: 'Ok',
+                                                      onPrimaryButtonPressed:
+                                                          () async {
+                                                        Get.offAllNamed(
+                                                          AllAdmins
+                                                              .allAdminRouteName,
+                                                        );
+                                                      },
+                                                    );
+                                            },
+                                          );
+                                        });
+                                  }
                                 },
                               );
                             });

@@ -105,19 +105,13 @@ class _MembersState extends State<MembersView> {
   }
 
   setInitialData() async {
-    print('set initial data');
     final prefs = await SharedPreferences.getInstance();
 
     userType = prefs.getInt('user_type');
-    print('pppppp');
-    print('$userType');
     adminId = prefs.getInt('adminId');
-    print('pppppp');
     branchId = prefs.getInt('branchId');
-    print('pppppp');
 
     if (userType == 2) {
-      print('Admin login');
       adminBranchList =
           await adminController.getAdminAllBranches(adminId: adminId);
       if (globalSelectedBranch != null) {
@@ -132,7 +126,6 @@ class _MembersState extends State<MembersView> {
       setDataOnBranchChange();
     }
     if (userType == 3) {
-      print('branch login');
       setDataOnBranchLogin();
     }
   }
@@ -140,7 +133,6 @@ class _MembersState extends State<MembersView> {
   setDataOnBranchLogin() async {
     isLoading = true;
     setState(() {});
-    print('selected branch ${selectedBranch}');
     var a = await memmberController.getAllMembers(
         branchId: branchId ?? selectedBranch['id'],
         searchKeyword: searchController.text,
@@ -206,7 +198,6 @@ class _MembersState extends State<MembersView> {
       }
     }).toList();
 
-    print(membersList);
 
     _headerModel = DaviModel(
       rows: membersList,
@@ -482,8 +473,6 @@ class _MembersState extends State<MembersView> {
                                   future: memmberController
                                       .deleteMember(row.data['id']),
                                   builder: (context, snapshot) {
-                                    print('snapshotttt datatatatat');
-                                    print(snapshot.data);
                                     return snapshot.connectionState ==
                                             ConnectionState.waiting
                                         ? GenericDialogBox(

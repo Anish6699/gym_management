@@ -7,10 +7,7 @@ import 'package:gmstest/configs/colors.dart';
 import 'package:gmstest/controllers/admin_controllers.dart';
 import 'package:gmstest/navigation_pane/navigation_pane_closed.dart';
 import 'package:gmstest/navigation_pane/navigation_pane_expanded.dart';
-import 'package:gmstest/super_admin/admins.dart';
 import 'package:gmstest/super_admin/branch/branch_view.dart';
-import 'package:gmstest/widgets/buttons.dart';
-import 'package:gmstest/widgets/generic_appbar.dart';
 import 'package:davi/davi.dart';
 import 'package:gmstest/widgets/popup.dart';
 import 'package:gmstest/widgets/searchfield.dart';
@@ -373,6 +370,7 @@ class _MembersState extends State<AdminAllBranch> {
                                             child: SelectableText(
                                               'Branch Name',
                                               style: TextStyle(
+                                                  color: Colors.white,
                                                   fontWeight: FontWeight.bold),
                                             ),
                                           ),
@@ -395,7 +393,7 @@ class _MembersState extends State<AdminAllBranch> {
                                                       OutlineInputBorder(
                                                     borderSide: BorderSide(
                                                         color:
-                                                            primaryThemeColor),
+                                                            secondaryBorderGreyColor),
                                                   )),
                                               controller: firstNameController,
                                               keyboardType:
@@ -404,6 +402,7 @@ class _MembersState extends State<AdminAllBranch> {
                                               onChanged: (e) {},
                                               autofocus: true,
                                               style: TextStyle(
+                                                  color: Colors.white,
                                                   fontSize:
                                                       MediaQuery.of(context)
                                                               .size
@@ -416,6 +415,7 @@ class _MembersState extends State<AdminAllBranch> {
                                         ],
                                       ),
                                     ),
+                                    const SizedBox(height: 30),
                                     SizedBox(
                                       width: MediaQuery.of(context).size.width *
                                           0.3,
@@ -428,6 +428,7 @@ class _MembersState extends State<AdminAllBranch> {
                                             child: SelectableText(
                                               'Primary Mobile No',
                                               style: TextStyle(
+                                                  color: Colors.white,
                                                   fontWeight: FontWeight.bold),
                                             ),
                                           ),
@@ -450,7 +451,7 @@ class _MembersState extends State<AdminAllBranch> {
                                                       OutlineInputBorder(
                                                     borderSide: BorderSide(
                                                         color:
-                                                            primaryThemeColor),
+                                                            secondaryBorderGreyColor),
                                                   )),
                                               controller: primaryMobileNo,
                                               keyboardType:
@@ -459,6 +460,7 @@ class _MembersState extends State<AdminAllBranch> {
                                               onChanged: (e) {},
                                               autofocus: true,
                                               style: TextStyle(
+                                                  color: Colors.white,
                                                   fontSize:
                                                       MediaQuery.of(context)
                                                               .size
@@ -471,6 +473,7 @@ class _MembersState extends State<AdminAllBranch> {
                                         ],
                                       ),
                                     ),
+                                    const SizedBox(height: 30),
                                     SizedBox(
                                       width: MediaQuery.of(context).size.width *
                                           0.3,
@@ -483,6 +486,7 @@ class _MembersState extends State<AdminAllBranch> {
                                             child: SelectableText(
                                               'Secondary Mobile No',
                                               style: TextStyle(
+                                                  color: Colors.white,
                                                   fontWeight: FontWeight.bold),
                                             ),
                                           ),
@@ -505,7 +509,7 @@ class _MembersState extends State<AdminAllBranch> {
                                                       OutlineInputBorder(
                                                     borderSide: BorderSide(
                                                         color:
-                                                            primaryThemeColor),
+                                                            secondaryBorderGreyColor),
                                                   )),
                                               controller: secondaryMobileNo,
                                               keyboardType:
@@ -514,6 +518,7 @@ class _MembersState extends State<AdminAllBranch> {
                                               onChanged: (e) {},
                                               autofocus: true,
                                               style: TextStyle(
+                                                  color: Colors.white,
                                                   fontSize:
                                                       MediaQuery.of(context)
                                                               .size
@@ -526,6 +531,7 @@ class _MembersState extends State<AdminAllBranch> {
                                         ],
                                       ),
                                     ),
+                                    const SizedBox(height: 30),
                                     SizedBox(
                                       width: MediaQuery.of(context).size.width *
                                           0.3,
@@ -538,6 +544,7 @@ class _MembersState extends State<AdminAllBranch> {
                                             child: SelectableText(
                                               'Email',
                                               style: TextStyle(
+                                                  color: Colors.white,
                                                   fontWeight: FontWeight.bold),
                                             ),
                                           ),
@@ -560,7 +567,7 @@ class _MembersState extends State<AdminAllBranch> {
                                                       OutlineInputBorder(
                                                     borderSide: BorderSide(
                                                         color:
-                                                            primaryThemeColor),
+                                                            secondaryBorderGreyColor),
                                                   )),
                                               controller: email,
                                               keyboardType:
@@ -569,6 +576,7 @@ class _MembersState extends State<AdminAllBranch> {
                                               onChanged: (e) {},
                                               autofocus: true,
                                               style: TextStyle(
+                                                  color: Colors.white,
                                                   fontSize:
                                                       MediaQuery.of(context)
                                                               .size
@@ -581,6 +589,7 @@ class _MembersState extends State<AdminAllBranch> {
                                         ],
                                       ),
                                     ),
+                                    const SizedBox(height: 30),
                                     SizedBox(
                                       width: MediaQuery.of(context).size.width *
                                           0.3,
@@ -593,6 +602,7 @@ class _MembersState extends State<AdminAllBranch> {
                                             child: SelectableText(
                                               'Address',
                                               style: TextStyle(
+                                                  color: Colors.white,
                                                   fontWeight: FontWeight.bold),
                                             ),
                                           ),
@@ -615,7 +625,7 @@ class _MembersState extends State<AdminAllBranch> {
                                                       OutlineInputBorder(
                                                     borderSide: BorderSide(
                                                         color:
-                                                            primaryThemeColor),
+                                                            secondaryBorderGreyColor),
                                                   )),
                                               controller: address,
                                               keyboardType:
@@ -624,6 +634,7 @@ class _MembersState extends State<AdminAllBranch> {
                                               onChanged: (e) {},
                                               autofocus: true,
                                               style: TextStyle(
+                                                  color: Colors.white,
                                                   fontSize:
                                                       MediaQuery.of(context)
                                                               .size
@@ -636,6 +647,7 @@ class _MembersState extends State<AdminAllBranch> {
                                         ],
                                       ),
                                     ),
+                                    const SizedBox(height: 30),
                                   ],
                                 ),
                               ),
@@ -743,7 +755,10 @@ class _MembersState extends State<AdminAllBranch> {
                           );
                         });
                   },
-                  child: const Icon(Icons.edit)));
+                  child: const Icon(
+                    Icons.edit,
+                    color: primaryColor,
+                  )));
         },
 
         width: MediaQuery.of(context).size.width * 0.066,
@@ -752,8 +767,8 @@ class _MembersState extends State<AdminAllBranch> {
 
         cellPadding: EdgeInsets.zero,
 
-        headerTextStyle: const TextStyle(
-            fontWeight: FontWeight.bold, color: primaryLightColor),
+        headerTextStyle:
+            const TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
 
         // pinStatus: PinStatus.left,
 
@@ -789,7 +804,7 @@ class _MembersState extends State<AdminAllBranch> {
                 '${arrData['adminName'] ?? '-'}(Admin) - All Branches',
                 style: Theme.of(context).textTheme.titleLarge,
               ),
-              Spacer(
+              const Spacer(
                 flex: 2,
               ),
               // Expanded(child: SearchField()),
@@ -803,8 +818,8 @@ class _MembersState extends State<AdminAllBranch> {
                   SizedBox(
                       width: MediaQuery.of(context).size.width * 0.2,
                       height: MediaQuery.of(context).size.height * 0.08,
-                      child: SearchField()),
-                  SizedBox(
+                      child: const SearchField()),
+                  const SizedBox(
                     width: 10,
                   ),
                   Container(
@@ -850,7 +865,8 @@ class _MembersState extends State<AdminAllBranch> {
                             fontSize: MediaQuery.of(context).size.width * 0.01,
                             color: Colors.white,
                             fontWeight: FontWeight.bold),
-                        contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                        contentPadding:
+                            const EdgeInsets.symmetric(horizontal: 10),
                         fillColor: Colors.white,
                         border: const OutlineInputBorder(
                           borderSide: BorderSide(
@@ -952,7 +968,7 @@ class _MembersState extends State<AdminAllBranch> {
                                                                 borderSide:
                                                                     BorderSide(
                                                                         color:
-                                                                            primaryThemeColor),
+                                                                            secondaryBorderGreyColor),
                                                               )),
                                                       controller:
                                                           firstNameController,
@@ -976,7 +992,7 @@ class _MembersState extends State<AdminAllBranch> {
                                                 ],
                                               ),
                                             ),
-                                            SizedBox(width: 15),
+                                            const SizedBox(width: 15),
                                             SizedBox(
                                               width: MediaQuery.of(context)
                                                       .size
@@ -1019,7 +1035,7 @@ class _MembersState extends State<AdminAllBranch> {
                                                                 borderSide:
                                                                     BorderSide(
                                                                         color:
-                                                                            primaryThemeColor),
+                                                                            secondaryBorderGreyColor),
                                                               )),
                                                       controller:
                                                           primaryMobileNo,
@@ -1045,6 +1061,7 @@ class _MembersState extends State<AdminAllBranch> {
                                             ),
                                           ],
                                         ),
+                                        const SizedBox(height: 20),
                                         Row(
                                           children: [
                                             SizedBox(
@@ -1089,7 +1106,7 @@ class _MembersState extends State<AdminAllBranch> {
                                                                 borderSide:
                                                                     BorderSide(
                                                                         color:
-                                                                            primaryThemeColor),
+                                                                            secondaryBorderGreyColor),
                                                               )),
                                                       controller:
                                                           secondaryMobileNo,
@@ -1113,7 +1130,7 @@ class _MembersState extends State<AdminAllBranch> {
                                                 ],
                                               ),
                                             ),
-                                            SizedBox(width: 15),
+                                            const SizedBox(width: 15),
                                             SizedBox(
                                               width: MediaQuery.of(context)
                                                       .size
@@ -1156,7 +1173,7 @@ class _MembersState extends State<AdminAllBranch> {
                                                                 borderSide:
                                                                     BorderSide(
                                                                         color:
-                                                                            primaryThemeColor),
+                                                                            secondaryBorderGreyColor),
                                                               )),
                                                       controller: email,
                                                       keyboardType:
@@ -1181,6 +1198,7 @@ class _MembersState extends State<AdminAllBranch> {
                                             ),
                                           ],
                                         ),
+                                        const SizedBox(height: 20),
                                         Row(
                                           children: [
                                             SizedBox(
@@ -1225,7 +1243,7 @@ class _MembersState extends State<AdminAllBranch> {
                                                                 borderSide:
                                                                     BorderSide(
                                                                         color:
-                                                                            primaryThemeColor),
+                                                                            secondaryBorderGreyColor),
                                                               )),
                                                       controller: address,
                                                       keyboardType:
@@ -1248,7 +1266,7 @@ class _MembersState extends State<AdminAllBranch> {
                                                 ],
                                               ),
                                             ),
-                                            SizedBox(
+                                            const SizedBox(
                                               width: 15,
                                             ),
                                             SizedBox(
@@ -1293,7 +1311,7 @@ class _MembersState extends State<AdminAllBranch> {
                                                                 borderSide:
                                                                     BorderSide(
                                                                         color:
-                                                                            primaryThemeColor),
+                                                                            secondaryBorderGreyColor),
                                                               )),
                                                       controller: password,
                                                       keyboardType:
@@ -1318,6 +1336,7 @@ class _MembersState extends State<AdminAllBranch> {
                                             ),
                                           ],
                                         ),
+                                        const SizedBox(height: 20),
                                         Row(
                                           children: [
                                             SizedBox(
@@ -1331,14 +1350,14 @@ class _MembersState extends State<AdminAllBranch> {
                                                   crossAxisAlignment:
                                                       CrossAxisAlignment.start,
                                                   children: [
-                                                    SelectableText(
+                                                    const SelectableText(
                                                       "From Date ",
                                                       style: TextStyle(
                                                         fontWeight:
                                                             FontWeight.bold,
                                                       ),
                                                     ),
-                                                    SizedBox(height: 8),
+                                                    const SizedBox(height: 8),
                                                     Container(
                                                       height:
                                                           MediaQuery.of(context)
@@ -1374,7 +1393,7 @@ class _MembersState extends State<AdminAllBranch> {
                                                               'Select Date ',
                                                           suffixIcon:
                                                               IconButton(
-                                                            icon: Icon(Icons
+                                                            icon: const Icon(Icons
                                                                 .calendar_today),
                                                             onPressed:
                                                                 () async {
@@ -1390,7 +1409,7 @@ class _MembersState extends State<AdminAllBranch> {
                                                     ),
                                                   ],
                                                 )),
-                                            SizedBox(
+                                            const SizedBox(
                                               width: 30,
                                             ),
                                             SizedBox(
@@ -1404,14 +1423,14 @@ class _MembersState extends State<AdminAllBranch> {
                                                   crossAxisAlignment:
                                                       CrossAxisAlignment.start,
                                                   children: [
-                                                    SelectableText(
+                                                    const SelectableText(
                                                       "To Date ",
                                                       style: TextStyle(
                                                         fontWeight:
                                                             FontWeight.bold,
                                                       ),
                                                     ),
-                                                    SizedBox(height: 8),
+                                                    const SizedBox(height: 8),
                                                     Container(
                                                       height:
                                                           MediaQuery.of(context)
@@ -1447,7 +1466,7 @@ class _MembersState extends State<AdminAllBranch> {
                                                               'Select Date ',
                                                           suffixIcon:
                                                               IconButton(
-                                                            icon: Icon(Icons
+                                                            icon: const Icon(Icons
                                                                 .calendar_today),
                                                             onPressed:
                                                                 () async {
@@ -1465,6 +1484,7 @@ class _MembersState extends State<AdminAllBranch> {
                                                 )),
                                           ],
                                         ),
+                                        const SizedBox(height: 20),
                                         Row(
                                           children: [
                                             SizedBox(
@@ -1509,7 +1529,7 @@ class _MembersState extends State<AdminAllBranch> {
                                                                 borderSide:
                                                                     BorderSide(
                                                                         color:
-                                                                            primaryThemeColor),
+                                                                            secondaryBorderGreyColor),
                                                               )),
                                                       controller: totalAmtPaid,
                                                       keyboardType:
@@ -1531,7 +1551,7 @@ class _MembersState extends State<AdminAllBranch> {
                                                 ],
                                               ),
                                             ),
-                                            SizedBox(
+                                            const SizedBox(
                                               width: 30,
                                             ),
                                             SizedBox(
@@ -1576,7 +1596,7 @@ class _MembersState extends State<AdminAllBranch> {
                                                                 borderSide:
                                                                     BorderSide(
                                                                         color:
-                                                                            primaryThemeColor),
+                                                                            secondaryBorderGreyColor),
                                                               )),
                                                       controller: paidAmmot,
                                                       keyboardType:
@@ -1600,6 +1620,7 @@ class _MembersState extends State<AdminAllBranch> {
                                             ),
                                           ],
                                         ),
+                                        const SizedBox(height: 20),
                                       ],
                                     ),
                                   ),
@@ -1747,13 +1768,13 @@ class _MembersState extends State<AdminAllBranch> {
           ),
           Container(
             padding: const EdgeInsets.all(5),
-            height: MediaQuery.of(context).size.height * 0.7,
+            height: MediaQuery.of(context).size.height * 0.8,
             decoration: BoxDecoration(
               color: secondaryColor,
               borderRadius: BorderRadius.circular(5),
             ),
             child: isLoading == true
-                ? Center(
+                ? const Center(
                     child: CircularProgressIndicator(),
                   )
                 : RawKeyboardListener(
@@ -1765,7 +1786,7 @@ class _MembersState extends State<AdminAllBranch> {
                         decoration: BoxDecoration(
                           border: Border.all(width: 0),
                         ),
-                        columnDividerColor: primaryThemeColor,
+                        columnDividerColor: secondaryBorderGreyColor,
                         scrollbar: const TableScrollbarThemeData(
                           pinnedHorizontalColor: Colors.transparent,
                           unpinnedHorizontalColor: Colors.transparent,
@@ -1852,15 +1873,6 @@ class _MembersState extends State<AdminAllBranch> {
         Expanded(
           flex: 9,
           child: Scaffold(
-            appBar: GenericAppBar(
-              onNavbarIconPressed: () {
-                setState(() {
-                  isNavOpen = !isNavOpen;
-                });
-              },
-              title: 'Admin All Branches',
-              toolbarHeight: MediaQuery.of(context).size.height * 0.075,
-            ),
             body: _body(mediaQuery),
           ),
         ),

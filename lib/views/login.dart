@@ -85,13 +85,10 @@ class _LoginPageState extends State<LoginPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Container(
-                          // width: MediaQuery.of(context).size.height * 0.2,
-                          height: MediaQuery.of(context).size.height * 0.08,
-                          child: Text(
-                            "Fittraa",
-                            style: TextStyle(color: primaryColor, fontSize: 30),
-                          ),
-                        ),
+                            // width: MediaQuery.of(context).size.height * 0.2,
+                            height: MediaQuery.of(context).size.height * 0.08,
+                            child:
+                                Image.asset("assets/images/fittraa_logo.png")),
                         SizedBox(
                           height: MediaQuery.of(context).size.height * 0.095,
                         ),
@@ -388,19 +385,6 @@ class _LoginPageState extends State<LoginPage> {
                         const SizedBox(
                           height: 10,
                         ),
-                        InkWell(
-                          onTap: () {
-                            setState(() {
-                              isLogin = !isLogin;
-                            });
-                          },
-                          child: const Text(
-                            'New User?',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white),
-                          ),
-                        )
                       ],
                     ),
                   ),
