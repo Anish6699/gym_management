@@ -32,6 +32,7 @@ class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  TextEditingController forgotPasswordController = TextEditingController();
   bool isLogin = true;
 
   var nameController = TextEditingController();
@@ -172,11 +173,11 @@ class _LoginPageState extends State<LoginPage> {
                                                     color: Colors.white,
                                                   )),
                                       ),
-                                      border: OutlineInputBorder(
+                                      border: const OutlineInputBorder(
                                         borderSide:
                                             BorderSide(color: Colors.black),
                                       ),
-                                      focusedBorder: OutlineInputBorder(
+                                      focusedBorder: const OutlineInputBorder(
                                         borderSide: BorderSide(
                                             color: secondaryBorderGreyColor),
                                       )),
@@ -385,6 +386,240 @@ class _LoginPageState extends State<LoginPage> {
                         const SizedBox(
                           height: 10,
                         ),
+                        InkWell(
+                          onTap: () {
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return GenericDialogBox(
+                                    enableSecondaryButton: true,
+                                    isLoader: false,
+                                    title: "Forgot Password",
+                                    primaryButtonText: 'Submit',
+                                    secondaryButtonText: 'Cancel',
+                                    content: SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.3,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          const Flexible(
+                                            child: SelectableText(
+                                              'Registered Email Address',
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            height: 8,
+                                          ),
+                                          SizedBox(
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                0.07,
+                                            child: TextFormField(
+                                              decoration: const InputDecoration(
+                                                  border: OutlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                        color:
+                                                            secondaryBorderGreyColor),
+                                                  ),
+                                                  focusedBorder:
+                                                      OutlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                        color:
+                                                            secondaryBorderGreyColor),
+                                                  )),
+                                              controller:
+                                                  forgotPasswordController,
+                                              keyboardType:
+                                                  TextInputType.emailAddress,
+                                              enableSuggestions: true,
+                                              autofocus: true,
+                                              style: TextStyle(
+                                                  fontSize:
+                                                      MediaQuery.of(context)
+                                                              .size
+                                                              .height *
+                                                          0.02),
+                                              textAlignVertical:
+                                                  TextAlignVertical.center,
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            height: 8,
+                                          ),
+                                          const Text(
+                                            'Reset Password link will be shared on email',
+                                            style:
+                                                TextStyle(color: Colors.grey),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                    onSecondaryButtonPressed: () {
+                                      Get.back();
+                                    },
+                                    onPrimaryButtonPressed: () {
+                                      if (forgotPasswordController.text
+                                          .contains('@')) {
+                                        showDialog(
+                                            barrierDismissible: false,
+                                            context: context,
+                                            builder: (context) {
+                                              return FutureBuilder(
+                                                future: loginController
+                                                    .forgotPassword({
+                                                  'email':
+                                                      forgotPasswordController
+                                                          .text
+                                                }),
+                                                builder: (context, snapshot) {
+                                                  return snapshot
+                                                              .connectionState ==
+                                                          ConnectionState
+                                                              .waiting
+                                                      ? GenericDialogBox(
+                                                          enableSecondaryButton:
+                                                              false,
+                                                          isLoader: true,
+                                                          content: Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(8.0),
+                                                            child: SizedBox(
+                                                              width: MediaQuery.of(
+                                                                          context)
+                                                                      .size
+                                                                      .width *
+                                                                  0.04,
+                                                              height: MediaQuery.of(
+                                                                          context)
+                                                                      .size
+                                                                      .width *
+                                                                  0.06,
+                                                              child:
+                                                                  const Center(
+                                                                child: Column(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .center,
+                                                                  children: [
+                                                                    CircularProgressIndicator(
+                                                                      color:
+                                                                          primaryDarkBlueColor,
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        )
+                                                      : GenericDialogBox(
+                                                          closeButtonEnabled:
+                                                              false,
+                                                          enablePrimaryButton:
+                                                              true,
+                                                          enableSecondaryButton:
+                                                              false,
+                                                          isLoader: false,
+                                                          content: Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(8.0),
+                                                            child: SizedBox(
+                                                              width: MediaQuery.of(
+                                                                          context)
+                                                                      .size
+                                                                      .width *
+                                                                  0.04,
+                                                              height: MediaQuery.of(
+                                                                          context)
+                                                                      .size
+                                                                      .width *
+                                                                  0.06,
+                                                              child: Center(
+                                                                child: Column(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .center,
+                                                                  children: [
+                                                                    Text(snapshot
+                                                                            .data![
+                                                                        'message'])
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          primaryButtonText:
+                                                              'Ok',
+                                                          onPrimaryButtonPressed:
+                                                              () async {
+                                                            Get.back();
+                                                          },
+                                                        );
+                                                },
+                                              );
+                                            });
+                                      } else {
+                                        showDialog(
+                                            context: context,
+                                            builder: (context) {
+                                              return GenericDialogBox(
+                                                enableSecondaryButton: false,
+                                                primaryButtonText: 'Ok',
+                                                isLoader: false,
+                                                content: Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: SizedBox(
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width *
+                                                            0.04,
+                                                    height:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width *
+                                                            0.06,
+                                                    child: const Center(
+                                                      child: Column(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
+                                                        children: [
+                                                          Text(
+                                                            'Please Enter Valid Email Address !!',
+                                                            style: TextStyle(
+                                                                color:
+                                                                    Colors.red),
+                                                          )
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                                onPrimaryButtonPressed: () {
+                                                  Get.back();
+                                                },
+                                              );
+                                            });
+                                      }
+                                    },
+                                  );
+                                });
+                          },
+                          child: Text(
+                            "Forgot Password",
+                            style: TextStyle(
+                                color: Colors.redAccent,
+                                fontSize:
+                                    MediaQuery.of(context).size.width * 0.01),
+                          ),
+                        )
                       ],
                     ),
                   ),

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:gmstest/configs/colors.dart';
+import 'package:gmstest/controllers/dashboard_controllers/admin_dashboard_controller.dart';
 import 'package:gmstest/navigation_pane/navigation_pane_closed.dart';
 import 'package:gmstest/navigation_pane/navigation_pane_expanded.dart';
 import 'package:gmstest/views/dashboards/widgets/admin_graph1.dart';
+import 'package:gmstest/views/dashboards/widgets/gender_pi_chart.dart';
+import 'package:gmstest/views/dashboards/widgets/livedata_tile_widget.dart';
 import 'package:gmstest/views/dashboards/widgets/tile_widget.dart';
-import 'package:gmstest/widgets/generic_appbar.dart';
 
 class AdminDashboard extends StatefulWidget {
   const AdminDashboard({super.key});
@@ -25,14 +27,29 @@ class _DashboardState extends State<AdminDashboard>
   final scaffoldKey = GlobalKey<ScaffoldState>();
   bool isNavOpen = true;
   var selectedYear;
+  AdminDashboardController adminDashboardController =
+      AdminDashboardController();
+
+  Map<String, dynamic> adminDashboardData = {};
+  bool isLoading = true;
 
   @override
   void initState() {
-    // getTasks();
+    selectedYear = (DateTime.now().year).toString();
+    getDashboardData();
     super.initState();
   }
 
+  getDashboardData() async {
+    adminDashboardData = await adminDashboardController
+        .getAdminDashboardData({'year': selectedYear});
+
+    isLoading = false;
+    setState(() {});
+  }
+
   setDataOnBranchChange() {}
+  List yearList = ['2021', '2022', '2023', '2024', '2025', '2026'];
 
   Widget _body() {
     return Padding(
@@ -41,10 +58,64 @@ class _DashboardState extends State<AdminDashboard>
       child: SingleChildScrollView(
           child: Column(
         children: [
+          // Row(
+          //   children: [
+          //     Text(
+          //       "Live Data",
+          //       style: TextStyle(
+          //           color: Colors.greenAccent,
+          //           fontSize: MediaQuery.of(context).size.width * 0.035),
+          //     ),
+          //   ],
+          // ),
+          const SizedBox(
+            height: 20,
+          ),
+          Padding(
+            padding: EdgeInsets.only(right: 30),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Column(
+                  children: [
+                    Row(
+                      children: [
+                        LiveDataFileInfoCard(
+                          fieldName: "Total Member's",
+                          value: adminDashboardData['total_member'].toString(),
+                          svgSrc: 'assets/icon/people.png',
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        LiveDataFileInfoCard(
+                          fieldName: "Total Visitor's",
+                          value: adminDashboardData['total_visitor'].toString(),
+                          svgSrc: 'assets/icon/visitors.png',
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        LiveDataFileInfoCard(
+                          fieldName: "Total Trainer's",
+                          value: adminDashboardData['total_trainer'].toString(),
+                          svgSrc: 'assets/icon/coach.png',
+                        )
+                      ],
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
           Row(
             children: [
               Text(
-                "Admin Dashboard - (Overview of All Branches)",
+                "Year wise Data - (Overview of All Branches)",
                 style: Theme.of(context).textTheme.titleLarge,
               ),
               const Spacer(
@@ -66,7 +137,7 @@ class _DashboardState extends State<AdminDashboard>
                   value: selectedYear,
                   isExpanded: true,
                   elevation: 1,
-                  items: ['2021', '2022', '2023', '2024', '2025', '2026'].map(
+                  items: yearList.map(
                     (item) {
                       return DropdownMenuItem(
                         value: item,
@@ -82,7 +153,11 @@ class _DashboardState extends State<AdminDashboard>
                   ).toList(),
                   onChanged: (value) {
                     selectedYear = value!;
-                    setDataOnBranchChange();
+                    setState(() {
+                      adminDashboardData.clear();
+                      isLoading == true;
+                    });
+                    getDashboardData();
                   },
                   borderRadius: BorderRadius.circular(4),
                   style: TextStyle(
@@ -120,49 +195,15 @@ class _DashboardState extends State<AdminDashboard>
             ],
           ),
           const SizedBox(
-            height: 10,
+            height: 20,
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              SizedBox(
-                width: MediaQuery.of(context).size.width * 0.16,
-                child: const FileInfoCard(
-                  fieldName: "Active Member's",
-                  value: '500',
-                  svgSrc: 'assets/icon/people.png',
-                ),
-              ),
-              SizedBox(
-                width: MediaQuery.of(context).size.width * 0.16,
-                child: const FileInfoCard(
-                  fieldName: "In-Active Member's",
-                  value: '500',
-                  svgSrc: 'assets/icon/people.png',
-                ),
-              ),
-              SizedBox(
-                width: MediaQuery.of(context).size.width * 0.16,
-                child: const FileInfoCard(
-                  fieldName: "Payment Received",
-                  value: '500',
-                  svgSrc: 'assets/icon/budget.png',
-                ),
-              ),
-              SizedBox(
-                width: MediaQuery.of(context).size.width * 0.16,
-                child: const FileInfoCard(
-                  fieldName: "Payment Pending",
-                  value: '500',
-                  svgSrc: 'assets/icon/budget.png',
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          AdminGraph1()
+          isLoading == true
+              ? CircularProgressIndicator()
+              : adminDashboardData.isEmpty
+                  ? SizedBox()
+                  : AdminGraph1(
+                      graphData: adminDashboardData['data'],
+                    )
         ],
       )),
     );
@@ -204,3 +245,10 @@ class _DashboardState extends State<AdminDashboard>
     );
   }
 }
+
+
+
+ // CustomPieChart(
+                //   maleCount: 20, // Replace with your male count
+                //   femaleCount: 30, // Replace with your female count
+                // ),

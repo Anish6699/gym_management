@@ -13,6 +13,7 @@ import 'package:gmstest/configs/colors.dart';
 import 'package:gmstest/configs/global_functions.dart';
 import 'package:gmstest/views/dashboards/branch/testdata.dart';
 import 'package:gmstest/views/dashboards/widgets/test_graph_datas.dart';
+import 'package:gmstest/views/dashboards/widgets/tile_widget.dart';
 
 class CustomCircleSymbolRenderer extends CircleSymbolRenderer {
   CustomCircleSymbolRenderer(this.value);
@@ -108,19 +109,25 @@ class TextSymbolRenderer extends CircleSymbolRenderer {
 }
 
 class AdminGraph1 extends StatefulWidget {
-  static const String id = '/StackedBarLineExample';
-
-  const AdminGraph1({super.key});
+  List graphData;
+  AdminGraph1({super.key, required this.graphData});
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<AdminGraph1> {
   @override
+  void initState() {
+    print('dtaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
+    print(widget.graphData);
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: OrdinalComboBarLineChart(graph1Data),
+      child: OrdinalComboBarLineChart(widget.graphData),
     );
   }
 }
@@ -136,27 +143,22 @@ class OrdinalComboBarLineChart extends StatefulWidget {
 }
 
 class _OrdinalComboBarLineChartState extends State<OrdinalComboBarLineChart> {
-  List<charts.Series<OrdinalSales, String>> createSampleData(
-      List<dynamic> graphData) {
-    List<charts.Series<OrdinalSales, String>> seriesList = [];
-
-    // Iterate over each branch's data
+  List<charts.Series<OrdinalSales, String>> seriesList = [];
+  createSampleData(List<dynamic> graphData) {
+    seriesList.clear();
     for (var i = 0; i < graphData.length; i++) {
       final branchData = graphData[i];
       final branchName = branchData['branch_name'];
       final List<dynamic> branchDataList = branchData['data'];
 
-      // Create a list of OrdinalSales objects for this branch
       final List<OrdinalSales> salesData = [];
 
       for (var monthData in branchDataList) {
         salesData.add(OrdinalSales(
-          monthData['month'],
-          int.parse(monthData['activeValue']),
+          monthData['month'].toString(),
+          int.parse(monthData[graphFilterValue()].toString()),
         ));
       }
-
-      // Create a series for this branch with the color from the list
       seriesList.add(
         charts.Series<OrdinalSales, String>(
           id: branchName,
@@ -170,31 +172,73 @@ class _OrdinalComboBarLineChartState extends State<OrdinalComboBarLineChart> {
         )..setAttribute(charts.rendererIdKey, 'customLine'),
       );
     }
-
-    return seriesList;
+    setState(() {});
   }
 
   List randomColors = [];
-  List filterList = [
+  List<Map> filterList = [
     {"name": "Active Member's", "id": 1},
     {"name": "In-Active Member's", "id": 2},
-    {"name": "Pending Fees Member's", "id": 3},
+    {"name": "Expense", "id": 3},
     {"name": "Visitor's", "id": 4},
-    {"name": "Total Amount Received", "id": 5},
-    {"name": "Total Amount Pending", "id": 6},
   ];
+
+  String graphFilterValue() {
+    if (selectedFilter != null) {
+      switch (selectedFilter['id']) {
+        case 1:
+          return "active";
+        case 2:
+          return "inactive";
+        case 3:
+          return "expense";
+        case 4:
+          return "visitors";
+
+        default:
+          return "active";
+      }
+    } else {
+      return "active";
+    }
+  }
+
+  String totalCount() {
+    if (selectedFilter != null) {
+      switch (selectedFilter['id']) {
+        case 1:
+          return "active";
+        case 2:
+          return "inactive";
+        case 3:
+          return "expense";
+        case 4:
+          return "visitors";
+
+        default:
+          return "active";
+      }
+    } else {
+      return "active";
+    }
+  }
 
   @override
   void initState() {
     randomColors = generateGlobalRandomColors(widget.seriesList.length);
+    selectedFilter = filterList.first;
+    createSampleData(widget.seriesList);
     super.initState();
   }
 
-  changeGraphonFilterChange() {}
+  changeGraphonFilterChange() {
+    createSampleData(widget.seriesList);
+  }
+
+  String value = '';
   var selectedFilter;
   @override
   Widget build(BuildContext context) {
-    String value = '';
     return Column(
       children: [
         Row(
@@ -234,18 +278,12 @@ class _OrdinalComboBarLineChartState extends State<OrdinalComboBarLineChart> {
                 value: selectedFilter,
                 isExpanded: true,
                 elevation: 1,
-                items: [
-                  "Active Member's",
-                  "In-Active Member's",
-                  "Pending Fees Members",
-                  "Total Amount Received",
-                  "Total Amount Pending"
-                ].map(
+                items: filterList.map(
                   (item) {
                     return DropdownMenuItem(
                       value: item,
                       child: Text(
-                        item,
+                        item['name'],
                         style: mat.TextStyle(
                             fontSize: MediaQuery.of(context).size.width * 0.01,
                             color: Colors.white),
@@ -293,7 +331,7 @@ class _OrdinalComboBarLineChartState extends State<OrdinalComboBarLineChart> {
         SizedBox(
           height: MediaQuery.of(context).size.height * 0.6,
           child: charts.OrdinalComboChart(
-            createSampleData(widget.seriesList),
+            seriesList,
             animate: true,
             defaultRenderer: charts.BarRendererConfig(
               groupingType: charts.BarGroupingType.stacked,
@@ -343,7 +381,7 @@ class _OrdinalComboBarLineChartState extends State<OrdinalComboBarLineChart> {
             ),
             primaryMeasureAxis: charts.NumericAxisSpec(
               renderSpec: charts.GridlineRendererSpec(
-                labelStyle: charts.TextStyleSpec(
+                labelStyle: const charts.TextStyleSpec(
                   color: charts.MaterialPalette.white, // Y-axis title color
                 ),
                 lineStyle: charts.LineStyleSpec(
@@ -354,6 +392,77 @@ class _OrdinalComboBarLineChartState extends State<OrdinalComboBarLineChart> {
               ),
             ),
           ),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        SizedBox(
+          height: MediaQuery.of(context).size.height * 0.5,
+          child: ListView.builder(
+              itemCount: widget.seriesList.length,
+              itemBuilder: ((context, index) {
+                return SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.17,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        widget.seriesList[index]['branch_name'].toString(),
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.17,
+                            child: FileInfoCard(
+                              fieldName: "Active Member's",
+                              value: widget.seriesList[index]
+                                          ['yearly_active_member_count']
+                                      ?.toString() ??
+                                  '-',
+                              svgSrc: 'assets/icon/people.png',
+                            ),
+                          ),
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.17,
+                            child: FileInfoCard(
+                              fieldName: "In-Active Member's",
+                              value: widget.seriesList[index]
+                                          ['yearly_in-active_member_count']
+                                      ?.toString() ??
+                                  '-',
+                              svgSrc: 'assets/icon/people.png',
+                            ),
+                          ),
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.17,
+                            child: FileInfoCard(
+                              fieldName: "Total Visitors",
+                              value: widget.seriesList[index]
+                                          ['yearly_total_visitor_count']
+                                      ?.toString() ??
+                                  '-',
+                              svgSrc: 'assets/icon/visitors.png',
+                            ),
+                          ),
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.17,
+                            child: FileInfoCard(
+                              fieldName: "Total Expense",
+                              value: widget.seriesList[index]
+                                          ['yearly_total_expense']
+                                      ?.toString() ??
+                                  '-',
+                              svgSrc: 'assets/icon/budget.png',
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                );
+              })),
         ),
       ],
     );

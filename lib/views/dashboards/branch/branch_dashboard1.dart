@@ -253,7 +253,7 @@ class _Dashboard1ViewState extends State<Dashboard1View> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.16,
+                  width: MediaQuery.of(context).size.width * 0.17,
                   child: FileInfoCard(
                     fieldName: "Active Member's",
                     value: branchData['yearly_active']?.toString() ?? '-',
@@ -261,7 +261,7 @@ class _Dashboard1ViewState extends State<Dashboard1View> {
                   ),
                 ),
                 SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.16,
+                  width: MediaQuery.of(context).size.width * 0.17,
                   child: FileInfoCard(
                     fieldName: "In-Active Member's",
                     value: branchData['yearly_inactive']?.toString() ?? '-',
@@ -269,7 +269,7 @@ class _Dashboard1ViewState extends State<Dashboard1View> {
                   ),
                 ),
                 SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.16,
+                  width: MediaQuery.of(context).size.width * 0.17,
                   child: FileInfoCard(
                     fieldName: "Payment Received",
                     value: branchData['yearly_paid']?.toString() ?? '-',
@@ -277,7 +277,7 @@ class _Dashboard1ViewState extends State<Dashboard1View> {
                   ),
                 ),
                 SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.16,
+                  width: MediaQuery.of(context).size.width * 0.17,
                   child: FileInfoCard(
                     fieldName: "Payment Pending",
                     value: branchData['yearly_unpaid']?.toString() ?? '-',

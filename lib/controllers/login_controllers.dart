@@ -34,4 +34,13 @@ class LoginController extends GetxController {
 
     return response;
   }
+   Future<Map<String, dynamic>> forgotPassword(
+      Map<String, dynamic> data) async {
+    var response = await _httpClient.post(
+        path: 'forgot-password', body: data);
+
+    var body = json.decode(response['body']) as Map<String, dynamic>;
+
+    return body;
+  }
 }

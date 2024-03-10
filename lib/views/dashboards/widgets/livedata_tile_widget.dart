@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gmstest/configs/colors.dart';
 
-class FileInfoCard extends StatelessWidget {
-  const FileInfoCard({
+class LiveDataFileInfoCard extends StatelessWidget {
+  const LiveDataFileInfoCard({
     Key? key,
     required this.fieldName,
     required this.value,
@@ -19,8 +19,8 @@ class FileInfoCard extends StatelessWidget {
       message: fieldName,
       child: Container(
         padding: const EdgeInsets.all(16),
-        decoration: const BoxDecoration(
-          color: secondaryColor,
+        decoration: BoxDecoration(
+          color: primaryColor.withOpacity(0.5),
           borderRadius: BorderRadius.all(Radius.circular(10)),
         ),
         child: Column(
@@ -34,9 +34,9 @@ class FileInfoCard extends StatelessWidget {
                   padding: const EdgeInsets.all(5),
                   height: 40,
                   width: 40,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     // color: color.withOpacity(0.1),
-                    borderRadius: const BorderRadius.all(Radius.circular(10)),
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
                   ),
                   child: Image.asset(
                     svgSrc,
@@ -48,12 +48,14 @@ class FileInfoCard extends StatelessWidget {
                   width: 5,
                 ),
                 Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
                       "${value} ",
                       style: Theme.of(context)
                           .textTheme
-                          .bodyMedium!
+                          .bodyLarge!
                           .copyWith(color: Colors.white70),
                     ),
                     SizedBox(
@@ -74,43 +76,6 @@ class FileInfoCard extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-}
-
-class ProgressLine extends StatelessWidget {
-  const ProgressLine({
-    Key? key,
-    this.color = primaryColor,
-    required this.percentage,
-  }) : super(key: key);
-
-  final Color? color;
-  final int? percentage;
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Container(
-          width: double.infinity,
-          height: 5,
-          decoration: BoxDecoration(
-            color: color!.withOpacity(0.1),
-            borderRadius: const BorderRadius.all(Radius.circular(10)),
-          ),
-        ),
-        LayoutBuilder(
-          builder: (context, constraints) => Container(
-            width: constraints.maxWidth * (percentage! / 100),
-            height: 5,
-            decoration: BoxDecoration(
-              color: color,
-              borderRadius: const BorderRadius.all(Radius.circular(10)),
-            ),
-          ),
-        ),
-      ],
     );
   }
 }
