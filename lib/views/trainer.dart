@@ -91,7 +91,6 @@ class _MembersState extends State<TrainerView> {
   }
 
   setInitialData() async {
-    print('set initial data');
     final prefs = await SharedPreferences.getInstance();
 
     userType = prefs.getInt('user_type');
@@ -99,7 +98,6 @@ class _MembersState extends State<TrainerView> {
     branchId = prefs.getInt('branchId');
 
     if (userType == 2) {
-      print('Admin login');
       adminBranchList =
           await adminController.getAdminAllBranches(adminId: adminId);
 
@@ -116,7 +114,6 @@ class _MembersState extends State<TrainerView> {
       setDataOnBranchChange();
     }
     if (userType == 3) {
-      print('branch login');
       setDataOnBranchLogin();
     }
   }
@@ -135,7 +132,7 @@ class _MembersState extends State<TrainerView> {
         return {'data': item};
       }
     }).toList();
-    print(' trainerrrr ${trainerList}');
+
     _headerModel = DaviModel(
       rows: trainerList,
       columns: _getColumns(context),
@@ -181,8 +178,6 @@ class _MembersState extends State<TrainerView> {
         return {'data': item};
       }
     }).toList();
-
-    print(' trainerrrr ${trainerList}');
 
     _headerModel = DaviModel(
       rows: trainerList,
@@ -1078,8 +1073,6 @@ class _MembersState extends State<TrainerView> {
                                       future: trainerController
                                           .deleteTrainer(row.data['id']),
                                       builder: (context, snapshot) {
-                                        print('snapshotttt datatatatat');
-                                        print(snapshot.data);
                                         return snapshot.connectionState ==
                                                 ConnectionState.waiting
                                             ? GenericDialogBox(

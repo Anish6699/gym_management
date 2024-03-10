@@ -42,13 +42,12 @@ class _InventoryNavigationPaneExpandedState
   }
 
   setInitialData() async {
-    print('in set initial data');
     final prefs = await SharedPreferences.getInstance();
 
     userType = prefs.getInt('user_type');
     adminId = prefs.getInt('adminId');
     branchId = prefs.getInt('branchId');
-    print(userType.toString());
+
     setState(() {});
   }
 

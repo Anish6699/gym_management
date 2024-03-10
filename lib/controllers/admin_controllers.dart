@@ -17,7 +17,6 @@ class AdminController extends GetxController {
   }
 
   Future<List> getAdminAllBranches({required int adminId}) async {
-    print(adminId);
     var response = await _httpClient.get(path: 'admin-branch-list/$adminId');
 
     var a = jsonDecode(response['body']);

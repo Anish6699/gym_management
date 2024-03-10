@@ -77,8 +77,6 @@ class _MembersState extends State<AllAdmins> {
         return {'data': item};
       }
     }).toList();
-    print('aaaaaaaaaaaaaaaa');
-    print(categoryList);
     initializeData();
   }
 

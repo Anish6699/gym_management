@@ -40,7 +40,6 @@ class _Dashboard1ViewState extends State<Dashboard1View> {
     branchId = prefs.getInt('branchId');
 
     if (userType == 2) {
-      print('Admin login');
       adminBranchList =
           await adminController.getAdminAllBranches(adminId: adminId);
       if (globalSelectedBranch != null) {
@@ -56,7 +55,6 @@ class _Dashboard1ViewState extends State<Dashboard1View> {
       setState(() {});
     }
     if (userType == 3) {
-      print('branch login');
       setDataOnBranchLogin();
     }
   }
@@ -66,7 +64,7 @@ class _Dashboard1ViewState extends State<Dashboard1View> {
       {'year': selectedYear},
       branchId ?? selectedBranch['id'],
     );
-    print(branchData);
+
     setState(() {
       isLoading = false;
     });
@@ -76,12 +74,12 @@ class _Dashboard1ViewState extends State<Dashboard1View> {
     setState(() {
       isLoading = true;
     });
-    print('setDataOnBranchChange');
+
     branchData = await branchDashboardController.getBranchDashboardData(
       {'year': selectedYear},
       branchId ?? selectedBranch['id'],
     );
-    print(branchData);
+
     setState(() {
       isLoading = false;
     });

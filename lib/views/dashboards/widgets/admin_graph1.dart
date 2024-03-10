@@ -118,8 +118,6 @@ class AdminGraph1 extends StatefulWidget {
 class _HomePageState extends State<AdminGraph1> {
   @override
   void initState() {
-    print('dtaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
-    print(widget.graphData);
     super.initState();
   }
 
@@ -356,8 +354,6 @@ class _OrdinalComboBarLineChartState extends State<OrdinalComboBarLineChart> {
             ],
             selectionModels: [
               SelectionModelConfig(changedListener: (SelectionModel model) {
-                print(model.selectedDatum);
-
                 pointIndex = -1;
 
                 if (model.hasDatumSelection) {

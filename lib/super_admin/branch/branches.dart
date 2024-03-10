@@ -88,7 +88,6 @@ class _MembersState extends State<AdminAllBranch> {
   }
 
   getAdminData() async {
-    print('innnn elseee');
 
     arrData = Get.arguments;
     adminBranchList = await adminController.getAdminAllBranches(

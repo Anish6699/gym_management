@@ -50,7 +50,6 @@ class _SendNotificationState extends State<SendNotificationView>
   }
 
   setInitialData() async {
-    print('set initial data');
     final prefs = await SharedPreferences.getInstance();
 
     userType = prefs.getInt('user_type');
@@ -58,7 +57,6 @@ class _SendNotificationState extends State<SendNotificationView>
     branchId = prefs.getInt('branchId');
 
     if (userType == 2) {
-      print('Admin login');
       adminBranchList =
           await adminController.getAdminAllBranches(adminId: adminId);
       if (globalSelectedBranch != null) {
@@ -73,10 +71,7 @@ class _SendNotificationState extends State<SendNotificationView>
       // setDataOnBranchChange();
       setState(() {});
     }
-    if (userType == 3) {
-      print('branch login');
-      // setDataOnBranchLogin();
-    }
+    if (userType == 3) {}
   }
 
   String formatDate(String dateString) {
@@ -480,10 +475,6 @@ class _SendNotificationState extends State<SendNotificationView>
                                                                     builder:
                                                                         (context,
                                                                             snapshot) {
-                                                                      print(
-                                                                          'snapshotttt datatatatat');
-                                                                      print(snapshot
-                                                                          .data);
                                                                       return snapshot.connectionState ==
                                                                               ConnectionState.waiting
                                                                           ? GenericDialogBox(

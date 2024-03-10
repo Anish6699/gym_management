@@ -14,10 +14,6 @@ class MemberController extends GetxController {
       required statusId,
       required startDate,
       required endDate}) async {
-    print('branchId  $branchId');
-    print('searchKeyword  $searchKeyword');
-    print('statusId  $statusId');
-
     var response = await _httpClient.post(path: 'get-member/$branchId', body: {
       'search': searchKeyword,
       'status': statusId == -1 ? null : statusId,
@@ -92,8 +88,6 @@ class MemberController extends GetxController {
       required searchKeyword,
       required startDate,
       required endDate}) async {
-    print('searchKeyword');
-    print(searchKeyword);
     var response = await _httpClient.post(
         path: 'visitor-list/$branchId',
         body: {

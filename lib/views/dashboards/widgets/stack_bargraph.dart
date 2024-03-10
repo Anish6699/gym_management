@@ -28,8 +28,6 @@ class _OrdinalComboBarLineChartState extends State<StackBarGraphWidget> {
   ];
   @override
   void initState() {
-    print('graphhhhh datatattatat');
-    print(widget.graphData);
     aaaa();
     super.initState();
   }

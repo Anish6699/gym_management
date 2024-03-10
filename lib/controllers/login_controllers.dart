@@ -9,9 +9,8 @@ final HttpClient _httpClient = HttpClient();
 
 class LoginController extends GetxController {
   Future<Map<String, dynamic>> login(Map<String, dynamic> data) async {
-    print(data);
     var response = await _httpClient.post(path: 'user-login', body: data);
-    print(response['body']);
+
     var body = json.decode(response['body']) as Map<String, dynamic>;
 
     return body;
@@ -26,18 +25,15 @@ class LoginController extends GetxController {
 
   Future<Map<String, dynamic>> sendNotifications(
       Map<String, dynamic> data) async {
-    print('datatatatattatatatatatatatatatatatta');
-    print(data);
     var response = await _httpClient.post(path: 'send-mail', body: data);
-    print(response);
+
     // var body = json.decode(response['body']) as String;
 
     return response;
   }
-   Future<Map<String, dynamic>> forgotPassword(
-      Map<String, dynamic> data) async {
-    var response = await _httpClient.post(
-        path: 'forgot-password', body: data);
+
+  Future<Map<String, dynamic>> forgotPassword(Map<String, dynamic> data) async {
+    var response = await _httpClient.post(path: 'forgot-password', body: data);
 
     var body = json.decode(response['body']) as Map<String, dynamic>;
 

@@ -92,7 +92,6 @@ class _DashboardState extends State<ExpenseTrackerView>
     branchId = prefs.getInt('branchId');
 
     if (userType == 2) {
-      print('Admin login');
       adminBranchList =
           await adminController.getAdminAllBranches(adminId: adminId);
       if (globalSelectedBranch != null) {
@@ -115,9 +114,6 @@ class _DashboardState extends State<ExpenseTrackerView>
   getGraphData() async {
     expenseGraphData = await expenseController.getExpenseGraph(
         {'year': selectedYear}, branchId ?? selectedBranch['id']);
-    print('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
-
-    print(expenseGraphData);
   }
 
   setDataOnBranchLogin() async {

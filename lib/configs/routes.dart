@@ -15,7 +15,6 @@ import 'package:gmstest/views/visitors.dart';
 
 class AppRouter {
   static Route onGenerateRoute(RouteSettings settings) {
-    print(settings.name);
     switch (settings.name) {
       case Dashboard.routeName:
         return Dashboard.route();

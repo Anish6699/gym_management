@@ -38,7 +38,6 @@ class _ExpenseTrackerGraphState extends State<ExpenseTrackerGraph> {
 
   setData() {
     graphFlList = convertToListOfFlSpots(widget.graphData);
-    print(graphFlList);
   }
 
   @override

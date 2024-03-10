@@ -14,14 +14,11 @@ class AdminDashboardController extends GetxController {
     final prefs = await SharedPreferences.getInstance();
 
     var a = prefs.getInt('adminId');
-    print('aaaaaaaaaaaaaaaaaaaaaa');
-    print(a);
+
     var response =
         await _httpClient.post(path: 'admin-dashboard/$a', body: data);
 
     var body = json.decode(response['body']) as Map<String, dynamic>;
-
-    print(body);
 
     return body;
   }

@@ -436,8 +436,6 @@ class _VisitorsState extends State<VisitorsView> {
             children: [
               IconButton(
                   onPressed: () {
-                    print('row datatatatatatattatatatat');
-                    print(row.data);
                     firstNameController.text = row.data['first_name'];
                     lastNameController.text = row.data['last_name'];
                     primaryMobileNo.text = row.data['primary_mobile_no'];
@@ -1080,8 +1078,6 @@ class _VisitorsState extends State<VisitorsView> {
                                       future: visitorController
                                           .deleteVisitor(row.data['id']),
                                       builder: (context, snapshot) {
-                                        print('snapshotttt datatatatat');
-                                        print(snapshot.data);
                                         return snapshot.connectionState ==
                                                 ConnectionState.waiting
                                             ? GenericDialogBox(
