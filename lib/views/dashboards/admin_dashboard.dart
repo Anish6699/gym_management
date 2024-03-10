@@ -4,9 +4,7 @@ import 'package:gmstest/controllers/dashboard_controllers/admin_dashboard_contro
 import 'package:gmstest/navigation_pane/navigation_pane_closed.dart';
 import 'package:gmstest/navigation_pane/navigation_pane_expanded.dart';
 import 'package:gmstest/views/dashboards/widgets/admin_graph1.dart';
-import 'package:gmstest/views/dashboards/widgets/gender_pi_chart.dart';
 import 'package:gmstest/views/dashboards/widgets/livedata_tile_widget.dart';
-import 'package:gmstest/views/dashboards/widgets/tile_widget.dart';
 
 class AdminDashboard extends StatefulWidget {
   const AdminDashboard({super.key});

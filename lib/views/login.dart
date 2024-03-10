@@ -470,7 +470,7 @@ class _LoginPageState extends State<LoginPage> {
                                             builder: (context) {
                                               return FutureBuilder(
                                                 future: loginController
-                                                    .forgotPassword({
+                                                    .forgetPassword({
                                                   'email':
                                                       forgotPasswordController
                                                           .text
@@ -557,6 +557,7 @@ class _LoginPageState extends State<LoginPage> {
                                                               'Ok',
                                                           onPrimaryButtonPressed:
                                                               () async {
+                                                            Get.back();
                                                             Get.back();
                                                           },
                                                         );

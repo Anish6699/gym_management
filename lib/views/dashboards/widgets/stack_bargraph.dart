@@ -1,12 +1,6 @@
-// ignore_for_file: implementation_imports
+// ignore_for_file: implementation_imports, must_be_immutable
 
-import 'dart:convert';
-import 'dart:math';
-import 'package:charts_flutter/flutter.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
-import 'package:charts_flutter/src/text_element.dart' as element;
-import 'package:charts_flutter/src/text_element.dart' as ts;
-import 'package:charts_flutter/src/text_style.dart' as style;
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as mat;
 
