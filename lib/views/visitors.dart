@@ -1283,58 +1283,91 @@ class _VisitorsState extends State<VisitorsView> {
           const SizedBox(
             height: 10,
           ),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.2,
-                  height: MediaQuery.of(context).size.height * 0.08,
-                  child: TextField(
-                    style: TextStyle(
-                      fontSize: mediaQuery.width * 0.008,
-                    ),
-                    controller: searchController,
-                    decoration: InputDecoration(
-                      hintText: "Search",
-                      fillColor: secondaryColor,
-                      filled: true,
-                      border: const OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.07,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.2,
+                    height: MediaQuery.of(context).size.height * 0.08,
+                    child: TextField(
+                      style: TextStyle(
+                        fontSize: mediaQuery.width * 0.008,
                       ),
-                      suffixIcon: InkWell(
-                        onTap: () {
-                          setDataOnBranchLogin();
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                              right: 8.0, top: 3, bottom: 3),
-                          child: Container(
-                            decoration: const BoxDecoration(
-                              color: primaryColor,
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10)),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: SvgPicture.asset("assets/Search.svg"),
+                      controller: searchController,
+                      decoration: InputDecoration(
+                        hintText: "Search",
+                        fillColor: secondaryColor,
+                        filled: true,
+                        border: const OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                        ),
+                        suffixIcon: InkWell(
+                          onTap: () {
+                            setDataOnBranchLogin();
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                                right: 8.0, top: 3, bottom: 3),
+                            child: Container(
+                              decoration: const BoxDecoration(
+                                color: primaryColor,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10)),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: SvgPicture.asset("assets/Search.svg"),
+                              ),
                             ),
                           ),
                         ),
                       ),
-                    ),
-                  )),
-              SizedBox(
-                width: mediaQuery.width * 0.01,
-              ),
-              SizedBox(
+                    )),
+                SizedBox(
+                  width: mediaQuery.width * 0.01,
+                ),
+                SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.12,
+                    height: MediaQuery.of(context).size.height * 0.08,
+                    child: TextField(
+                      style: TextStyle(
+                        fontSize: mediaQuery.width * 0.008,
+                      ),
+                      controller: filterFromDateController,
+                      readOnly: true,
+                      decoration: InputDecoration(
+                        contentPadding: const EdgeInsets.only(left: 10),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(4.0),
+                          borderSide:
+                              const BorderSide(color: secondaryBorderGreyColor),
+                        ),
+                        hintText: 'From Date ',
+                        suffixIcon: IconButton(
+                          icon: const Icon(Icons.calendar_today),
+                          onPressed: () async {
+                            filterFromDateController.text =
+                                await selectedDatee(context);
+
+                            setDataOnBranchChange();
+                          },
+                        ),
+                      ),
+                    )),
+                SizedBox(
+                  width: mediaQuery.width * 0.01,
+                ),
+                SizedBox(
                   width: MediaQuery.of(context).size.width * 0.12,
                   height: MediaQuery.of(context).size.height * 0.08,
                   child: TextField(
                     style: TextStyle(
                       fontSize: mediaQuery.width * 0.008,
                     ),
-                    controller: filterFromDateController,
+                    controller: filterToDateController,
                     readOnly: true,
                     decoration: InputDecoration(
                       contentPadding: const EdgeInsets.only(left: 10),
@@ -1343,66 +1376,36 @@ class _VisitorsState extends State<VisitorsView> {
                         borderSide:
                             const BorderSide(color: secondaryBorderGreyColor),
                       ),
-                      hintText: 'From Date ',
+                      hintText: 'End Date ',
                       suffixIcon: IconButton(
                         icon: const Icon(Icons.calendar_today),
                         onPressed: () async {
-                          filterFromDateController.text =
+                          filterToDateController.text =
                               await selectedDatee(context);
 
                           setDataOnBranchChange();
                         },
                       ),
                     ),
-                  )),
-              SizedBox(
-                width: mediaQuery.width * 0.01,
-              ),
-              SizedBox(
-                width: MediaQuery.of(context).size.width * 0.12,
-                height: MediaQuery.of(context).size.height * 0.08,
-                child: TextField(
-                  style: TextStyle(
-                    fontSize: mediaQuery.width * 0.008,
-                  ),
-                  controller: filterToDateController,
-                  readOnly: true,
-                  decoration: InputDecoration(
-                    contentPadding: const EdgeInsets.only(left: 10),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(4.0),
-                      borderSide:
-                          const BorderSide(color: secondaryBorderGreyColor),
-                    ),
-                    hintText: 'End Date ',
-                    suffixIcon: IconButton(
-                      icon: const Icon(Icons.calendar_today),
-                      onPressed: () async {
-                        filterToDateController.text =
-                            await selectedDatee(context);
-
-                        setDataOnBranchChange();
-                      },
-                    ),
                   ),
                 ),
-              ),
-              SizedBox(
-                width: mediaQuery.width * 0.01,
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.08,
-                child: PrimaryButton(
-                  onPressed: () {
-                    searchController.clear();
-                    filterFromDateController.clear();
-                    filterToDateController.clear();
-                    setDataOnBranchChange();
-                  },
-                  title: 'Clear Filter',
+                SizedBox(
+                  width: mediaQuery.width * 0.01,
                 ),
-              )
-            ],
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.08,
+                  child: PrimaryButton(
+                    onPressed: () {
+                      searchController.clear();
+                      filterFromDateController.clear();
+                      filterToDateController.clear();
+                      setDataOnBranchChange();
+                    },
+                    title: 'Clear Filter',
+                  ),
+                )
+              ],
+            ),
           ),
           SizedBox(
             height: mediaQuery.height * 0.01,

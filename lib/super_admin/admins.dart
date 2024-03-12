@@ -290,42 +290,6 @@ class _MembersState extends State<AllAdmins> {
         cellOverflow: TextOverflow.visible,
       ),
       DaviColumn(
-        name: 'Active',
-        cellBuilder: (context, data) {
-          return Center(
-              child: Transform.scale(
-            scale: 0.6,
-            child: CupertinoSwitch(
-                activeColor: primaryDarkGreenColor,
-                value: data.data['status'] == 0 ? true : false,
-                onChanged: (v) {}),
-          ));
-        },
-
-        width: MediaQuery.of(context).size.width * 0.07,
-
-        headerPadding: EdgeInsets.zero,
-
-        cellPadding: EdgeInsets.zero,
-
-        headerTextStyle: const TextStyle(
-            fontWeight: FontWeight.bold, color: primaryLightColor),
-
-        // pinStatus: PinStatus.left,
-
-        sortable: true,
-
-        stringValue: (row) => '',
-
-        cellAlignment: Alignment.center,
-
-        headerAlignment: Alignment.center,
-
-        resizable: false,
-
-        cellOverflow: TextOverflow.visible,
-      ),
-      DaviColumn(
         name: 'View Branches',
         cellBuilder: (context, data) {
           return Center(

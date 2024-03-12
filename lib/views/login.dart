@@ -288,6 +288,13 @@ class _LoginPageState extends State<LoginPage> {
                                                       final prefs =
                                                           await SharedPreferences
                                                               .getInstance();
+                                                      await prefs.setInt(
+                                                          'categoryId',
+                                                          snapshot.data![
+                                                              'category_id']);
+
+                                                      categoryId = snapshot
+                                                          .data!['category_id'];
                                                       userType = snapshot
                                                           .data!['user_type'];
                                                       if (userType == 1) {}

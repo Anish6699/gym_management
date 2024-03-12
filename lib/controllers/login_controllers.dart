@@ -12,6 +12,8 @@ class LoginController extends GetxController {
     var response = await _httpClient.post(path: 'user-login', body: data);
 
     var body = json.decode(response['body']) as Map<String, dynamic>;
+    print('bodyyyyyyyyyyyyyyyyyyyyyyy');
+    print(body);
 
     return body;
   }
@@ -25,6 +27,9 @@ class LoginController extends GetxController {
 
   Future<Map<String, dynamic>> sendNotifications(
       Map<String, dynamic> data) async {
+    print('sent notification');
+    print('dataaaaaaaaaaaaaaaaaaaa');
+    print(data);
     var response = await _httpClient.post(path: 'send-mail', body: data);
 
     // var body = json.decode(response['body']) as String;

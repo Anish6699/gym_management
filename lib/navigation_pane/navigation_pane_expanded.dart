@@ -47,8 +47,32 @@ class _InventoryNavigationPaneExpandedState
     userType = prefs.getInt('user_type');
     adminId = prefs.getInt('adminId');
     branchId = prefs.getInt('branchId');
+    categoryId = prefs.getInt('categoryId');
 
     setState(() {});
+  }
+
+  String getAnimationString() {
+    switch (categoryId) {
+      case 1:
+        return 'assets/animations/member_animation.json';
+      case 2:
+        return 'assets/animations/football_animation.json';
+      case 3:
+        return 'assets/animations/cricket_animation.json';
+      case 4:
+        return 'assets/animations/dance_animation.json';
+      case 5:
+        return 'assets/animations/karate_animation.json';
+      case 6:
+        return 'assets/animations/singing_animation.json';
+      case 7:
+        return 'assets/animations/coach_animation.json';
+      case 8:
+        return 'assets/animations/coach_animation.json';
+      default:
+        return 'assets/animations/coach_animation.json';
+    }
   }
 
   @override
@@ -77,8 +101,7 @@ class _InventoryNavigationPaneExpandedState
                     DrawerHeader(
                         child: Padding(
                             padding: const EdgeInsets.all(24.0),
-                            child: Lottie.asset(
-                                'assets/animations/football_animation.json'))
+                            child: Lottie.asset(getAnimationString()))
 
                         //  Image.asset("assets/manGym.png"),
                         ),

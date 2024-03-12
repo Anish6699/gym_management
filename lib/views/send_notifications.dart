@@ -411,7 +411,7 @@ class _SendNotificationState extends State<SendNotificationView>
                                             ),
                                           ),
                                         ),
-                                        maxLines: 10,
+                                        maxLines: 12,
                                       ),
                                     ),
                                     Padding(

@@ -23,8 +23,10 @@ class _Dashboard1ViewState extends State<Dashboard1View> {
   var selectedBranch;
   var selectedYear;
   bool isLoading = false;
+  List yearList = ['2021', '2022', '2023', '2024', '2025', '2026'];
   @override
   void initState() {
+    selectedYear = DateTime.now().year.toString();
     setInitialData();
     super.initState();
   }
@@ -190,7 +192,7 @@ class _Dashboard1ViewState extends State<Dashboard1View> {
                     value: selectedYear,
                     isExpanded: true,
                     elevation: 1,
-                    items: ['2021', '2022', '2023', '2024', '2025', '2026'].map(
+                    items: yearList.map(
                       (item) {
                         return DropdownMenuItem(
                           value: item,

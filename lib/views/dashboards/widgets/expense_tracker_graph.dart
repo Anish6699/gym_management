@@ -43,6 +43,7 @@ class _ExpenseTrackerGraphState extends State<ExpenseTrackerGraph> {
   @override
   Widget build(BuildContext context) => LineChart(
         LineChartData(
+          
           minX: 0,
           // maxX: 11,
           minY: 0,
@@ -56,8 +57,8 @@ class _ExpenseTrackerGraphState extends State<ExpenseTrackerGraph> {
                 return Text(value.toString());
               },
             )),
-            rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-            topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+            rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+            topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
             bottomTitles: AxisTitles(
               sideTitles: SideTitles(
                   showTitles: true,
@@ -99,15 +100,15 @@ class _ExpenseTrackerGraphState extends State<ExpenseTrackerGraph> {
           gridData: FlGridData(
             show: true,
             getDrawingHorizontalLine: (value) {
-              return FlLine(
-                color: const Color(0xff37434d),
+              return const FlLine(
+                color: Color(0xff37434d),
                 strokeWidth: 1,
               );
             },
             drawVerticalLine: true,
             getDrawingVerticalLine: (value) {
-              return FlLine(
-                color: const Color(0xff37434d),
+              return const FlLine(
+                color: Color(0xff37434d),
                 strokeWidth: 1,
               );
             },
@@ -123,11 +124,11 @@ class _ExpenseTrackerGraphState extends State<ExpenseTrackerGraph> {
               isStrokeJoinRound: false,
               isStrokeCapRound: false,
               curveSmoothness: 0.1,
-              color: Color(0xff23b6e6),
+              color: const Color(0xff23b6e6),
               barWidth: 3,
               // dotData: FlDotData(show: false),
               belowBarData: BarAreaData(
-                  show: true, color: Color(0xff02d39a).withOpacity(0.3)),
+                  show: true, color: const Color(0xff02d39a).withOpacity(0.3)),
             ),
           ],
         ),
