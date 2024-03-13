@@ -88,7 +88,6 @@ class _MembersState extends State<AdminAllBranch> {
   }
 
   getAdminData() async {
-
     arrData = Get.arguments;
     adminBranchList = await adminController.getAdminAllBranches(
         adminId: Get.arguments['adminId']);
@@ -908,6 +907,11 @@ class _MembersState extends State<AdminAllBranch> {
                         email.clear();
                         address.clear();
                         password.clear();
+                        fromDate.clear();
+                        toDate.clear;
+                        paidAmmot.clear;
+                        totalAmtPaid.clear();
+
                         showDialog(
                             context: context,
                             builder: (context) {

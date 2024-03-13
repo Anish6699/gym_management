@@ -110,64 +110,64 @@ class _InventoryNavigationPaneExpandedState
                         const SizedBox(
                           height: 20,
                         ),
-                        userType == 1
-                            ? InkWell(
-                                onTap: () {
-                                  Get.toNamed(
-                                    Dashboard.routeName,
-                                  );
-                                },
-                                child: Padding(
-                                  padding: EdgeInsets.only(
-                                      right: MediaQuery.of(context).size.width *
-                                          0.006,
-                                      top: MediaQuery.of(context).size.width *
-                                          0.006),
-                                  child: Container(
-                                    height: MediaQuery.of(context).size.width *
-                                        0.03,
-                                    decoration: BoxDecoration(
-                                      color: widget.selected == "dashboard"
-                                          ? Colors.white
-                                          : Colors.transparent,
-                                      borderRadius: const BorderRadius.only(
-                                          topRight: Radius.circular(5),
-                                          bottomRight: Radius.circular(5)),
-                                    ),
-                                    child: Padding(
-                                      padding: EdgeInsets.all(
-                                          MediaQuery.of(context).size.width *
-                                              0.006),
-                                      child: Row(
-                                        children: [
-                                          Image.asset(
-                                              'assets/icon/business-report.png'),
-                                          SizedBox(
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.012,
-                                          ),
-                                          Text(
-                                            "SUPERADMIN DASHBOARD",
-                                            style: TextStyle(
-                                                fontSize: MediaQuery.of(context)
-                                                        .size
-                                                        .width *
-                                                    0.009,
-                                                fontWeight: FontWeight.w700,
-                                                color: widget.selected ==
-                                                        "dashboard"
-                                                    ? primaryThemeColor
-                                                    : Colors.white),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              )
-                            : const SizedBox(),
+                        // userType == 1
+                        //     ? InkWell(
+                        //         onTap: () {
+                        //           Get.toNamed(
+                        //             Dashboard.routeName,
+                        //           );
+                        //         },
+                        //         child: Padding(
+                        //           padding: EdgeInsets.only(
+                        //               right: MediaQuery.of(context).size.width *
+                        //                   0.006,
+                        //               top: MediaQuery.of(context).size.width *
+                        //                   0.006),
+                        //           child: Container(
+                        //             height: MediaQuery.of(context).size.width *
+                        //                 0.03,
+                        //             decoration: BoxDecoration(
+                        //               color: widget.selected == "dashboard"
+                        //                   ? Colors.white
+                        //                   : Colors.transparent,
+                        //               borderRadius: const BorderRadius.only(
+                        //                   topRight: Radius.circular(5),
+                        //                   bottomRight: Radius.circular(5)),
+                        //             ),
+                        //             child: Padding(
+                        //               padding: EdgeInsets.all(
+                        //                   MediaQuery.of(context).size.width *
+                        //                       0.006),
+                        //               child: Row(
+                        //                 children: [
+                        //                   Image.asset(
+                        //                       'assets/icon/business-report.png'),
+                        //                   SizedBox(
+                        //                     width: MediaQuery.of(context)
+                        //                             .size
+                        //                             .width *
+                        //                         0.012,
+                        //                   ),
+                        //                   Text(
+                        //                     "SUPERADMIN DASHBOARD",
+                        //                     style: TextStyle(
+                        //                         fontSize: MediaQuery.of(context)
+                        //                                 .size
+                        //                                 .width *
+                        //                             0.009,
+                        //                         fontWeight: FontWeight.w700,
+                        //                         color: widget.selected ==
+                        //                                 "dashboard"
+                        //                             ? primaryThemeColor
+                        //                             : Colors.white),
+                        //                   )
+                        //                 ],
+                        //               ),
+                        //             ),
+                        //           ),
+                        //         ),
+                        //       )
+                        //     : const SizedBox(),
                         userType == 2
                             ? InkWell(
                                 onTap: () {

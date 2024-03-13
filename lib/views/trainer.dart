@@ -357,14 +357,24 @@ class _MembersState extends State<TrainerView> {
             children: [
               IconButton(
                   onPressed: () {
-                    firstNameController.text = row.data['first_name'];
-                    lastNameController.text = row.data['last_name'];
-                    address.text = row.data['addr'];
-                    secondaryMobileNo.text = row.data['secondary_mobile_no'];
-                    email.text = row.data['email'];
-                    primaryMobileNo.text = row.data['primary_mobile_no'];
+                    firstNameController.text =
+                        row.data['first_name']?.toString() ?? "";
+                    lastNameController.text =
+                        row.data['last_name']?.toString() ?? "";
 
-                    experienceController.text = row.data['experience'];
+                    address.text = row.data['addr']?.toString() ?? "";
+
+                    secondaryMobileNo.text =
+                        row.data['secondary_mobile_no']?.toString() ?? "";
+
+                    email.text = row.data['email']?.toString() ?? "";
+
+                    primaryMobileNo.text =
+                        row.data['primary_mobile_no']?.toString() ?? "";
+
+                    experienceController.text =
+                        row.data['experience']?.toString() ?? "";
+
                     showDialog(
                         context: context,
                         builder: (context) {
@@ -908,7 +918,10 @@ class _MembersState extends State<TrainerView> {
                                                     MainAxisAlignment.center,
                                                 children: [
                                                   Text(
-                                                      'Please Enter All Mandatory Field')
+                                                    'Please Enter All Mandatory Field',
+                                                    style: TextStyle(
+                                                        color: Colors.white),
+                                                  )
                                                 ],
                                               ),
                                             ),
@@ -1020,8 +1033,12 @@ class _MembersState extends State<TrainerView> {
                                                               MainAxisAlignment
                                                                   .center,
                                                           children: [
-                                                            Text(snapshot.data![
-                                                                'message'])
+                                                            Text(
+                                                                snapshot.data![
+                                                                    'message'],
+                                                                style: TextStyle(
+                                                                    color: Colors
+                                                                        .white))
                                                           ],
                                                         ),
                                                       ),

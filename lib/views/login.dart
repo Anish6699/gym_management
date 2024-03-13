@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:gmstest/configs/colors.dart';
 import 'package:gmstest/configs/server_configs.dart';
 import 'package:gmstest/controllers/login_controllers.dart';
+import 'package:gmstest/super_admin/admins.dart';
 import 'package:gmstest/views/dashboards/admin_dashboard.dart';
 import 'package:gmstest/views/dashboards/branch/branch_dashboard.dart';
 import 'package:gmstest/views/dashboards/dashboard.dart';
@@ -326,7 +327,8 @@ class _LoginPageState extends State<LoginPage> {
 
                                                       if (userType == 1) {
                                                         Get.toNamed(
-                                                          Dashboard.routeName,
+                                                          AllAdmins
+                                                              .allAdminRouteName,
                                                         );
                                                       } else if (userType ==
                                                           2) {

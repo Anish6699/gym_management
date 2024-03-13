@@ -799,6 +799,10 @@ class _MembersState extends State<AllAdmins> {
                                                                 'message'],
                                                             textAlign: TextAlign
                                                                 .center,
+                                                            style:
+                                                                const TextStyle(
+                                                                    color: Colors
+                                                                        .white),
                                                           )
                                                         ],
                                                       ),
@@ -1602,7 +1606,8 @@ class _MembersState extends State<AllAdmins> {
                                               'password': password.text,
                                               'secondary_mobile_no':
                                                   secondaryMobileNo.text,
-                                              'category': selectedCategory['id']
+                                              'category_id':
+                                                  selectedCategory['id']
                                             }),
                                             builder: (context, snapshot) {
                                               return snapshot.connectionState ==
