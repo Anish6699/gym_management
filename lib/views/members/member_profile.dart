@@ -1,22 +1,17 @@
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:gmstest/configs/colors.dart';
 import 'package:gmstest/configs/global_functions.dart';
-import 'package:gmstest/configs/server_configs.dart';
 import 'package:gmstest/controllers/member_controllers.dart';
 import 'package:gmstest/controllers/trainers_controller.dart';
 import 'package:gmstest/navigation_pane/navigation_pane_closed.dart';
 import 'package:gmstest/navigation_pane/navigation_pane_expanded.dart';
 import 'package:gmstest/views/members/members.dart';
-import 'package:gmstest/views/profilewidgets/headerpannel.dart';
 import 'package:gmstest/views/profilewidgets/reusablecomponents.dart';
 import 'package:gmstest/views/profilewidgets/reusabletext.dart';
-import 'package:gmstest/views/profilewidgets/topbackground.dart';
 import 'package:gmstest/widgets/buttons.dart';
-import 'package:gmstest/widgets/generic_appbar.dart';
 import 'package:gmstest/widgets/popup.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
@@ -61,6 +56,7 @@ class _MemberProfileState extends State<MemberProfile>
   TextEditingController weightController = TextEditingController();
   TextEditingController bloodGroupController = TextEditingController();
   var selectedTrainer;
+  var selectedGender;
   TextEditingController secondaryMobileNoController = TextEditingController();
 
   List<Map<String, dynamic>> trainerList = [];
@@ -105,6 +101,11 @@ class _MemberProfileState extends State<MemberProfile>
       heightController.text = membersData['height'] ?? '';
       weightController.text = membersData['weight'] ?? '';
       bloodGroupController.text = membersData['blood_group'] ?? '';
+      selectedGender = membersData['gender'] == 0
+          ? 'Male'
+          : membersData['gender'] == 1
+              ? 'Female'
+              : 'Others';
       var b = await TrainerController()
           .getAllTrainer(branchId: membersData['branch_id'], searchKeyword: '');
 
@@ -391,7 +392,7 @@ class _MemberProfileState extends State<MemberProfile>
                                       return DropdownMenuItem(
                                         value: item,
                                         child: Text(
-                                          '${item['first_name'] ?? ''}${item['last_name'] ?? ''}',
+                                          '${item['first_name'] ?? ''} ${item['last_name'] ?? ''}',
                                           style: TextStyle(
                                               fontSize: MediaQuery.of(context)
                                                       .size
@@ -572,7 +573,7 @@ class _MemberProfileState extends State<MemberProfile>
                                 child: TextFormField(
                                   inputFormatters: [
                                     FilteringTextInputFormatter.allow(
-                                        RegExp(r'[0-9]{0,10}$')),
+                                        RegExp(r'[0-9,a-z,A-Z, ]{0,50}$')),
                                   ],
                                   decoration: const InputDecoration(
                                       border: OutlineInputBorder(
@@ -807,6 +808,95 @@ class _MemberProfileState extends State<MemberProfile>
                     const SizedBox(
                       height: 20,
                     ),
+                    Row(
+                      children: [
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.25,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Flexible(
+                                child: SelectableText(
+                                  'Select Gender ',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 8,
+                              ),
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.07,
+                                child: DropdownButtonFormField(
+                                  isExpanded: true,
+                                  elevation: 1,
+                                  value: selectedGender,
+                                  items: ['Male', 'Female', 'Others'].map(
+                                    (item) {
+                                      return DropdownMenuItem(
+                                        value: item,
+                                        child: Text(
+                                          item,
+                                          style: TextStyle(
+                                              fontSize: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.01,
+                                              color: Colors.white),
+                                        ),
+                                      );
+                                    },
+                                  ).toList(),
+                                  onChanged: (value) {
+                                    selectedGender = value;
+                                    setState(() {});
+                                  },
+                                  borderRadius: BorderRadius.circular(4),
+                                  style: TextStyle(
+                                      fontSize:
+                                          MediaQuery.of(context).size.width *
+                                              0.008,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold),
+                                  icon: Icon(
+                                    Icons.keyboard_arrow_down_rounded,
+                                    color: Colors.white,
+                                    size: MediaQuery.of(context).size.width *
+                                        0.015,
+                                  ),
+                                  decoration: InputDecoration(
+                                    hintText: "Select Gender",
+                                    hintStyle: TextStyle(
+                                        fontSize:
+                                            MediaQuery.of(context).size.width *
+                                                0.008,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold),
+                                    contentPadding: const EdgeInsets.symmetric(
+                                        horizontal: 10),
+                                    fillColor: Colors.white,
+                                    border: const OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Colors.transparent,
+                                      ),
+                                    ),
+                                    focusedBorder: const OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Colors.transparent,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
                   ],
                 ),
               ),
@@ -844,7 +934,12 @@ class _MemberProfileState extends State<MemberProfile>
                         'height': heightController.text,
                         'secondary_mobile_no': secondaryMobileNoController.text,
                         'weight': weightController.text,
-                        'blood_group': bloodGroupController.text
+                        'blood_group': bloodGroupController.text,
+                        'gender': selectedGender == 'Male'
+                            ? 0
+                            : selectedGender == 'Female'
+                                ? 1
+                                : 2
                       }, membersData['id']),
                       builder: (context, snapshot) {
                         return snapshot.connectionState ==

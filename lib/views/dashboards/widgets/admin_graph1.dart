@@ -9,8 +9,10 @@ import 'package:charts_flutter/src/text_element.dart' as ts;
 import 'package:charts_flutter/src/text_style.dart' as style;
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as mat;
+import 'package:get/get.dart';
 import 'package:gmstest/configs/colors.dart';
 import 'package:gmstest/configs/global_functions.dart';
+import 'package:gmstest/super_admin/branch/branch_view.dart';
 import 'package:gmstest/views/dashboards/branch/testdata.dart';
 import 'package:gmstest/views/dashboards/widgets/test_graph_datas.dart';
 import 'package:gmstest/views/dashboards/widgets/tile_widget.dart';
@@ -402,9 +404,19 @@ class _OrdinalComboBarLineChartState extends State<OrdinalComboBarLineChart> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        widget.seriesList[index]['branch_name'].toString(),
-                        style: Theme.of(context).textTheme.titleMedium,
+                      InkWell(
+                        onTap: () {
+                          Get.toNamed(BranchProfile.routeName,
+                              arguments: widget.seriesList[index]['branch_id']);
+                        },
+                        child: Text(
+                          '${widget.seriesList[index]['branch_name'].toString()} - View Details',
+                          style: mat.TextStyle(
+                              color: primaryColor,
+                              fontSize:
+                                  MediaQuery.of(context).size.width * 0.013,
+                              fontWeight: FontWeight.bold),
+                        ),
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,

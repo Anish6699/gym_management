@@ -62,6 +62,7 @@ class _MembersState extends State<TrainerView> {
   TrainerController trainerController = TrainerController();
   List adminBranchList = [];
   DateTime selectedDateTime = DateTime.now();
+  var selectedGender;
 
   var selectedBranch;
   @override
@@ -374,6 +375,11 @@ class _MembersState extends State<TrainerView> {
 
                     experienceController.text =
                         row.data['experience']?.toString() ?? "";
+                    selectedGender = row.data['gender'] == 0
+                        ? 'Male'
+                        : row.data['gender'] == 1
+                            ? 'Female'
+                            : 'Others';
 
                     showDialog(
                         context: context,
@@ -876,6 +882,122 @@ class _MembersState extends State<TrainerView> {
                                             ],
                                           ),
                                         ),
+                                        const SizedBox(
+                                          width: 30,
+                                        ),
+                                        SizedBox(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.25,
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              const Flexible(
+                                                child: SelectableText(
+                                                  'Select Gender ',
+                                                  style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                              ),
+                                              const SizedBox(
+                                                height: 8,
+                                              ),
+                                              Container(
+                                                height: MediaQuery.of(context)
+                                                        .size
+                                                        .height *
+                                                    0.07,
+                                                decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        const BorderRadius.all(
+                                                            Radius.circular(5)),
+                                                    border: Border.all(
+                                                        color:
+                                                            secondaryBorderGreyColor)),
+                                                child: Center(
+                                                  child:
+                                                      DropdownButtonFormField(
+                                                    elevation: 0,
+                                                    value: selectedGender,
+                                                    items: [
+                                                      'Male',
+                                                      'Female',
+                                                      'Others'
+                                                    ].map(
+                                                      (item) {
+                                                        return DropdownMenuItem(
+                                                          value: item,
+                                                          child: Text(
+                                                            item,
+                                                            style: TextStyle(
+                                                                fontSize: MediaQuery.of(
+                                                                            context)
+                                                                        .size
+                                                                        .width *
+                                                                    0.01,
+                                                                color: Colors
+                                                                    .white),
+                                                          ),
+                                                        );
+                                                      },
+                                                    ).toList(),
+                                                    dropdownColor:
+                                                        primaryThemeColor,
+                                                    onChanged: (value) {
+                                                      selectedGender = value;
+                                                      setState(() {});
+                                                    },
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            4),
+                                                    style: TextStyle(
+                                                        fontSize: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .width *
+                                                            0.008,
+                                                        color: Colors.white,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                    icon: Icon(
+                                                      Icons
+                                                          .keyboard_arrow_down_rounded,
+                                                      color: Colors.white,
+                                                      size:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width *
+                                                              0.015,
+                                                    ),
+                                                    decoration: InputDecoration(
+                                                      focusedBorder:
+                                                          InputBorder.none,
+                                                      hintText: "Select Gender",
+                                                      hintStyle: TextStyle(
+                                                          fontSize: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .width *
+                                                              0.008,
+                                                          color: Colors.white,
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                      contentPadding:
+                                                          const EdgeInsets
+                                                              .symmetric(
+                                                              horizontal: 10),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
                                       ],
                                     ),
                                     const SizedBox(
@@ -969,6 +1091,11 @@ class _MembersState extends State<TrainerView> {
                                               secondaryMobileNo.text == ''
                                                   ? null
                                                   : secondaryMobileNo.text,
+                                          'gender': selectedGender == 'Male'
+                                              ? 0
+                                              : selectedGender == 'Female'
+                                                  ? 1
+                                                  : 2
                                         }, row.data['id']),
                                         builder: (context, snapshot) {
                                           return snapshot.connectionState ==
@@ -1036,7 +1163,7 @@ class _MembersState extends State<TrainerView> {
                                                             Text(
                                                                 snapshot.data![
                                                                     'message'],
-                                                                style: TextStyle(
+                                                                style: const TextStyle(
                                                                     color: Colors
                                                                         .white))
                                                           ],
@@ -1906,6 +2033,113 @@ class _MembersState extends State<TrainerView> {
                                         ],
                                       ),
                                     ),
+                                    const SizedBox(
+                                      width: 30,
+                                    ),
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.25,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          const Flexible(
+                                            child: SelectableText(
+                                              'Select Gender ',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            height: 8,
+                                          ),
+                                          SizedBox(
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                0.07,
+                                            child: DropdownButtonFormField(
+                                              isExpanded: true,
+                                              elevation: 1,
+                                              value: selectedGender,
+                                              items: [
+                                                'Male',
+                                                'Female',
+                                                'Others'
+                                              ].map(
+                                                (item) {
+                                                  return DropdownMenuItem(
+                                                    value: item,
+                                                    child: Text(
+                                                      item,
+                                                      style: TextStyle(
+                                                          fontSize: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .width *
+                                                              0.01,
+                                                          color: Colors.white),
+                                                    ),
+                                                  );
+                                                },
+                                              ).toList(),
+                                              onChanged: (value) {
+                                                selectedGender = value;
+                                                setState(() {});
+                                              },
+                                              borderRadius:
+                                                  BorderRadius.circular(4),
+                                              style: TextStyle(
+                                                  fontSize:
+                                                      MediaQuery.of(context)
+                                                              .size
+                                                              .width *
+                                                          0.008,
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold),
+                                              icon: Icon(
+                                                Icons
+                                                    .keyboard_arrow_down_rounded,
+                                                color: Colors.white,
+                                                size: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.015,
+                                              ),
+                                              decoration: InputDecoration(
+                                                hintText: "Select Gender",
+                                                hintStyle: TextStyle(
+                                                    fontSize:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width *
+                                                            0.008,
+                                                    color: Colors.white,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                                contentPadding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 10),
+                                                fillColor: Colors.white,
+                                                border:
+                                                    const OutlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                    color: Colors.transparent,
+                                                  ),
+                                                ),
+                                                focusedBorder:
+                                                    const OutlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                    color: Colors.transparent,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
                                   ],
                                 ),
                                 const SizedBox(
@@ -1994,6 +2228,11 @@ class _MembersState extends State<TrainerView> {
                                           secondaryMobileNo.text == ''
                                               ? null
                                               : secondaryMobileNo.text,
+                                      'gender': selectedGender == 'Male'
+                                          ? 0
+                                          : selectedGender == 'Female'
+                                              ? 1
+                                              : 2
                                     }),
                                     builder: (context, snapshot) {
                                       return snapshot.connectionState ==

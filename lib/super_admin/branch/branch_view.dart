@@ -1,21 +1,17 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gmstest/configs/colors.dart';
+import 'package:gmstest/configs/server_configs.dart';
 import 'package:gmstest/controllers/admin_controllers.dart';
-import 'package:gmstest/controllers/member_controllers.dart';
 import 'package:gmstest/navigation_pane/navigation_pane_closed.dart';
 import 'package:gmstest/navigation_pane/navigation_pane_expanded.dart';
-import 'package:gmstest/views/members/members.dart';
-import 'package:gmstest/views/profilewidgets/headerpannel.dart';
 import 'package:gmstest/views/profilewidgets/reusablecomponents.dart';
 import 'package:gmstest/views/profilewidgets/reusabletext.dart';
-import 'package:gmstest/views/profilewidgets/topbackground.dart';
 import 'package:gmstest/widgets/buttons.dart';
-import 'package:gmstest/widgets/generic_appbar.dart';
 import 'package:gmstest/widgets/popup.dart';
 import 'package:intl/intl.dart';
+import 'package:lottie/lottie.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class BranchProfile extends StatefulWidget {
   const BranchProfile({super.key});
@@ -46,6 +42,7 @@ class _BranchProfileState extends State<BranchProfile>
 
   @override
   void initState() {
+    setInitialData();
     initializeData();
     super.initState();
   }
@@ -58,6 +55,17 @@ class _BranchProfileState extends State<BranchProfile>
       // Handle parsing error or return the original string if the format is not valid
       return dateString;
     }
+  }
+
+  setInitialData() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    userType = prefs.getInt('user_type');
+    adminId = prefs.getInt('adminId');
+    branchId = prefs.getInt('branchId');
+    categoryId = prefs.getInt('categoryId');
+
+    setState(() {});
   }
 
   Future<String> selectedDatee(BuildContext context) async {
@@ -95,7 +103,7 @@ class _BranchProfileState extends State<BranchProfile>
         isNavOpen
             ? Expanded(
                 flex: 2,
-                child: InventoryNavigationPaneExpanded(selected: "members"),
+                child: InventoryNavigationPaneExpanded(selected: "a"),
               )
             : SizedBox(
                 width: MediaQuery.of(context).size.width * 0.05,
@@ -106,175 +114,161 @@ class _BranchProfileState extends State<BranchProfile>
                     });
                   },
                   child: InventoryNavigationPaneMinimized(
-                    selected: "members",
+                    selected: "a",
                   ),
                 ),
               ),
         Expanded(
           flex: 9,
           child: Scaffold(
-              backgroundColor: const Color(0xffdde9e9),
               body: SafeArea(
                   child: Stack(children: [
-                TopBackground(),
-                branchData.isEmpty
-                    ? const Center(
-                        child: CircularProgressIndicator(
-                        color: Colors.white,
-                      ))
-                    : SingleChildScrollView(
-                        child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Container(
-                                  margin:
-                                      const EdgeInsets.fromLTRB(30, 10, 30, 0),
-                                  child: Stack(children: [
-                                    Container(
-                                      width: width,
-                                      margin: const EdgeInsets.only(top: 70),
-                                      padding: const EdgeInsets.fromLTRB(
-                                          10, 20, 10, 10),
-                                      decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius:
-                                              BorderRadius.circular(5),
-                                          boxShadow: [
-                                            BoxShadow(
-                                                color: Colors.black
-                                                    .withOpacity(.1),
-                                                blurRadius: 5,
-                                                spreadRadius: 2)
-                                          ]),
-                                      child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            /// card header
-                                            SizedBox(
-                                                width: double.infinity,
-                                                child: Row(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      const Spacer(flex: 1),
-                                                      socialValue(
-                                                          'Created Date',
-                                                          formatDate(branchData[
-                                                              'created_at'])),
-                                                      socialValue(
-                                                          'last Updated',
-                                                          formatDate(branchData[
-                                                              'updated_at'])),
-                                                      const Spacer(flex: 10),
-                                                      NormalButton(
-                                                          branchData['status'] ==
-                                                                  0
-                                                              ? 'ACTIVE'
-                                                              : branchData[
-                                                                          'status'] ==
-                                                                      1
-                                                                  ? 'IN-ACTIVE'
-                                                                  : "BLOCK",
-                                                          Colors.white,
-                                                          '',
-                                                          Colors.white,
-                                                          branchData['status'] ==
-                                                                  0
-                                                              ? Colors.green
-                                                              : branchData[
-                                                                          'status'] ==
-                                                                      1
-                                                                  ? const Color
-                                                                      .fromARGB(
-                                                                      255,
-                                                                      223,
-                                                                      164,
-                                                                      28)
-                                                                  : Colors.red),
-                                                      const Spacer(flex: 1)
-                                                    ])),
-                                            const SizedBox(height: 50),
-                                            LargeBoldTextBlack(
-                                                branchData['branch_name']
-                                                        ?.toString() ??
-                                                    '-'),
-                                            const SizedBox(height: 10),
-                                            Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
+            branchData.isEmpty
+                ? const Center(
+                    child: CircularProgressIndicator(
+                    color: Colors.white,
+                  ))
+                : SingleChildScrollView(
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                              margin: const EdgeInsets.fromLTRB(30, 10, 30, 0),
+                              child: Stack(children: [
+                                Container(
+                                  width: width,
+                                  margin: const EdgeInsets.only(top: 70),
+                                  padding:
+                                      const EdgeInsets.fromLTRB(10, 20, 10, 10),
+                                  decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(5),
+                                      boxShadow: [
+                                        BoxShadow(
+                                            color: Colors.black.withOpacity(.1),
+                                            blurRadius: 5,
+                                            spreadRadius: 2)
+                                      ]),
+                                  child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        /// card header
+                                        SizedBox(
+                                            width: double.infinity,
+                                            child: Row(
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.center,
                                                 children: [
-                                                  Icon(Icons.location_pin,
-                                                      size: 20,
-                                                      color: Colors.grey[400]),
-                                                  const SizedBox(width: 5),
-                                                  NormalGreyText(
-                                                      branchData['addr']!
-                                                          .toString())
-                                                ]),
-                                            const SizedBox(height: 30),
+                                                  const Spacer(flex: 1),
+                                                  socialValue(
+                                                      'Created Date',
+                                                      formatDate(branchData[
+                                                          'created_at'])),
+                                                  socialValue(
+                                                      'last Updated',
+                                                      formatDate(branchData[
+                                                          'updated_at'])),
+                                                  const Spacer(flex: 10),
+                                                  NormalButton(
+                                                      branchData['status'] == 0
+                                                          ? 'ACTIVE'
+                                                          : branchData[
+                                                                      'status'] ==
+                                                                  1
+                                                              ? 'IN-ACTIVE'
+                                                              : "BLOCK",
+                                                      Colors.white,
+                                                      '',
+                                                      Colors.white,
+                                                      branchData['status'] == 0
+                                                          ? Colors.green
+                                                          : branchData[
+                                                                      'status'] ==
+                                                                  1
+                                                              ? const Color
+                                                                  .fromARGB(255,
+                                                                  223, 164, 28)
+                                                              : Colors.red),
+                                                  const Spacer(flex: 1)
+                                                ])),
+                                        const SizedBox(height: 50),
+                                        LargeBoldTextBlack(
+                                            branchData['branch_name']
+                                                    ?.toString() ??
+                                                '-'),
+                                        const SizedBox(height: 10),
+                                        Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              Icon(Icons.location_pin,
+                                                  size: 20,
+                                                  color: Colors.grey[400]),
+                                              const SizedBox(width: 5),
+                                              NormalGreyText(branchData['addr']!
+                                                  .toString())
+                                            ]),
+                                        const SizedBox(height: 30),
 
-                                            Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
+                                        Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              Icon(Icons.mail,
+                                                  size: 20,
+                                                  color: Colors.grey[400]),
+                                              const SizedBox(width: 5),
+                                              NormalGreyText(
+                                                  'Email Address : ${branchData['email']?.toString() ?? ''}')
+                                            ]),
+
+                                        /// description
+                                        const Divider(
+                                            height: 30,
+                                            thickness: 1,
+                                            color: primaryThemeColor),
+                                        SizedBox(
+                                            width: double.infinity,
+                                            child: Row(
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.center,
                                                 children: [
-                                                  Icon(Icons.mail,
-                                                      size: 20,
-                                                      color: Colors.grey[400]),
-                                                  const SizedBox(width: 5),
-                                                  NormalGreyText(
-                                                      'Email Address : ${branchData['email']?.toString() ?? ''}')
-                                                ]),
-
-                                            /// description
-                                            const Divider(
-                                                height: 30,
-                                                thickness: 1,
-                                                color: primaryThemeColor),
-                                            SizedBox(
-                                                width: double.infinity,
-                                                child: Row(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      const Spacer(flex: 1),
-                                                      socialValue(
-                                                          'Primary Mobile Number',
-                                                          branchData['primary_mobile_no']
-                                                                  ?.toString() ??
-                                                              ''),
-                                                      const Spacer(flex: 1),
-                                                      socialValue(
-                                                          'Secondary Mobile Number',
-                                                          branchData['secondary_mobile_no']
-                                                                  ?.toString() ??
-                                                              ''),
-                                                      const Spacer(flex: 1),
-                                                      socialValue(
-                                                          'Start Date',
-                                                          formatDate(planList
-                                                                  .first[
-                                                              'start_date'])),
-                                                      const Spacer(flex: 1),
-                                                      socialValue(
-                                                          'End Date',
-                                                          formatDate(
-                                                              planList.first[
-                                                                  'end_date'])),
-                                                      const Spacer(flex: 1),
-                                                      socialValue(
-                                                          'Pending Ammount',
-                                                          planList.first[
-                                                                  'unpaid_amount']
-                                                              .toString()),
-                                                      const Spacer(flex: 10),
-                                                      PrimaryButton(
+                                                  const Spacer(flex: 1),
+                                                  socialValue(
+                                                      'Primary Mobile Number',
+                                                      branchData['primary_mobile_no']
+                                                              ?.toString() ??
+                                                          ''),
+                                                  const Spacer(flex: 1),
+                                                  socialValue(
+                                                      'Secondary Mobile Number',
+                                                      branchData['secondary_mobile_no']
+                                                              ?.toString() ??
+                                                          ''),
+                                                  const Spacer(flex: 1),
+                                                  socialValue(
+                                                      'Start Date',
+                                                      formatDate(planList.first[
+                                                          'start_date'])),
+                                                  const Spacer(flex: 1),
+                                                  socialValue(
+                                                      'End Date',
+                                                      formatDate(planList
+                                                          .first['end_date'])),
+                                                  const Spacer(flex: 1),
+                                                  socialValue(
+                                                      'Pending Ammount',
+                                                      planList.first[
+                                                              'unpaid_amount']
+                                                          .toString()),
+                                                  const Spacer(flex: 10),
+                                                  userType == 1
+                                                      ? PrimaryButton(
                                                           onPressed: () {
                                                             showDialog(
                                                                 context:
@@ -550,9 +544,11 @@ class _BranchProfileState extends State<BranchProfile>
                                                                   );
                                                                 });
                                                           },
-                                                          title: 'Add PLAN'),
-                                                      const Spacer(flex: 1),
-                                                      PrimaryButton(
+                                                          title: 'Add PLAN')
+                                                      : SizedBox(),
+                                                  const Spacer(flex: 1),
+                                                  userType == 1
+                                                      ? PrimaryButton(
                                                           onPressed: () {
                                                             showDialog(
                                                                 context:
@@ -690,94 +686,83 @@ class _BranchProfileState extends State<BranchProfile>
                                                                 });
                                                           },
                                                           title: 'Pay Pending')
-                                                    ])),
+                                                      : SizedBox()
+                                                ])),
 
-                                            SizedBox(
-                                                height: MediaQuery.of(context)
-                                                        .size
-                                                        .height *
-                                                    0.15 *
-                                                    planList.length,
-                                                child: ListView.builder(
-                                                  itemCount: planList.length,
-                                                  itemBuilder:
-                                                      (context, index) {
-                                                    return Padding(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              8.0),
-                                                      child: Container(
-                                                        height: MediaQuery.of(
-                                                                    context)
+                                        SizedBox(
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                0.15 *
+                                                planList.length,
+                                            child: ListView.builder(
+                                              itemCount: planList.length,
+                                              itemBuilder: (context, index) {
+                                                return Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: Container(
+                                                    height:
+                                                        MediaQuery.of(context)
                                                                 .size
                                                                 .height *
                                                             0.115,
-                                                        color: const Color
-                                                            .fromARGB(
-                                                            255, 220, 215, 215),
-                                                        child: Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(8.0),
-                                                          child: Row(
-                                                            children: [
-                                                              socialValue(
-                                                                  'Start Date',
-                                                                  formatDate(planList[
-                                                                          index]
-                                                                      [
-                                                                      'start_date'])),
-                                                              const Spacer(
-                                                                  flex: 1),
-                                                              socialValue(
-                                                                  'End Date',
-                                                                  formatDate(planList[
-                                                                          index]
-                                                                      [
-                                                                      'end_date'])),
-                                                              const Spacer(
-                                                                  flex: 1),
-                                                              socialValue(
-                                                                  'Total Ammount',
-                                                                  planList[
-                                                                          index]
-                                                                      [
-                                                                      'price']),
-                                                              const Spacer(
-                                                                  flex: 1),
-                                                              socialValue(
-                                                                  'Paid Ammount',
-                                                                  planList[
-                                                                          index]
-                                                                      [
-                                                                      'paid_amount']),
-                                                              const Spacer(
-                                                                  flex: 1),
-                                                              socialValue(
-                                                                  'Pending Ammount',
-                                                                  planList[
-                                                                          index]
-                                                                      [
-                                                                      'unpaid_amount']),
-                                                            ],
-                                                          ),
-                                                        ),
+                                                    color: const Color.fromARGB(
+                                                        255, 220, 215, 215),
+                                                    child: Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              8.0),
+                                                      child: Row(
+                                                        children: [
+                                                          socialValue(
+                                                              'Start Date',
+                                                              formatDate(planList[
+                                                                      index][
+                                                                  'start_date'])),
+                                                          const Spacer(flex: 1),
+                                                          socialValue(
+                                                              'End Date',
+                                                              formatDate(planList[
+                                                                      index][
+                                                                  'end_date'])),
+                                                          const Spacer(flex: 1),
+                                                          socialValue(
+                                                              'Total Ammount',
+                                                              planList[index]
+                                                                  ['price']),
+                                                          const Spacer(flex: 1),
+                                                          socialValue(
+                                                              'Paid Ammount',
+                                                              planList[index][
+                                                                  'paid_amount']),
+                                                          const Spacer(flex: 1),
+                                                          socialValue(
+                                                              'Pending Ammount',
+                                                              planList[index][
+                                                                  'unpaid_amount']),
+                                                        ],
                                                       ),
-                                                    );
-                                                  },
-                                                ))
-                                          ]),
-                                    ),
-                                    Container(
-                                        alignment: Alignment.center,
-                                        child: const CircleAvatar(
-                                            radius: 70,
-                                            backgroundImage: AssetImage(
-                                                'assets/gym_image.png')))
-                                  ])),
-                            ]),
-                      )
-              ]))),
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                            ))
+                                      ]),
+                                ),
+                                Container(
+                                    alignment: Alignment.center,
+                                    child: SizedBox(
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.3,
+                                      child: Lottie.asset(
+                                          'assets/animations/coach_animation.json'),
+                                    ))
+                              ])),
+                        ]),
+                  )
+          ]))),
         ),
       ],
     );

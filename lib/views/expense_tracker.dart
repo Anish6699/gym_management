@@ -381,7 +381,7 @@ class _DashboardState extends State<ExpenseTrackerView>
                                     ),
                                     const Flexible(
                                       child: SelectableText(
-                                        'Expense',
+                                        'Expense Name',
                                         style: TextStyle(
                                             color: Colors.white,
                                             fontWeight: FontWeight.bold),
@@ -1263,7 +1263,7 @@ class _DashboardState extends State<ExpenseTrackerView>
                               ),
                               const Flexible(
                                 child: SelectableText(
-                                  'Expense',
+                                  'Expense Name',
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                 ),
                               ),

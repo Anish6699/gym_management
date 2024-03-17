@@ -202,192 +202,199 @@ class _LoginPageState extends State<LoginPage> {
                           width: MediaQuery.of(context).size.width * .2,
                           child: PrimaryButton(
                             onPressed: () {
-                              showDialog(
-                                  barrierDismissible: false,
-                                  context: context,
-                                  builder: (context) {
-                                    return FutureBuilder(
-                                      future: loginController.login({
-                                        'email': emailController.text,
-                                        'password': passwordController.text
-                                      }),
-                                      builder: (context, snapshot) {
-                                        return snapshot.connectionState ==
-                                                ConnectionState.waiting
-                                            ? GenericDialogBox(
-                                                enableSecondaryButton: false,
-                                                isLoader: true,
-                                                content: Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: SizedBox(
-                                                    width:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .width *
-                                                            0.04,
-                                                    height:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .width *
-                                                            0.06,
-                                                    child: const Center(
-                                                      child: Column(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .center,
-                                                        children: [
-                                                          CircularProgressIndicator(
-                                                            color:
-                                                                primaryDarkBlueColor,
-                                                          ),
-                                                        ],
+                              if (emailController.text.isNotEmpty &&
+                                  passwordController.text.isNotEmpty) {
+                                showDialog(
+                                    barrierDismissible: false,
+                                    context: context,
+                                    builder: (context) {
+                                      return FutureBuilder(
+                                        future: loginController.login({
+                                          'email': emailController.text,
+                                          'password': passwordController.text
+                                        }),
+                                        builder: (context, snapshot) {
+                                          return snapshot.connectionState ==
+                                                  ConnectionState.waiting
+                                              ? GenericDialogBox(
+                                                  enableSecondaryButton: false,
+                                                  isLoader: true,
+                                                  content: Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    child: SizedBox(
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width *
+                                                              0.04,
+                                                      height:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width *
+                                                              0.06,
+                                                      child: const Center(
+                                                        child: Column(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                          children: [
+                                                            CircularProgressIndicator(
+                                                              color:
+                                                                  primaryDarkBlueColor,
+                                                            ),
+                                                          ],
+                                                        ),
                                                       ),
                                                     ),
                                                   ),
-                                                ),
-                                              )
-                                            : snapshot.data!['access_token'] !=
-                                                    null
-                                                ? GenericDialogBox(
-                                                    closeButtonEnabled: false,
-                                                    enablePrimaryButton: true,
-                                                    enableSecondaryButton:
-                                                        false,
-                                                    isLoader: false,
-                                                    content: Padding(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              8.0),
-                                                      child: SizedBox(
-                                                        width: MediaQuery.of(
-                                                                    context)
-                                                                .size
-                                                                .width *
-                                                            0.04,
-                                                        height: MediaQuery.of(
-                                                                    context)
-                                                                .size
-                                                                .width *
-                                                            0.06,
-                                                        child: const Center(
-                                                          child: Column(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .center,
-                                                            children: [
-                                                              Text(
-                                                                  'Login Successfully')
-                                                            ],
+                                                )
+                                              : snapshot.data![
+                                                          'access_token'] !=
+                                                      null
+                                                  ? GenericDialogBox(
+                                                      closeButtonEnabled: false,
+                                                      enablePrimaryButton: true,
+                                                      enableSecondaryButton:
+                                                          false,
+                                                      isLoader: false,
+                                                      content: Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(8.0),
+                                                        child: SizedBox(
+                                                          width: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .width *
+                                                              0.04,
+                                                          height: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .width *
+                                                              0.06,
+                                                          child: const Center(
+                                                            child: Column(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .center,
+                                                              children: [
+                                                                Text(
+                                                                    "Login Sucessfully")
+                                                              ],
+                                                            ),
                                                           ),
                                                         ),
                                                       ),
-                                                    ),
-                                                    primaryButtonText: 'Ok',
-                                                    onPrimaryButtonPressed:
-                                                        () async {
-                                                      final prefs =
-                                                          await SharedPreferences
-                                                              .getInstance();
-                                                      await prefs.setInt(
-                                                          'categoryId',
-                                                          snapshot.data![
-                                                              'category_id']);
-
-                                                      categoryId = snapshot
-                                                          .data!['category_id'];
-                                                      userType = snapshot
-                                                          .data!['user_type'];
-                                                      if (userType == 1) {}
-                                                      if (userType == 2) {
-                                                        adminId = snapshot
-                                                            .data!['user_id'];
+                                                      primaryButtonText: 'Ok',
+                                                      onPrimaryButtonPressed:
+                                                          () async {
+                                                        final prefs =
+                                                            await SharedPreferences
+                                                                .getInstance();
                                                         await prefs.setInt(
-                                                            'adminId',
+                                                            'categoryId',
                                                             snapshot.data![
-                                                                'user_id']);
-                                                      }
-                                                      if (userType == 3) {
-                                                        branchId = snapshot
-                                                            .data!['user_id'];
+                                                                'category_id']);
+
+                                                        categoryId =
+                                                            snapshot.data![
+                                                                'category_id'];
+                                                        userType = snapshot
+                                                            .data!['user_type'];
+                                                        if (userType == 1) {}
+                                                        if (userType == 2) {
+                                                          adminId = snapshot
+                                                              .data!['user_id'];
+                                                          await prefs.setInt(
+                                                              'adminId',
+                                                              snapshot.data![
+                                                                  'user_id']);
+                                                        }
+                                                        if (userType == 3) {
+                                                          branchId = snapshot
+                                                              .data!['user_id'];
+                                                          await prefs.setInt(
+                                                              'branchId',
+                                                              snapshot.data![
+                                                                  'user_id']);
+                                                        }
+
+                                                        await prefs.setString(
+                                                            'token',
+                                                            snapshot.data![
+                                                                'access_token']);
                                                         await prefs.setInt(
-                                                            'branchId',
+                                                            'user_type',
                                                             snapshot.data![
-                                                                'user_id']);
-                                                      }
+                                                                'user_type']);
 
-                                                      await prefs.setString(
-                                                          'token',
-                                                          snapshot.data![
-                                                              'access_token']);
-                                                      await prefs.setInt(
-                                                          'user_type',
-                                                          snapshot.data![
-                                                              'user_type']);
-
-                                                      if (userType == 1) {
-                                                        Get.toNamed(
-                                                          AllAdmins
-                                                              .allAdminRouteName,
-                                                        );
-                                                      } else if (userType ==
-                                                          2) {
-                                                        Get.toNamed(
-                                                          AdminDashboard
-                                                              .routeName,
-                                                        );
-                                                      } else if (userType ==
-                                                          3) {
-                                                        Get.toNamed(
-                                                          BranchDashboard
-                                                              .routeName,
-                                                        );
-                                                      }
-                                                    },
-                                                  )
-                                                : GenericDialogBox(
-                                                    enableSecondaryButton:
-                                                        false,
-                                                    primaryButtonText: 'Ok',
-                                                    isLoader: false,
-                                                    content: Padding(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              8.0),
-                                                      child: SizedBox(
-                                                        width: MediaQuery.of(
-                                                                    context)
-                                                                .size
-                                                                .width *
-                                                            0.04,
-                                                        height: MediaQuery.of(
-                                                                    context)
-                                                                .size
-                                                                .width *
-                                                            0.06,
-                                                        child: const Center(
-                                                          child: Column(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .center,
-                                                            children: [
-                                                              Text(
-                                                                  'Login Failed')
-                                                            ],
+                                                        if (userType == 1) {
+                                                          Get.toNamed(
+                                                            AllAdmins
+                                                                .allAdminRouteName,
+                                                          );
+                                                        } else if (userType ==
+                                                            2) {
+                                                          Get.toNamed(
+                                                            AdminDashboard
+                                                                .routeName,
+                                                          );
+                                                        } else if (userType ==
+                                                            3) {
+                                                          Get.toNamed(
+                                                            BranchDashboard
+                                                                .routeName,
+                                                          );
+                                                        }
+                                                      },
+                                                    )
+                                                  : GenericDialogBox(
+                                                      enableSecondaryButton:
+                                                          false,
+                                                      primaryButtonText: 'Ok',
+                                                      isLoader: false,
+                                                      content: Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(8.0),
+                                                        child: SizedBox(
+                                                          width: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .width *
+                                                              0.04,
+                                                          height: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .width *
+                                                              0.06,
+                                                          child: Center(
+                                                            child: Column(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .center,
+                                                              children: [
+                                                                Text(snapshot
+                                                                        .data?[
+                                                                            'message']
+                                                                        ?.toString() ??
+                                                                    '')
+                                                              ],
+                                                            ),
                                                           ),
                                                         ),
                                                       ),
-                                                    ),
-                                                    onPrimaryButtonPressed: () {
-                                                      Get.back();
-                                                    },
-                                                  );
-                                      },
-                                    );
-                                  });
-                              // Get.toNamed(
-                              //   Dashboard.routeName,
-                              // );
+                                                      onPrimaryButtonPressed:
+                                                          () {
+                                                        Get.back();
+                                                      },
+                                                    );
+                                        },
+                                      );
+                                    });
+                              }
                             },
                             title: 'Login',
                           ),
