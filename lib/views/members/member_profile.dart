@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'dart:html';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -9,12 +11,15 @@ import 'package:gmstest/controllers/trainers_controller.dart';
 import 'package:gmstest/navigation_pane/navigation_pane_closed.dart';
 import 'package:gmstest/navigation_pane/navigation_pane_expanded.dart';
 import 'package:gmstest/views/members/members.dart';
+import 'package:gmstest/views/members/widget/memberFitness.dart';
 import 'package:gmstest/views/profilewidgets/reusablecomponents.dart';
 import 'package:gmstest/views/profilewidgets/reusabletext.dart';
 import 'package:gmstest/widgets/buttons.dart';
 import 'package:gmstest/widgets/popup.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:image/image.dart' as img;
 
 class MemberProfile extends StatefulWidget {
   const MemberProfile({super.key});
@@ -60,6 +65,8 @@ class _MemberProfileState extends State<MemberProfile>
   TextEditingController secondaryMobileNoController = TextEditingController();
 
   List<Map<String, dynamic>> trainerList = [];
+  var dpBase64String;
+  bool uploadingImage = false;
 
   @override
   void initState() {
@@ -74,6 +81,77 @@ class _MemberProfileState extends State<MemberProfile>
     } catch (e) {
       // Handle parsing error or return the original string if the format is not valid
       return dateString;
+    }
+  }
+
+  // uploadImageFileConvertToBase64String() async {
+  //   FilePickerResult? file = await FilePicker.platform.pickFiles(
+  //       dialogTitle: 'Upload Documents',
+  //       type: FileType.custom,
+  //       allowMultiple: true,
+  //       allowedExtensions: ['jpg', 'jpeg', 'png']);
+  // }
+
+  singleImageToBase64() async {
+    setState(() {
+      uploadingImage = true;
+    });
+    // Prompt user to pick a single image
+    FilePickerResult? filePickerResult = await FilePicker.platform.pickFiles(
+      type: FileType.image,
+    );
+
+    // Check if user picked a file
+    if (filePickerResult != null && filePickerResult.files.isNotEmpty) {
+      // Get the picked file
+      final file = filePickerResult.files.first;
+
+      // Read file as bytes
+      Uint8List? fileBytes = await file.bytes;
+      Uint8List fileBytes1 = await compressImageTo50KB(fileBytes!);
+      String base64String = base64Encode(fileBytes1);
+      dpBase64String = base64String;
+      setState(() {
+        uploadingImage = false;
+      });
+    }
+  }
+
+  Future<Uint8List> compressImageTo50KB(Uint8List imageData) async {
+    img.Image? image = img.decodeImage(imageData);
+    if (image == null) {
+      throw Exception('Failed to decode image.');
+    }
+
+    // Target size (50 KB)
+    int targetSize = 100 * 1024;
+
+    // Initial quality
+    double initialQuality = 0.05;
+    double currentQuality = initialQuality;
+
+    // Compress the image iteratively until the size is approximately 50 KB
+    while (true) {
+      // Encode the image with the current quality
+      List<int> compressedBytes =
+          img.encodeJpg(image, quality: (currentQuality * 100).toInt());
+
+      // Check if the compressed image size is within the target size
+      if (compressedBytes.length <= targetSize) {
+        return Uint8List.fromList(compressedBytes);
+      } else {
+        // Calculate the difference between the compressed size and target size
+        int sizeDifference = compressedBytes.length - targetSize;
+
+        // Adjust the quality based on the size difference
+        currentQuality -= sizeDifference * 0.001;
+
+        // Check if the quality is within the valid range (0.1 to 1.0)
+        if (currentQuality <= 0.1) {
+          // If quality drops too low, return the compressed image with current quality
+          return Uint8List.fromList(compressedBytes);
+        }
+      }
     }
   }
 
@@ -148,16 +226,17 @@ class _MemberProfileState extends State<MemberProfile>
                 child: Column(
                   children: [
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.25,
+                          width: MediaQuery.of(context).size.width * 0.17,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               const Flexible(
                                 child: SelectableText(
-                                  'First Name',
+                                  'First Name *',
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                 ),
                               ),
@@ -182,7 +261,6 @@ class _MemberProfileState extends State<MemberProfile>
                                             color: primaryDarkGreenColor),
                                       )),
                                   controller: firstNameController,
-                                  keyboardType: TextInputType.emailAddress,
                                   enableSuggestions: true,
                                   onChanged: (e) {},
                                   autofocus: true,
@@ -200,14 +278,14 @@ class _MemberProfileState extends State<MemberProfile>
                           width: 30,
                         ),
                         SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.25,
+                          width: MediaQuery.of(context).size.width * 0.17,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               const Flexible(
                                 child: SelectableText(
-                                  'Last Name',
+                                  'Last Name *',
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                 ),
                               ),
@@ -232,7 +310,6 @@ class _MemberProfileState extends State<MemberProfile>
                                             color: primaryDarkGreenColor),
                                       )),
                                   controller: lastNameController,
-                                  keyboardType: TextInputType.emailAddress,
                                   enableSuggestions: true,
                                   onChanged: (e) {},
                                   autofocus: true,
@@ -241,6 +318,91 @@ class _MemberProfileState extends State<MemberProfile>
                                           MediaQuery.of(context).size.height *
                                               0.02),
                                   textAlignVertical: TextAlignVertical.center,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 30,
+                        ),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.12,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Flexible(
+                                child: SelectableText(
+                                  'Select Gender *',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 8,
+                              ),
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.07,
+                                child: DropdownButtonFormField(
+                                  isExpanded: true,
+                                  elevation: 1,
+                                  value: selectedGender,
+                                  items: ['Male', 'Female', 'Others'].map(
+                                    (item) {
+                                      return DropdownMenuItem(
+                                        value: item,
+                                        child: Text(
+                                          item,
+                                          style: TextStyle(
+                                              fontSize: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.01,
+                                              color: Colors.white),
+                                        ),
+                                      );
+                                    },
+                                  ).toList(),
+                                  onChanged: (value) {
+                                    selectedGender = value;
+                                    setState(() {});
+                                  },
+                                  borderRadius: BorderRadius.circular(4),
+                                  style: TextStyle(
+                                      fontSize:
+                                          MediaQuery.of(context).size.width *
+                                              0.008,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold),
+                                  icon: Icon(
+                                    Icons.keyboard_arrow_down_rounded,
+                                    color: Colors.white,
+                                    size: MediaQuery.of(context).size.width *
+                                        0.015,
+                                  ),
+                                  decoration: InputDecoration(
+                                    hintText: "Select Gender",
+                                    hintStyle: TextStyle(
+                                        fontSize:
+                                            MediaQuery.of(context).size.width *
+                                                0.008,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold),
+                                    contentPadding: const EdgeInsets.symmetric(
+                                        horizontal: 10),
+                                    fillColor: Colors.white,
+                                    border: const OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Colors.transparent,
+                                      ),
+                                    ),
+                                    focusedBorder: const OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Colors.transparent,
+                                      ),
+                                    ),
+                                  ),
                                 ),
                               ),
                             ],
@@ -808,95 +970,6 @@ class _MemberProfileState extends State<MemberProfile>
                     const SizedBox(
                       height: 20,
                     ),
-                    Row(
-                      children: [
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.25,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              const Flexible(
-                                child: SelectableText(
-                                  'Select Gender ',
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 8,
-                              ),
-                              SizedBox(
-                                height:
-                                    MediaQuery.of(context).size.height * 0.07,
-                                child: DropdownButtonFormField(
-                                  isExpanded: true,
-                                  elevation: 1,
-                                  value: selectedGender,
-                                  items: ['Male', 'Female', 'Others'].map(
-                                    (item) {
-                                      return DropdownMenuItem(
-                                        value: item,
-                                        child: Text(
-                                          item,
-                                          style: TextStyle(
-                                              fontSize: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.01,
-                                              color: Colors.white),
-                                        ),
-                                      );
-                                    },
-                                  ).toList(),
-                                  onChanged: (value) {
-                                    selectedGender = value;
-                                    setState(() {});
-                                  },
-                                  borderRadius: BorderRadius.circular(4),
-                                  style: TextStyle(
-                                      fontSize:
-                                          MediaQuery.of(context).size.width *
-                                              0.008,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold),
-                                  icon: Icon(
-                                    Icons.keyboard_arrow_down_rounded,
-                                    color: Colors.white,
-                                    size: MediaQuery.of(context).size.width *
-                                        0.015,
-                                  ),
-                                  decoration: InputDecoration(
-                                    hintText: "Select Gender",
-                                    hintStyle: TextStyle(
-                                        fontSize:
-                                            MediaQuery.of(context).size.width *
-                                                0.008,
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold),
-                                    contentPadding: const EdgeInsets.symmetric(
-                                        horizontal: 10),
-                                    fillColor: Colors.white,
-                                    border: const OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: Colors.transparent,
-                                      ),
-                                    ),
-                                    focusedBorder: const OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: Colors.transparent,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
                   ],
                 ),
               ),
@@ -1051,15 +1124,6 @@ class _MemberProfileState extends State<MemberProfile>
         Expanded(
           flex: 9,
           child: Scaffold(
-              // appBar: GenericAppBar(
-              //   onNavbarIconPressed: () {
-              //     setState(() {
-              //       isNavOpen = !isNavOpen;
-              //     });
-              //   },
-              //   title: "Member's Profile",
-              //   toolbarHeight: MediaQuery.of(context).size.height * 0.075,
-              // ),
               body: SafeArea(
                   child: Stack(children: [
             membersData.isEmpty
@@ -1135,6 +1199,150 @@ class _MemberProfileState extends State<MemberProfile>
                                                       },
                                                       title: 'Edit Profile')
                                                 ])),
+                                        const SizedBox(height: 20),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            InkWell(
+                                              onTap: () {
+                                                if (membersData['height'] != null &&
+                                                    membersData['weight'] !=
+                                                        null &&
+                                                    membersData['age'] !=
+                                                        null) {
+                                                  showDialog(
+                                                    context: context,
+                                                    barrierDismissible:
+                                                        false, // Prevent dialog from being dismissed
+                                                    builder:
+                                                        (BuildContext context) {
+                                                      // Show loader initially
+                                                      return AlertDialog(
+                                                        content: Column(
+                                                          mainAxisSize:
+                                                              MainAxisSize.min,
+                                                          children: [
+                                                            SizedBox(
+                                                              height: MediaQuery.of(
+                                                                          context)
+                                                                      .size
+                                                                      .height *
+                                                                  0.2,
+                                                              child: Lottie.asset(
+                                                                  'assets/animations/coach_animation.json'),
+                                                            ),
+                                                            const SizedBox(
+                                                                height: 10),
+                                                            const Text(
+                                                                'Analysing Member Health...'),
+                                                          ],
+                                                        ),
+                                                      );
+                                                    },
+                                                  );
+
+                                                  // Simulate loading delay
+                                                  Future.delayed(
+                                                      const Duration(
+                                                          seconds: 2), () {
+                                                    // Close the dialog and show content
+                                                    Navigator.of(context).pop();
+                                                    showDialog(
+                                                        context: context,
+                                                        builder: (context) {
+                                                          return GenericDialogBox(
+                                                            enableSecondaryButton:
+                                                                false,
+                                                            enablePrimaryButton:
+                                                                false,
+                                                            isLoader: false,
+                                                            content: SizedBox(
+                                                              width: MediaQuery.of(
+                                                                          context)
+                                                                      .size
+                                                                      .width *
+                                                                  0.7,
+                                                              child: StatefulBuilder(builder:
+                                                                  (BuildContext
+                                                                          context,
+                                                                      StateSetter
+                                                                          uploadState) {
+                                                                return FitnessRecommendations(
+                                                                  height: double.parse(
+                                                                      membersData[
+                                                                          'height']), // Provide height in cm
+                                                                  weight: double.parse(
+                                                                      membersData[
+                                                                          'weight']), // Provide weight in kg
+                                                                  age: membersData[
+                                                                      'age'], // Provide age
+                                                                );
+                                                              }),
+                                                            ),
+                                                            onPrimaryButtonPressed:
+                                                                () {
+                                                              Get.back();
+                                                            },
+                                                          );
+                                                        });
+                                                  });
+                                                } else {
+                                                  showDialog(
+                                                      context: context,
+                                                      builder: (context) {
+                                                        return GenericDialogBox(
+                                                          enableSecondaryButton:
+                                                              false,
+                                                          primaryButtonText:
+                                                              'Ok',
+                                                          isLoader: false,
+                                                          content: Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(8.0),
+                                                            child: SizedBox(
+                                                              width: MediaQuery.of(
+                                                                          context)
+                                                                      .size
+                                                                      .width *
+                                                                  0.04,
+                                                              height: MediaQuery.of(
+                                                                          context)
+                                                                      .size
+                                                                      .width *
+                                                                  0.06,
+                                                              child:
+                                                                  const Center(
+                                                                child: Column(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .center,
+                                                                  children: [
+                                                                    Text(
+                                                                        'Please Enter Valid  Height, Age, Weight')
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          onPrimaryButtonPressed:
+                                                              () {
+                                                            Get.back();
+                                                          },
+                                                        );
+                                                      });
+                                                }
+                                              },
+                                              child: const Text(
+                                                '      Analyse Member Health',
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    color: primaryColor),
+                                              ),
+                                            )
+                                          ],
+                                        ),
                                         const SizedBox(height: 50),
                                         LargeBoldTextBlack(
                                             '${membersData['first_name']?.toString() ?? '-'} ${membersData['last_name']?.toString()}'),
@@ -1866,15 +2074,74 @@ class _MemberProfileState extends State<MemberProfile>
                                             ))
                                       ])),
                                 ),
-                                Container(
-                                    alignment: Alignment.center,
-                                    child: SizedBox(
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.3,
-                                      child: Lottie.asset(
-                                          'assets/animations/member_profile_animation.json'),
-                                    ))
+                                uploadingImage == true
+                                    ? Container(
+                                        alignment: Alignment.center,
+                                        child: SizedBox(
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.2,
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.2,
+                                          child: const Text(
+                                            'Uploading Image....',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: primaryColor),
+                                          ),
+                                        ),
+                                      )
+                                    : dpBase64String != null
+                                        ? Container(
+                                            alignment: Alignment.center,
+                                            child: SizedBox(
+                                              height: MediaQuery.of(context)
+                                                      .size
+                                                      .height *
+                                                  0.2,
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .height *
+                                                  0.2,
+                                              child: Tooltip(
+                                                message: "Upload Member Photo",
+                                                child: InkWell(
+                                                  onTap: () {
+                                                    singleImageToBase64();
+                                                  },
+                                                  child: ImageWidget(
+                                                    base64String:
+                                                        dpBase64String,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          )
+                                        : Container(
+                                            alignment: Alignment.center,
+                                            child: SizedBox(
+                                              height: MediaQuery.of(context)
+                                                      .size
+                                                      .height *
+                                                  0.25,
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .height *
+                                                  0.25,
+                                              child: Tooltip(
+                                                message: "Upload Member Photo",
+                                                child: InkWell(
+                                                  onTap: () {
+                                                    singleImageToBase64();
+                                                  },
+                                                  child: Lottie.asset(
+                                                      'assets/animations/member_profile_animation.json'),
+                                                ),
+                                              ),
+                                            )),
                               ])),
                         ]),
                   )

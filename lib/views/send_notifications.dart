@@ -155,7 +155,7 @@ class _SendNotificationState extends State<SendNotificationView>
                             Container(
                                 width: _width,
                                 height:
-                                    MediaQuery.of(context).size.height * 0.8,
+                                    MediaQuery.of(context).size.height * 0.85,
                                 margin: const EdgeInsets.only(top: 70),
                                 padding:
                                     const EdgeInsets.fromLTRB(10, 20, 10, 10),
@@ -411,7 +411,7 @@ class _SendNotificationState extends State<SendNotificationView>
                                             ),
                                           ),
                                         ),
-                                        maxLines: 12,
+                                        maxLines: 15,
                                       ),
                                     ),
                                     Padding(

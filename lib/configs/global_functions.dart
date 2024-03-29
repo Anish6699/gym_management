@@ -1,5 +1,9 @@
+import 'dart:convert';
 import 'dart:math';
+import 'dart:typed_data';
 import 'dart:ui';
+
+import 'package:flutter/material.dart';
 
 bool isStartDateAfterEndDate(String startDateStr, String endDateStr) {
   // Parse date strings into DateTime objects
@@ -35,3 +39,20 @@ List<Color> generateGlobalRandomColors(int length) {
 }
 
 var globalSelectedBranch;
+
+class ImageWidget extends StatelessWidget {
+  final String base64String;
+
+  ImageWidget({required this.base64String});
+
+  @override
+  Widget build(BuildContext context) {
+    Uint8List bytes = base64.decode(base64String);
+    return ClipOval(
+      child: Image.memory(
+        bytes,
+        fit: BoxFit.cover, // You can adjust the fit as per your requirement
+      ),
+    );
+  }
+}

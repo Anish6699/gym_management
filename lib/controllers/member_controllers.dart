@@ -34,6 +34,20 @@ class MemberController extends GetxController {
     return body;
   }
 
+  Future<Map<String, dynamic>> addBulkMembers(
+      Map<String, dynamic> data, branchId) async {
+    print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
+    print(branchId);
+    print(data);
+    var response = await _httpClient.post(
+        path: 'member-upload-files/$branchId', body: data);
+
+    var body = json.decode(response['body']) as Map<String, dynamic>;
+    print('bulk responseeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee');
+    print(body);
+    return body;
+  }
+
   Future<Map<String, dynamic>> editMember(
       Map<String, dynamic> data, branchId) async {
     var response =

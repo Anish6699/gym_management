@@ -1,5 +1,8 @@
 // ignore_for_file: prefer_typing_uninitialized_variables
 
+import 'dart:convert';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -19,6 +22,7 @@ import 'package:gmstest/widgets/popup.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MembersView extends StatefulWidget {
   const MembersView({Key? key}) : super(key: key);
@@ -43,6 +47,7 @@ class _MembersState extends State<MembersView> {
   bool isNavOpen = true;
   final FocusNode _tableFocusNode = FocusNode();
   bool isLoading = true;
+  bool uploadingFile = false;
 
   var _headerModel;
   var selectedEntity = 'All';
@@ -67,7 +72,9 @@ class _MembersState extends State<MembersView> {
   TextEditingController filterToDateController = TextEditingController();
   var selectedBranch;
   var selectedGender;
+  var selectedMonth;
   List adminBranchList = [];
+  var bulkMemberBase64String;
 
   List<Map<String, dynamic>> filterList = [
     {'id': -1, 'name': 'All'},
@@ -75,12 +82,132 @@ class _MembersState extends State<MembersView> {
     {'id': 1, 'name': 'In-Active'},
     {'id': 2, 'name': 'Payment Pending'}
   ];
+  List monthList = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
   var selectedStatus;
 
   @override
   void initState() {
     setInitialData();
     super.initState();
+  }
+
+  uploadBulkMembers() {
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (context) {
+          return FutureBuilder(
+            future: memmberController.addBulkMembers(
+                {'member_file': bulkMemberBase64String},
+                branchId ?? selectedBranch['id']),
+            builder: (context, snapshot) {
+              return snapshot.connectionState == ConnectionState.waiting
+                  ? GenericDialogBox(
+                      enableSecondaryButton: false,
+                      isLoader: true,
+                      content: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.04,
+                          height: MediaQuery.of(context).size.width * 0.06,
+                          child: const Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                CircularProgressIndicator(
+                                  color: primaryDarkBlueColor,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    )
+                  : GenericDialogBox(
+                      closeButtonEnabled: false,
+                      enablePrimaryButton: true,
+                      enableSecondaryButton: false,
+                      isLoader: false,
+                      content: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.04,
+                          height: MediaQuery.of(context).size.width * 0.06,
+                          child: Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [Text(snapshot.data!['message'])],
+                            ),
+                          ),
+                        ),
+                      ),
+                      primaryButtonText: 'Ok',
+                      onPrimaryButtonPressed: () async {
+                        Get.offAllNamed(
+                          MembersView.membersRouteName,
+                        );
+                      },
+                    );
+            },
+          );
+        });
+  }
+
+  selectfileConvertTobase64() async {
+    //  setState(() {
+    //   uploadingImage = true;
+    // });
+    // Prompt user to pick a single image
+    print('upload 2');
+    FilePickerResult? filePickerResult = await FilePicker.platform.pickFiles();
+    print('upload 3');
+    // Check if user picked a file
+    if (filePickerResult != null && filePickerResult.files.isNotEmpty) {
+      // Get the picked file
+      final file = filePickerResult.files.first;
+
+      // Read file as bytes
+      Uint8List? fileBytes = await file.bytes;
+
+      String base64String = base64Encode(fileBytes!);
+      bulkMemberBase64String = base64String;
+      uploadBulkMembers();
+      // setState(() {
+      //   uploadingImage = false;
+      // });
+    }
+  }
+
+  String addMonthsToDate(String dateString, int numberOfMonths) {
+    // Parse the input date string into a DateTime object
+    DateTime date = DateFormat('dd-MM-yyyy').parse(dateString);
+
+    // Add the specified number of months to the given date
+    int year = date.year + ((date.month + numberOfMonths - 1) ~/ 12);
+    int month = (date.month + numberOfMonths) % 12;
+    if (month == 0) {
+      month = 12;
+    }
+    int day = date.day;
+
+    // Handle the case where the resulting date might be invalid
+    try {
+      DateTime newDate = DateTime(year, month, day);
+      // Format the new date to match the input format
+      return DateFormat('dd-MM-yyyy').format(newDate);
+    } catch (e) {
+      // If the date is invalid, adjust the day until it becomes valid
+      while (true) {
+        day -= 1;
+        try {
+          DateTime newDate = DateTime(year, month, day);
+          // Format the new date to match the input format
+          return DateFormat('dd-MM-yyyy').format(newDate);
+        } catch (e) {
+          // Continue looping until a valid date is found
+        }
+      }
+    }
   }
 
   Future<String> selectedDatee(BuildContext context) async {
@@ -569,10 +696,10 @@ class _MembersState extends State<MembersView> {
     ];
   }
 
-  // void downloadTemplate() {
-  //   Uri url = Uri.parse('$serverUrl/downloadrakedispatchedtemplate');
-  //   launchUrl(url, webOnlyWindowName: '_blank');
-  // }
+  void downloadTemplate() {
+    Uri url = Uri.parse('${serverUrl}member-download-template');
+    launchUrl(url, webOnlyWindowName: '_blank');
+  }
 
   Widget _body(mediaQuery) {
     return Padding(
@@ -585,8 +712,90 @@ class _MembersState extends State<MembersView> {
           Row(
             children: [
               Text(
-                "Members",
+                "Members   ",
                 style: Theme.of(context).textTheme.titleLarge,
+              ),
+              Tooltip(
+                message: "click to bulk upload",
+                child: InkWell(
+                  onTap: () {
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return GenericDialogBox(
+                            enableSecondaryButton: false,
+                            enablePrimaryButton: false,
+                            isLoader: false,
+                            content: StatefulBuilder(builder:
+                                (BuildContext context,
+                                    StateSetter uploadState) {
+                              return Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.1,
+                                  height:
+                                      MediaQuery.of(context).size.width * 0.1,
+                                  child: Center(
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        PrimaryButton(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.6,
+                                            onPressed: () {
+                                              downloadTemplate();
+                                            },
+                                            title: "Download Template"),
+                                        const SizedBox(
+                                          height: 20,
+                                        ),
+                                        PrimaryButton(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.6,
+                                            buttonColor: Colors.green,
+                                            onPressed: () {
+                                              // uploadState(() {
+                                              //   uploadingFile = true;
+                                              // });
+                                              print('upload 1');
+                                              selectfileConvertTobase64();
+                                            },
+                                            title: "Upload Excel"),
+                                        const SizedBox(
+                                          height: 20,
+                                        ),
+                                        uploadingFile == true
+                                            ? const Text(
+                                                'Uploading File....',
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    color: primaryColor),
+                                              )
+                                            : SizedBox(),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }),
+                            onPrimaryButtonPressed: () {
+                              Get.back();
+                            },
+                          );
+                        });
+                  },
+                  child: const Text(
+                    "Bulk Upload Members   ",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold, color: primaryColor),
+                  ),
+                ),
               ),
               const Spacer(
                 flex: 2,
@@ -615,7 +824,7 @@ class _MembersState extends State<MembersView> {
                                 style: TextStyle(
                                     fontSize:
                                         MediaQuery.of(context).size.width *
-                                            0.01,
+                                            0.008,
                                     color: Colors.white),
                               ),
                             );
@@ -629,7 +838,7 @@ class _MembersState extends State<MembersView> {
                         },
                         borderRadius: BorderRadius.circular(4),
                         style: TextStyle(
-                            fontSize: MediaQuery.of(context).size.width * 0.008,
+                            fontSize: MediaQuery.of(context).size.width * 0.08,
                             color: Colors.white,
                             fontWeight: FontWeight.bold),
                         icon: Icon(
@@ -640,8 +849,7 @@ class _MembersState extends State<MembersView> {
                         decoration: InputDecoration(
                           hintText: "Select Branch",
                           hintStyle: TextStyle(
-                              fontSize:
-                                  MediaQuery.of(context).size.width * 0.008,
+                              fontSize: mediaQuery.width * 0.008,
                               color: Colors.white,
                               fontWeight: FontWeight.bold),
                           contentPadding:
@@ -1016,10 +1224,12 @@ class _MembersState extends State<MembersView> {
                             child: Column(
                               children: [
                                 Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     SizedBox(
                                       width: MediaQuery.of(context).size.width *
-                                          0.25,
+                                          0.17,
                                       child: Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
@@ -1080,7 +1290,7 @@ class _MembersState extends State<MembersView> {
                                     ),
                                     SizedBox(
                                       width: MediaQuery.of(context).size.width *
-                                          0.25,
+                                          0.17,
                                       child: Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
@@ -1131,6 +1341,113 @@ class _MembersState extends State<MembersView> {
                                                           0.02),
                                               textAlignVertical:
                                                   TextAlignVertical.center,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      width: 30,
+                                    ),
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.12,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          const Flexible(
+                                            child: SelectableText(
+                                              'Select Gender *',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            height: 8,
+                                          ),
+                                          SizedBox(
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                0.07,
+                                            child: DropdownButtonFormField(
+                                              isExpanded: true,
+                                              elevation: 1,
+                                              value: selectedGender,
+                                              items: [
+                                                'Male',
+                                                'Female',
+                                                'Others'
+                                              ].map(
+                                                (item) {
+                                                  return DropdownMenuItem(
+                                                    value: item,
+                                                    child: Text(
+                                                      item,
+                                                      style: TextStyle(
+                                                          fontSize: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .width *
+                                                              0.01,
+                                                          color: Colors.white),
+                                                    ),
+                                                  );
+                                                },
+                                              ).toList(),
+                                              onChanged: (value) {
+                                                selectedGender = value;
+                                                setState(() {});
+                                              },
+                                              borderRadius:
+                                                  BorderRadius.circular(4),
+                                              style: TextStyle(
+                                                  fontSize:
+                                                      MediaQuery.of(context)
+                                                              .size
+                                                              .width *
+                                                          0.008,
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold),
+                                              icon: Icon(
+                                                Icons
+                                                    .keyboard_arrow_down_rounded,
+                                                color: Colors.white,
+                                                size: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.015,
+                                              ),
+                                              decoration: InputDecoration(
+                                                hintText: "Select Gender",
+                                                hintStyle: TextStyle(
+                                                    fontSize:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width *
+                                                            0.008,
+                                                    color: Colors.white,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                                contentPadding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 10),
+                                                fillColor: Colors.white,
+                                                border:
+                                                    const OutlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                    color: Colors.transparent,
+                                                  ),
+                                                ),
+                                                focusedBorder:
+                                                    const OutlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                    color: Colors.transparent,
+                                                  ),
+                                                ),
+                                              ),
                                             ),
                                           ),
                                         ],
@@ -1386,11 +1703,13 @@ class _MembersState extends State<MembersView> {
                                   height: 20,
                                 ),
                                 Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     SizedBox(
                                         width:
                                             MediaQuery.of(context).size.width *
-                                                0.25,
+                                                0.15,
                                         child: Column(
                                           mainAxisAlignment:
                                               MainAxisAlignment.start,
@@ -1449,9 +1768,118 @@ class _MembersState extends State<MembersView> {
                                       width: 30,
                                     ),
                                     SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.15,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          const Flexible(
+                                            child: SelectableText(
+                                              'Select Months ',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            height: 8,
+                                          ),
+                                          SizedBox(
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                0.07,
+                                            child: DropdownButtonFormField(
+                                              isExpanded: true,
+                                              elevation: 1,
+                                              value: selectedMonth,
+                                              items: monthList.map(
+                                                (item) {
+                                                  return DropdownMenuItem(
+                                                    value: item,
+                                                    child: Text(
+                                                      '${item?.toString() ?? '-'} Month',
+                                                      style: TextStyle(
+                                                          fontSize: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .width *
+                                                              0.01,
+                                                          color: Colors.white),
+                                                    ),
+                                                  );
+                                                },
+                                              ).toList(),
+                                              onChanged: (value) {
+                                                selectedMonth = value;
+
+                                                toDateController.text =
+                                                    addMonthsToDate(
+                                                        fromDateController.text,
+                                                        selectedMonth);
+
+                                                setState(() {});
+                                              },
+                                              borderRadius:
+                                                  BorderRadius.circular(4),
+                                              style: TextStyle(
+                                                  fontSize:
+                                                      MediaQuery.of(context)
+                                                              .size
+                                                              .width *
+                                                          0.008,
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold),
+                                              icon: Icon(
+                                                Icons
+                                                    .keyboard_arrow_down_rounded,
+                                                color: Colors.white,
+                                                size: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.015,
+                                              ),
+                                              decoration: InputDecoration(
+                                                hintText: "Select Months",
+                                                hintStyle: TextStyle(
+                                                    fontSize:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width *
+                                                            0.008,
+                                                    color: Colors.white,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                                contentPadding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 10),
+                                                fillColor: Colors.white,
+                                                border:
+                                                    const OutlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                    color: Colors.transparent,
+                                                  ),
+                                                ),
+                                                focusedBorder:
+                                                    const OutlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                    color: Colors.transparent,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      width: 30,
+                                    ),
+                                    SizedBox(
                                         width:
                                             MediaQuery.of(context).size.width *
-                                                0.25,
+                                                0.15,
                                         child: Column(
                                           mainAxisAlignment:
                                               MainAxisAlignment.start,
@@ -1459,7 +1887,7 @@ class _MembersState extends State<MembersView> {
                                               CrossAxisAlignment.start,
                                           children: [
                                             const SelectableText(
-                                              "To Date *",
+                                              "End Date *",
                                               style: TextStyle(
                                                 fontWeight: FontWeight.bold,
                                               ),
@@ -1494,11 +1922,11 @@ class _MembersState extends State<MembersView> {
                                                     icon: const Icon(
                                                         Icons.calendar_today),
                                                     onPressed: () async {
-                                                      toDateController.text =
-                                                          await selectedDatee(
-                                                              context);
+                                                      // toDateController.text =
+                                                      //     await selectedDatee(
+                                                      //         context);
 
-                                                      setState(() {});
+                                                      // setState(() {});
                                                     },
                                                   ),
                                                 ),
@@ -1636,117 +2064,6 @@ class _MembersState extends State<MembersView> {
                                 const SizedBox(
                                   height: 20,
                                 ),
-                                Row(
-                                  children: [
-                                    SizedBox(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.25,
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          const Flexible(
-                                            child: SelectableText(
-                                              'Select Gender ',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                          ),
-                                          const SizedBox(
-                                            height: 8,
-                                          ),
-                                          SizedBox(
-                                            height: MediaQuery.of(context)
-                                                    .size
-                                                    .height *
-                                                0.07,
-                                            child: DropdownButtonFormField(
-                                              isExpanded: true,
-                                              elevation: 1,
-                                              value: selectedGender,
-                                              items: [
-                                                'Male',
-                                                'Female',
-                                                'Others'
-                                              ].map(
-                                                (item) {
-                                                  return DropdownMenuItem(
-                                                    value: item,
-                                                    child: Text(
-                                                      item,
-                                                      style: TextStyle(
-                                                          fontSize: MediaQuery.of(
-                                                                      context)
-                                                                  .size
-                                                                  .width *
-                                                              0.01,
-                                                          color: Colors.white),
-                                                    ),
-                                                  );
-                                                },
-                                              ).toList(),
-                                              onChanged: (value) {
-                                                selectedGender = value;
-                                                setState(() {});
-                                              },
-                                              borderRadius:
-                                                  BorderRadius.circular(4),
-                                              style: TextStyle(
-                                                  fontSize:
-                                                      MediaQuery.of(context)
-                                                              .size
-                                                              .width *
-                                                          0.008,
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.bold),
-                                              icon: Icon(
-                                                Icons
-                                                    .keyboard_arrow_down_rounded,
-                                                color: Colors.white,
-                                                size: MediaQuery.of(context)
-                                                        .size
-                                                        .width *
-                                                    0.015,
-                                              ),
-                                              decoration: InputDecoration(
-                                                hintText: "Select Gender",
-                                                hintStyle: TextStyle(
-                                                    fontSize:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .width *
-                                                            0.008,
-                                                    color: Colors.white,
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                                contentPadding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 10),
-                                                fillColor: Colors.white,
-                                                border:
-                                                    const OutlineInputBorder(
-                                                  borderSide: BorderSide(
-                                                    color: Colors.transparent,
-                                                  ),
-                                                ),
-                                                focusedBorder:
-                                                    const OutlineInputBorder(
-                                                  borderSide: BorderSide(
-                                                    color: Colors.transparent,
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(
-                                  height: 20,
-                                ),
                               ],
                             ),
                           ),
@@ -1762,7 +2079,8 @@ class _MembersState extends State<MembersView> {
                               toDateController.text.isEmpty ||
                               totalAmmountController.text.isEmpty ||
                               paidAmmountController.text.isEmpty ||
-                              email.text.isEmpty) {
+                              email.text.isEmpty ||
+                              selectedGender == null) {
                             showDialog(
                                 context: context,
                                 builder: (context) {

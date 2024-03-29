@@ -28,6 +28,11 @@ dependencies:
   fl_chart: ^0.66.2
   lottie: ^3.1.0
   pie_chart: ^5.4.0
+  file_picker: ^8.0.0+1
+  image_picker_for_web: ^3.0.2
+  flutter_image_compress: ^2.2.0
+  image: ^4.1.7
+  url_launcher: ^6.2.5
 
 dev_dependencies:
   flutter_test:
