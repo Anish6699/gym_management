@@ -23,6 +23,7 @@ import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'dart:html' as html;
 
 class MembersView extends StatefulWidget {
   const MembersView({Key? key}) : super(key: key);
@@ -143,6 +144,8 @@ class _MembersState extends State<MembersView> {
                       ),
                       primaryButtonText: 'Ok',
                       onPrimaryButtonPressed: () async {
+                        downloadCsvFromBase64String(
+                            snapshot.data!['file'], fileName);
                         Get.offAllNamed(
                           MembersView.membersRouteName,
                         );
@@ -698,7 +701,33 @@ class _MembersState extends State<MembersView> {
 
   void downloadTemplate() {
     Uri url = Uri.parse('${serverUrl}member-download-template');
-    launchUrl(url, webOnlyWindowName: '_blank');
+    launchUrl(url);
+  }
+
+  String fileName = 'responseFile';
+  String samplBase64String =
+      'Zmlyc3RfbmFtZSxsYXN0X25hbWUscHJpbWFyeV9tb2JpbGVfbm8sc2Vjb25kYXJ5X21vYmlsZV9ubyxhZGRyLGVtYWlsLGdlbmRlcixzdGFydF9kYXRlLGVuZF9kYXRlLHByaWNlLHBhaWRfYW1vdW50CnNzc2FzLGRodW1hbCw0NDQ5OTk5OTk5LDk1OTk5OTk5OTksamVlaixzYWdkZGR0ZWVzMzNzdDg4ODUzYXJAZ21haWwuY29tLG00YWxlLDI0LTAyLTIwMjQsMjctMDMtMjAyNCwxMDAwLDUwMApvbSxndW5ramFsLDk1ODk5OTk5OTIsOTk3ODk5OTk5OSxqZWVqLGRzc2oyM2tzamRrampAZ21haWwuY29tLG1hbDRlLDI0LTAyLTIwMjQsMjgtMDMtMjAyNCw0MDAsMzAw';
+  void downloadCsvFromBase64String(String base64String, String fileName) {
+    // Decode base64 string to binary data
+    List<int> csvBytes = base64Decode(base64String);
+
+    // Create a Blob from the binary data
+    final blob = html.Blob([csvBytes], 'text/csv');
+
+    // Create an object URL from the Blob
+    final url = html.Url.createObjectUrlFromBlob(blob);
+
+    // Create a link element
+    final link = html.AnchorElement(href: url)
+      ..setAttribute('download', fileName);
+
+    // Trigger download
+    html.document.body!.children.add(link);
+    link.click();
+
+    // Cleanup
+    html.Url.revokeObjectUrl(url);
+    link.remove();
   }
 
   Widget _body(mediaQuery) {
@@ -748,6 +777,8 @@ class _MembersState extends State<MembersView> {
                                                 0.6,
                                             onPressed: () {
                                               downloadTemplate();
+                                              // downloadCsvFromBase64String(
+                                              //     samplBase64String, fileName);
                                             },
                                             title: "Download Template"),
                                         const SizedBox(
@@ -763,6 +794,7 @@ class _MembersState extends State<MembersView> {
                                               // uploadState(() {
                                               //   uploadingFile = true;
                                               // });
+
                                               print('upload 1');
                                               selectfileConvertTobase64();
                                             },
