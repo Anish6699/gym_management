@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:gmstest/configs/colors.dart';
 import 'package:gmstest/configs/routes.dart';
 import 'package:gmstest/views/login.dart';
+import 'package:gmstest/website/screens/home/home_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 void main() {
@@ -48,7 +49,7 @@ class _MyAppState extends State<MyApp> {
                 },
         ),
       ),
-      initialRoute: LoginPage.routeName,
+      initialRoute: WebsiteHomeScreen.routeName,
     );
   }
 }

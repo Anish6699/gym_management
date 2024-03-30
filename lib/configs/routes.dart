@@ -12,10 +12,13 @@ import 'package:gmstest/views/members/members.dart';
 import 'package:gmstest/views/send_notifications.dart';
 import 'package:gmstest/views/trainer.dart';
 import 'package:gmstest/views/visitors.dart';
+import 'package:gmstest/website/screens/home/home_screen.dart';
 
 class AppRouter {
   static Route onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
+      case WebsiteHomeScreen.routeName:
+        return WebsiteHomeScreen.route();
       case Dashboard.routeName:
         return Dashboard.route();
       case BranchDashboard.routeName:
@@ -44,7 +47,7 @@ class AppRouter {
         return SendNotificationView.route(settings.arguments);
 
       default:
-        return Dashboard.route();
+        return WebsiteHomeScreen.route();
     }
   }
 

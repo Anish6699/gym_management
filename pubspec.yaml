@@ -33,6 +33,7 @@ dependencies:
   flutter_image_compress: ^2.2.0
   image: ^4.1.7
   url_launcher: ^6.2.5
+  animated_text_kit: ^4.2.2
 
 dev_dependencies:
   flutter_test:

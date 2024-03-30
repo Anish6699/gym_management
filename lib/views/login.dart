@@ -8,6 +8,7 @@ import 'package:gmstest/super_admin/admins.dart';
 import 'package:gmstest/views/dashboards/admin_dashboard.dart';
 import 'package:gmstest/views/dashboards/branch/branch_dashboard.dart';
 import 'package:gmstest/views/dashboards/dashboard.dart';
+import 'package:gmstest/website/screens/home/home_screen.dart';
 import 'package:gmstest/widgets/buttons.dart';
 import 'package:gmstest/widgets/popup.dart';
 import 'package:lottie/lottie.dart';
@@ -86,11 +87,20 @@ class _LoginPageState extends State<LoginPage> {
                       mainAxisSize: MainAxisSize.min,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Container(
-                            // width: MediaQuery.of(context).size.height * 0.2,
-                            height: MediaQuery.of(context).size.height * 0.08,
-                            child:
-                                Image.asset("assets/images/fittraa_logo.png")),
+                        Tooltip(
+                          message: "Visit Our Website",
+                          child: InkWell(
+                            onTap: () {
+                              Get.toNamed(WebsiteHomeScreen.routeName);
+                            },
+                            child: Container(
+                                // width: MediaQuery.of(context).size.height * 0.2,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.08,
+                                child: Image.asset(
+                                    "assets/images/fittraa_logo.png")),
+                          ),
+                        ),
                         SizedBox(
                           height: MediaQuery.of(context).size.height * 0.095,
                         ),
