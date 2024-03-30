@@ -111,10 +111,75 @@ class _MemberProfileState extends State<MemberProfile>
       Uint8List fileBytes1 = await compressImageTo50KB(fileBytes!);
       String base64String = base64Encode(fileBytes1);
       dpBase64String = base64String;
+      editmemberprofileImage();
+
       setState(() {
         uploadingImage = false;
       });
     }
+  }
+
+  editmemberprofileImage() {
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (context) {
+          return FutureBuilder(
+            future: memmberController.editMemberProfileImage(
+                {'profile_image': dpBase64String}, membersData['id']),
+            builder: (context, snapshot) {
+              return snapshot.connectionState == ConnectionState.waiting
+                  ? GenericDialogBox(
+                      enableSecondaryButton: false,
+                      isLoader: true,
+                      content: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.04,
+                          height: MediaQuery.of(context).size.width * 0.06,
+                          child: const Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                CircularProgressIndicator(
+                                  color: primaryDarkBlueColor,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    )
+                  : GenericDialogBox(
+                      closeButtonEnabled: false,
+                      enablePrimaryButton: true,
+                      enableSecondaryButton: false,
+                      isLoader: false,
+                      content: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.04,
+                          height: MediaQuery.of(context).size.width * 0.06,
+                          child: Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [Text(snapshot.data!['message'])],
+                            ),
+                          ),
+                        ),
+                      ),
+                      primaryButtonText: 'Ok',
+                      onPrimaryButtonPressed: () async {
+                        Get.offAllNamed(MemberProfile.routeName,
+                            arguments: membersData['id']);
+                      },
+                    );
+            },
+          );
+        });
+    setState(() {
+      uploadingImage = false;
+    });
   }
 
   Future<Uint8List> compressImageTo50KB(Uint8List imageData) async {
@@ -122,37 +187,11 @@ class _MemberProfileState extends State<MemberProfile>
     if (image == null) {
       throw Exception('Failed to decode image.');
     }
-
-    // Target size (50 KB)
-    int targetSize = 100 * 1024;
-
-    // Initial quality
     double initialQuality = 0.05;
     double currentQuality = initialQuality;
-
-    // Compress the image iteratively until the size is approximately 50 KB
-    while (true) {
-      // Encode the image with the current quality
-      List<int> compressedBytes =
-          img.encodeJpg(image, quality: (currentQuality * 100).toInt());
-
-      // Check if the compressed image size is within the target size
-      if (compressedBytes.length <= targetSize) {
-        return Uint8List.fromList(compressedBytes);
-      } else {
-        // Calculate the difference between the compressed size and target size
-        int sizeDifference = compressedBytes.length - targetSize;
-
-        // Adjust the quality based on the size difference
-        currentQuality -= sizeDifference * 0.001;
-
-        // Check if the quality is within the valid range (0.1 to 1.0)
-        if (currentQuality <= 0.1) {
-          // If quality drops too low, return the compressed image with current quality
-          return Uint8List.fromList(compressedBytes);
-        }
-      }
-    }
+    List<int> compressedBytes =
+        img.encodeJpg(image, quality: (currentQuality * 0.30).toInt());
+    return Uint8List.fromList(compressedBytes);
   }
 
   initializeData() async {
@@ -2094,33 +2133,9 @@ class _MemberProfileState extends State<MemberProfile>
                                           ),
                                         ),
                                       )
-                                    : dpBase64String != null
+                                    : (membersData['profile_image'] == null ||
+                                            membersData['profile_image'] == '')
                                         ? Container(
-                                            alignment: Alignment.center,
-                                            child: SizedBox(
-                                              height: MediaQuery.of(context)
-                                                      .size
-                                                      .height *
-                                                  0.2,
-                                              width: MediaQuery.of(context)
-                                                      .size
-                                                      .height *
-                                                  0.2,
-                                              child: Tooltip(
-                                                message: "Upload Member Photo",
-                                                child: InkWell(
-                                                  onTap: () {
-                                                    singleImageToBase64();
-                                                  },
-                                                  child: ImageWidget(
-                                                    base64String:
-                                                        dpBase64String,
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          )
-                                        : Container(
                                             alignment: Alignment.center,
                                             child: SizedBox(
                                               height: MediaQuery.of(context)
@@ -2141,7 +2156,33 @@ class _MemberProfileState extends State<MemberProfile>
                                                       'assets/animations/member_profile_animation.json'),
                                                 ),
                                               ),
-                                            )),
+                                            ))
+                                        : Container(
+                                            alignment: Alignment.center,
+                                            child: SizedBox(
+                                              height: MediaQuery.of(context)
+                                                      .size
+                                                      .height *
+                                                  0.2,
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .height *
+                                                  0.2,
+                                              child: Tooltip(
+                                                message: "Update Member Photo",
+                                                child: InkWell(
+                                                  onTap: () {
+                                                    singleImageToBase64();
+                                                  },
+                                                  child: ImageWidget(
+                                                    base64String: membersData[
+                                                            'profile_image']
+                                                        .toString(),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
                               ])),
                         ]),
                   )

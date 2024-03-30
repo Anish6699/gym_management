@@ -36,15 +36,10 @@ class MemberController extends GetxController {
 
   Future<Map<String, dynamic>> addBulkMembers(
       Map<String, dynamic> data, branchId) async {
-    print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
-    print(branchId);
-    print(data);
     var response = await _httpClient.post(
         path: 'member-upload-files/$branchId', body: data);
 
     var body = json.decode(response['body']) as Map<String, dynamic>;
-    print('bulk responseeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee');
-    print(body);
     return body;
   }
 
@@ -94,9 +89,17 @@ class MemberController extends GetxController {
     return body;
   }
 
+  Future<Map<String, dynamic>> editMemberProfileImage(
+      Map<String, dynamic> data, memberId) async {
+    var response = await _httpClient.post(
+        path: 'edit-profile-image/$memberId', body: data);
+
+    var body = json.decode(response['body']) as Map<String, dynamic>;
+
+    return body;
+  }
   //////////////////////////////////////Visitors////////////////////////////////////////
-  ///
-  ///
+
   Future<List> getAllVisitors(
       {required branchId,
       required searchKeyword,
