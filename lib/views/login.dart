@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:gmstest/configs/colors.dart';
 import 'package:gmstest/configs/server_configs.dart';
@@ -7,13 +6,11 @@ import 'package:gmstest/controllers/login_controllers.dart';
 import 'package:gmstest/super_admin/admins.dart';
 import 'package:gmstest/views/dashboards/admin_dashboard.dart';
 import 'package:gmstest/views/dashboards/branch/branch_dashboard.dart';
-import 'package:gmstest/views/dashboards/dashboard.dart';
 import 'package:gmstest/website/screens/home/home_screen.dart';
 import 'package:gmstest/widgets/buttons.dart';
 import 'package:gmstest/widgets/popup.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);

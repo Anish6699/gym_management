@@ -145,4 +145,14 @@ class MemberController extends GetxController {
 
     return body;
   }
+
+  ///map//
+  ///
+
+  Future<List> getMemberLocation({required branchId}) async {
+    var response = await _httpClient.get(path: 'map-view/$branchId');
+    var a = jsonDecode(response['body']);
+    List body = a['latlon'] as List;
+    return body;
+  }
 }

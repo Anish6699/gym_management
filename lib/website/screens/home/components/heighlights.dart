@@ -25,18 +25,26 @@ class GithubStats extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Spacer(),
-                  PrimaryButton(
-                      onPressed: () {
+                  // Spacer(),
+                  // PrimaryButton(
+                  // onPressed: () {
+                  //   Get.toNamed(LoginPage.routeName);
+                  // },
+                  //     title: 'Login'),
+                  // Spacer(),
+                  // PrimaryButton(onPressed: () {}, title: 'Contact Us'),
+                  // Spacer(),
+                  InkWell(
+                      onTap: () {
                         Get.toNamed(LoginPage.routeName);
                       },
-                      title: 'Login'),
+                      child: StatsText(text: 'Login')),
                   Spacer(),
-                  PrimaryButton(onPressed: () {}, title: 'Contact Us'),
-                  Spacer(),
-                  // StatsText(
-                  //     number: snapshot.data['public_gists'], text: 'Gists'),
-                  // Spacer(),
+                  InkWell(
+                      onTap: () {
+                        // Get.toNamed(LoginPage.routeName);
+                      },
+                      child: StatsText(text: 'Contact Us')),
                 ],
               )
             : Column(
@@ -63,11 +71,11 @@ class GithubStats extends StatelessWidget {
 class StatsText extends StatelessWidget {
   const StatsText({
     Key? key,
-    required this.number,
+    // required this.number,
     required this.text,
   }) : super(key: key);
 
-  final int number;
+  // final int number;
   final String text;
 
   @override
@@ -75,19 +83,19 @@ class StatsText extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        AnimatedCounter(
-          value: number,
-          text: '+',
-        ),
-        SizedBox(
-          width: defaultPadding / 2,
-        ),
+        // AnimatedCounter(
+        //   value: number,
+        //   text: '+',
+        // ),
+        // SizedBox(
+        //   width: defaultPadding / 2,
+        // ),
         Text(
           text,
           style: Theme.of(context)
               .textTheme
-              .subtitle1!
-              .copyWith(color: Colors.white),
+              .titleLarge!
+              .copyWith(color: primaryColor),
         ),
       ],
     );

@@ -7,6 +7,7 @@ import 'package:gmstest/views/dashboards/branch/branch_dashboard.dart';
 import 'package:gmstest/views/dashboards/dashboard.dart';
 import 'package:gmstest/views/expense_tracker.dart';
 import 'package:gmstest/views/login.dart';
+import 'package:gmstest/views/map_view.dart';
 import 'package:gmstest/views/members/member_profile.dart';
 import 'package:gmstest/views/members/members.dart';
 import 'package:gmstest/views/send_notifications.dart';
@@ -33,6 +34,8 @@ class AppRouter {
         return MembersView.memberRoute();
       case VisitorsView.visitorsRouteName:
         return VisitorsView.visitorRoute();
+      case MapView.routeName:
+        return MapView.mapviewRoute();
       case TrainerView.trainerRouteName:
         return TrainerView.trainerRoute();
       case AllAdmins.allAdminRouteName:

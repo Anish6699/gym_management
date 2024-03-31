@@ -116,6 +116,10 @@ class _MemberProfileState extends State<MemberProfile>
       setState(() {
         uploadingImage = false;
       });
+    } else {
+      setState(() {
+        uploadingImage = false;
+      });
     }
   }
 

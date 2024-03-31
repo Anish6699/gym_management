@@ -10,6 +10,7 @@ import 'package:gmstest/views/dashboards/admin_dashboard.dart';
 import 'package:gmstest/views/dashboards/branch/branch_dashboard.dart';
 import 'package:gmstest/views/dashboards/dashboard.dart';
 import 'package:gmstest/views/expense_tracker.dart';
+import 'package:gmstest/views/map_view.dart';
 import 'package:gmstest/views/members/members.dart';
 import 'package:gmstest/views/send_notifications.dart';
 import 'package:gmstest/views/trainer.dart';
@@ -735,6 +736,63 @@ class _InventoryNavigationPaneExpandedState
                                                 fontWeight: FontWeight.w700,
                                                 color: widget.selected ==
                                                         "expense-tracker"
+                                                    ? primaryThemeColor
+                                                    : Colors.white),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              )
+                            : const SizedBox(),
+                        (userType == 2 || userType == 3)
+                            ? InkWell(
+                                onTap: () {
+                                  Get.toNamed(
+                                    MapView.routeName,
+                                  );
+                                },
+                                child: Padding(
+                                  padding: EdgeInsets.only(
+                                      right: MediaQuery.of(context).size.width *
+                                          0.006,
+                                      top: MediaQuery.of(context).size.width *
+                                          0.006),
+                                  child: Container(
+                                    height: MediaQuery.of(context).size.width *
+                                        0.03,
+                                    decoration: BoxDecoration(
+                                      color: widget.selected == "map-view"
+                                          ? Colors.white
+                                          : Colors.transparent,
+                                      borderRadius: const BorderRadius.only(
+                                          topRight: Radius.circular(5),
+                                          bottomRight: Radius.circular(5)),
+                                    ),
+                                    child: Padding(
+                                      padding: EdgeInsets.all(
+                                          MediaQuery.of(context).size.width *
+                                              0.006),
+                                      child: Row(
+                                        children: [
+                                          Image.asset('assets/icon/map.png'),
+                                          SizedBox(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.012,
+                                          ),
+                                          Text(
+                                            "Map View",
+                                            style: TextStyle(
+                                                fontSize: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.009,
+                                                fontWeight: FontWeight.w700,
+                                                color: widget.selected ==
+                                                        "map-view"
                                                     ? primaryThemeColor
                                                     : Colors.white),
                                           )
