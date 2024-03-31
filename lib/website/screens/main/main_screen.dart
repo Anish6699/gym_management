@@ -17,6 +17,10 @@ class MainScreen extends StatelessWidget {
       appBar: Responsive.isDesktop(context)
           ? null
           : AppBar(
+              centerTitle: true,
+              title: SizedBox(
+                  height: 20,
+                  child: Image.asset("assets/images/fittraa_logo.png")),
               backgroundColor: bgColor,
               leading: Builder(
                 builder: (context) => IconButton(

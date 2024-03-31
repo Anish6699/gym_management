@@ -331,10 +331,10 @@ class _VisitorsState extends State<MapView> {
                           TileLayer(
                             urlTemplate:
                                 "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-                            subdomains: ['a', 'b', 'c'],
+                            // subdomains: ['a', 'b', 'c'],
                           ),
                           // PolylineLayer(
-                          //   polylines: [
+                          //   polylines: [s
                           //     Polyline(
                           //       points: routePoints,
                           //       color: Colors.blue, // Color of the route line

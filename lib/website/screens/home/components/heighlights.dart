@@ -51,15 +51,19 @@ class GithubStats extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  PrimaryButton(
-                      onPressed: () {
+                  InkWell(
+                      onTap: () {
                         Get.toNamed(LoginPage.routeName);
                       },
-                      title: 'Login'),
+                      child: StatsText(text: 'Login')),
                   SizedBox(
                     height: 10,
                   ),
-                  PrimaryButton(onPressed: () {}, title: 'Contact Us'),
+                  InkWell(
+                      onTap: () {
+                        // Get.toNamed(LoginPage.routeName);
+                      },
+                      child: StatsText(text: 'Contact Us')),
                   SizedBox(
                     height: 10,
                   ),
