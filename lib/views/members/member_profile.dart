@@ -1401,8 +1401,10 @@ class _MemberProfileState extends State<MemberProfile>
                                                   color: Colors.grey[400]),
                                               const SizedBox(width: 5),
                                               NormalGreyText(
-                                                  membersData['addr']!
-                                                      .toString())
+                                                  membersData['addr'] == null
+                                                      ? ''
+                                                      : membersData['addr']
+                                                          .toString())
                                             ]),
                                         const SizedBox(height: 30),
                                         Row(

@@ -67,6 +67,7 @@ class _VisitorsState extends State<MapView> {
   MemberController memmberController = MemberController();
 
   setInitialData() async {
+    markers.clear();
     final prefs = await SharedPreferences.getInstance();
 
     userType = prefs.getInt('user_type');
@@ -93,6 +94,7 @@ class _VisitorsState extends State<MapView> {
   }
 
   setDataOnBranchLogin() async {
+    markers.clear();
     isLoading = true;
     setState(() {});
 
@@ -112,6 +114,7 @@ class _VisitorsState extends State<MapView> {
   }
 
   createMarkerList() {
+    markers.clear();
     for (var j = 0; j < memberLocationList.length; j++) {
       markers.add(Marker(
         width: 50.0,
@@ -156,6 +159,7 @@ class _VisitorsState extends State<MapView> {
   }
 
   setDataOnBranchChange() async {
+    markers.clear();
     isLoading = true;
     setState(() {});
 
