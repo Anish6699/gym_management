@@ -144,8 +144,10 @@ class _MembersState extends State<MembersView> {
                       ),
                       primaryButtonText: 'Ok',
                       onPrimaryButtonPressed: () async {
-                        downloadCsvFromBase64String(
-                            snapshot.data!['file'], fileName);
+                        if (snapshot.data?['file'] != null) {
+                          downloadCsvFromBase64String(
+                              snapshot.data!['file'], fileName);
+                        }
                         Get.offAllNamed(
                           MembersView.membersRouteName,
                         );
