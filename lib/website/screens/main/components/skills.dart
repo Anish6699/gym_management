@@ -26,21 +26,21 @@ class Skills extends StatelessWidget {
             Expanded(
               child: AnimatedCircularProgressIndicator(
                 animation: 'member_animation.json',
-                label: "Gym",
+                label: "",
               ),
             ),
             SizedBox(width: defaultPadding),
             Expanded(
               child: AnimatedCircularProgressIndicator(
                 animation: 'football_animation.json',
-                label: "Football",
+                label: "",
               ),
             ),
             SizedBox(width: defaultPadding),
             Expanded(
               child: AnimatedCircularProgressIndicator(
                 animation: 'cricket_bat_ball.json',
-                label: "Cricket",
+                label: "",
               ),
             ),
           ],
@@ -50,21 +50,21 @@ class Skills extends StatelessWidget {
             Expanded(
               child: AnimatedCircularProgressIndicator(
                 animation: 'dance_animation.json',
-                label: "Dance",
+                label: "",
               ),
             ),
             SizedBox(width: defaultPadding),
             Expanded(
               child: AnimatedCircularProgressIndicator(
                 animation: 'karate_animation.json',
-                label: "Karate",
+                label: "",
               ),
             ),
             SizedBox(width: defaultPadding),
             Expanded(
               child: AnimatedCircularProgressIndicator(
                 animation: 'coach_animation.json',
-                label: "Classes",
+                label: "",
               ),
             ),
           ],

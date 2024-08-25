@@ -20,7 +20,7 @@ class MyInfo extends StatelessWidget {
                 child: Image.asset("assets/images/fittraa_logo.png")),
             Spacer(),
             Text(
-              "Welcome to the future of \n Buisness management.",
+              "Welcome to the future of \n Commercial Services.",
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontWeight: FontWeight.w200,

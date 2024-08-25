@@ -31,7 +31,7 @@ class MainScreen extends StatelessWidget {
                 ),
               ),
             ),
-      drawer: SideMenu(),
+
       body: Center(
         child: Container(
           constraints: BoxConstraints(maxWidth: maxWidth),

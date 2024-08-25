@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:gmstest/configs/colors.dart';
-import 'package:gmstest/views/login.dart';
 
-class GithubStats extends StatelessWidget {
-  const GithubStats({
+class VirusGithubStats extends StatelessWidget {
+  const VirusGithubStats({
     Key? key,
   }) : super(key: key);
 
@@ -17,26 +15,16 @@ class GithubStats extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  // Spacer(),
-                  // PrimaryButton(
-                  // onPressed: () {
-                  //   Get.toNamed(LoginPage.routeName);
-                  // },
-                  //     title: 'Login'),
-                  // Spacer(),
-                  // PrimaryButton(onPressed: () {}, title: 'Contact Us'),
-                  // Spacer(),
                   InkWell(
-                      onTap: () {
-                        Get.toNamed(LoginPage.routeName);
-                      },
-                      child: StatsText(text: 'Login')),
-                  Spacer(),
+                      onTap: () {},
+                      child: const StatsText(text: 'Contact No : 8668976697')),
+                  const Spacer(),
                   InkWell(
                       onTap: () {
                         // Get.toNamed(LoginPage.routeName);
                       },
-                      child: StatsText(text: 'Contact Us')),
+                      child: const StatsText(
+                          text: 'Contact Us : virusCustoms_admin@gmial.com')),
                 ],
               )
             : Column(
@@ -44,19 +32,18 @@ class GithubStats extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   InkWell(
-                      onTap: () {
-                        Get.toNamed(LoginPage.routeName);
-                      },
-                      child: StatsText(text: 'Login')),
-                  SizedBox(
+                      onTap: () {},
+                      child: const StatsText(text: 'Contact No : 8668976697')),
+                  const SizedBox(
                     height: 10,
                   ),
                   InkWell(
                       onTap: () {
                         // Get.toNamed(LoginPage.routeName);
                       },
-                      child: StatsText(text: 'Contact Us')),
-                  SizedBox(
+                      child: const StatsText(
+                          text: 'Email : virusCustoms_admin@gmial.com')),
+                  const SizedBox(
                     height: 10,
                   ),
                 ],
@@ -79,18 +66,11 @@ class StatsText extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        // AnimatedCounter(
-        //   value: number,
-        //   text: '+',
-        // ),
-        // SizedBox(
-        //   width: defaultPadding / 2,
-        // ),
         Text(
           text,
           style: Theme.of(context)
               .textTheme
-              .titleLarge!
+              .titleMedium!
               .copyWith(color: primaryColor),
         ),
       ],

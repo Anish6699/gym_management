@@ -1,7 +1,7 @@
 class Project {
-  final String? title, description;
+  final String? title, description, image;
 
-  Project({this.title, this.description});
+  Project({this.title, this.description, this.image});
 }
 
 List<Project> demo_projects = [
@@ -60,5 +60,76 @@ List<Project> demo_projects = [
     title: "Continuous Improvement",
     description:
         "Gather feedback from users and stakeholders to continually enhance the application's features, usability, and performance.",
+  ),
+];
+
+List<Project> tshirtFeatures = [
+  Project(
+      image: "assets/virus_images/polo_white_strip_tshirt.jpg",
+      title: "T-Shirts",
+      description:
+          "We provide premium quality t-shirts with custom Print that are comfortable to wear and long-lasting."),
+  Project(
+    image: "assets/virus_images/event_tshirt_theme.jpg",
+    title: "Event T-Shirts",
+    description:
+        "Custom printed event t-shirts for a memorable and branded experience.",
+  ),
+  Project(
+    image: "assets/virus_images/custom_id_cards.png",
+    title: "ID Cards",
+    description:
+        "Custom printed ID cards for employees, with photo, name, and title.",
+  ),
+  Project(
+    image: "assets/virus_images/custom_mug_printing.png",
+    title: "Mugs",
+    description:
+        "Custom printed mugs for a personalized coffee or tea experience.",
+  ),
+  Project(
+    image: "assets/virus_images/custom_watter_bottle.jpg",
+    title: "Water Bottles",
+    description:
+        "Custom printed water bottles for a eco-friendly and healthy option.",
+  ),
+  Project(
+    image: "assets/virus_images/custom_hoodies.png",
+    title: "Hoodies",
+    description: "Custom printed hoodies for a more casual and relaxed look.",
+  ),
+  Project(
+    image: "assets/virus_images/custom_caps.png",
+    title: "Caps",
+    description: "Custom printed caps for a stylish and professional look.",
+  ),
+  Project(
+      image: "assets/virus_images/custom_buisness_card.jpg",
+      title: "Business Cards",
+      description:
+          " Custom printed business cards for a professional and networking experience."),
+  Project(
+    image: "assets/virus_images/custom_brochers.jpg",
+    title: "Brochures",
+    description:
+        " Custom printed brochures for a detailed and informative marketing material.",
+  ),
+  Project(
+    image: "assets/virus_images/custom_flyers.jpg",
+    title: "Flyers",
+    description:
+        " Custom printed flyers for a quick and eye-catching marketing material..",
+  ),
+  Project(
+    image: "assets/virus_images/custom_posters.png",
+    title: "Posters",
+    description:
+        " Custom printed posters for a large and impactful marketing display.",
+  ),
+  Project(
+    image: "assets/virus_images/custom_banners.jpg",
+    title: "Banners",
+    description:
+        " Custom printed banners for a bold and attention-grabbing marketing display.",
   ),
 ];
